@@ -2,6 +2,8 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:tubes_ppbl/models/mata_kuliah.dart';
 import 'package:tubes_ppbl/models/jadwal_praktikum.dart';
+import 'package:tubes_ppbl/models/eksperimen.dart';
+import 'package:tubes_ppbl/models/alat_bahan.dart';
 import 'package:tubes_ppbl/models/pengamatan.dart';
 import 'package:tubes_ppbl/models/lampiran_media.dart';
 
@@ -206,6 +208,69 @@ class DatabaseHelper {
       'lampiran_media',
       where: 'id = ?',
       whereArgs: [id],
+    );
+  }
+
+  // ============ CRUD: Eksperimen ============
+
+  Future<int> insertEksperimen(Eksperimen eks) async {
+    final db = await database;
+    return await db.insert('eksperimen', eks.toMap());
+  }
+
+  Future<List<Eksperimen>> getEksperimenList(int mkId) async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      'eksperimen',
+      where: 'mk_id = ?',
+      whereArgs: [mkId],
+    );
+    return List.generate(maps.length, (i) => Eksperimen.fromMap(maps[i]));
+  }
+
+  Future<int> updateEksperimen(Eksperimen eks) async {
+    final db = await database;
+    return await db.update(
+      'eksperimen',
+      eks.toMap(),
+      where: 'id = ?',
+      whereArgs: [eks.id],
+    );
+  }
+
+  Future<int> deleteEksperimen(int id) async {
+    final db = await database;
+    return await db.delete(
+      'eksperimen',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+  // ============ CRUD: Alat Bahan ============
+
+  Future<int> insertAlatBahan(AlatBahan alat) async {
+    final db = await database;
+    return await db.insert('alat_bahan', alat.toMap());
+  }
+
+  Future<List<AlatBahan>> getAlatBahanList(int eksperimenId) async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      'alat_bahan',
+      where: 'eksperimen_id = ?',
+      whereArgs: [eksperimenId],
+    );
+    return List.generate(maps.length, (i) => AlatBahan.fromMap(maps[i]));
+  }
+
+  Future<int> updateAlatBahan(AlatBahan alat) async {
+    final db = await database;
+    return await db.update(
+      'alat_bahan',
+      alat.toMap(),
+      where: 'id = ?',
+      whereArgs: [alat.id],
     );
   }
 }
