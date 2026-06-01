@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:tubes_ppbl/models/mata_kuliah.dart';
@@ -24,7 +25,10 @@ class DatabaseHelper {
   }
 
   Future<Database> _initDatabase() async {
-    String path = join(await getDatabasesPath(), 'lablog_database.db');
+    String path = 'lablog_database.db';
+    if (!kIsWeb) {
+      path = join(await getDatabasesPath(), 'lablog_database.db');
+    }
     return await openDatabase(
       path,
       version: 1,

@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:io';
@@ -95,6 +96,15 @@ class _SketsaScreenState extends State<SketsaScreen> {
 
   Future<void> _saveSketch() async {
     if (_isSaving) return;
+    
+    if (kIsWeb) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('Menyimpan sketsa tidak didukung pada browser (Web). Silakan gunakan aplikasi Desktop atau Mobile.'),
+        backgroundColor: Colors.red,
+      ));
+      return;
+    }
+
     setState(() => _isSaving = true);
     try {
       final boundary = _repaintKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
