@@ -1,5 +1,9 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
+import 'package:tubes_ppbl/models/mata_kuliah.dart';
+import 'package:tubes_ppbl/models/jadwal_praktikum.dart';
+import 'package:tubes_ppbl/models/pengamatan.dart';
+import 'package:tubes_ppbl/models/lampiran_media.dart';
 
 class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._internal();
@@ -106,5 +110,102 @@ class DatabaseHelper {
         FOREIGN KEY (eksperimen_id) REFERENCES eksperimen (id) ON DELETE CASCADE
       )
     ''');
+  }
+
+  // ============ CRUD: Mata Kuliah ============
+
+  Future<int> insertMataKuliah(MataKuliah mk) async {
+    final db = await database;
+    return await db.insert('mata_kuliah', mk.toMap());
+  }
+
+  Future<List<MataKuliah>> getMataKuliahList() async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query('mata_kuliah');
+    return List.generate(maps.length, (i) => MataKuliah.fromMap(maps[i]));
+  }
+
+  Future<int> updateMataKuliah(MataKuliah mk) async {
+    final db = await database;
+    return await db.update(
+      'mata_kuliah',
+      mk.toMap(),
+      where: 'id = ?',
+      whereArgs: [mk.id],
+    );
+  }
+
+  Future<int> deleteMataKuliah(int id) async {
+    final db = await database;
+    return await db.delete(
+      'mata_kuliah',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+  // ============ CRUD: Jadwal Praktikum ============
+
+  Future<int> insertJadwal(JadwalPraktikum jadwal) async {
+    final db = await database;
+    return await db.insert('jadwal_praktikum', jadwal.toMap());
+  }
+
+  Future<List<JadwalPraktikum>> getJadwalList() async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query('jadwal_praktikum');
+    return List.generate(maps.length, (i) => JadwalPraktikum.fromMap(maps[i]));
+  }
+
+  // ============ CRUD: Pengamatan ============
+
+  Future<int> insertPengamatan(Pengamatan data) async {
+    final db = await database;
+    return await db.insert('pengamatan', data.toMap());
+  }
+
+  Future<List<Pengamatan>> getPengamatanList(int eksperimenId) async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      'pengamatan',
+      where: 'eksperimen_id = ?',
+      whereArgs: [eksperimenId],
+    );
+    return List.generate(maps.length, (i) => Pengamatan.fromMap(maps[i]));
+  }
+
+  Future<int> deletePengamatan(int id) async {
+    final db = await database;
+    return await db.delete(
+      'pengamatan',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+  // ============ CRUD: Lampiran Media ============
+
+  Future<int> insertLampiran(LampiranMedia media) async {
+    final db = await database;
+    return await db.insert('lampiran_media', media.toMap());
+  }
+
+  Future<List<LampiranMedia>> getLampiranList(int eksperimenId) async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      'lampiran_media',
+      where: 'eksperimen_id = ?',
+      whereArgs: [eksperimenId],
+    );
+    return List.generate(maps.length, (i) => LampiranMedia.fromMap(maps[i]));
+  }
+
+  Future<int> deleteLampiran(int id) async {
+    final db = await database;
+    return await db.delete(
+      'lampiran_media',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
   }
 }
