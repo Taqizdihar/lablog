@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:sqflite/sqflite.dart';
+import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
 import 'package:path/path.dart';
 import 'package:tubes_ppbl/models/mata_kuliah.dart';
 import 'package:tubes_ppbl/models/jadwal_praktikum.dart';
@@ -25,6 +26,11 @@ class DatabaseHelper {
   }
 
   Future<Database> _initDatabase() async {
+    // Configure database factory for web platform
+    if (kIsWeb) {
+      databaseFactory = databaseFactoryFfiWebNoWebWorker;
+    }
+
     String path = 'lablog_database.db';
     if (!kIsWeb) {
       path = join(await getDatabasesPath(), 'lablog_database.db');

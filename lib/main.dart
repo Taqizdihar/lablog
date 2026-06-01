@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart' show kIsWeb, defaultTargetPlatform, TargetPlatform;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
-import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:tubes_ppbl/utils/app_colors.dart';
 import 'package:tubes_ppbl/sqlite/koneksi.dart';
 import 'package:tubes_ppbl/screens/home_screen.dart';
@@ -12,21 +8,57 @@ import 'package:tubes_ppbl/screens/settings_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  if (kIsWeb) {
-    // Initialize sqflite for Web without worker (easier setup)
-    databaseFactory = databaseFactoryFfiWebNoWebWorker;
-  } else if (defaultTargetPlatform == TargetPlatform.windows || defaultTargetPlatform == TargetPlatform.linux) {
-    // Initialize sqflite for Windows/Linux desktop
-    sqfliteFfiInit();
-    databaseFactory = databaseFactoryFfi;
-  }
+  // Global error boundary — displays the error on screen instead of blank white
+  ErrorWidget.builder = (FlutterErrorDetails details) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        backgroundColor: AppColors.bgPage,
+        appBar: AppBar(
+          title: const Text('LabLog — Error', style: TextStyle(color: Colors.white)),
+          backgroundColor: AppColors.slate900,
+        ),
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.error_outline, size: 64, color: Color(0xFFEF4444)),
+                const SizedBox(height: 16),
+                const Text(
+                  'Terjadi Kesalahan',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: AppColors.textPrimary),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  details.exceptionAsString(),
+                  style: const TextStyle(fontSize: 14, color: AppColors.textSecondary),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  };
 
   // Initialize SQLite database early
-  await DatabaseHelper().database;
+  try {
+    await DatabaseHelper().database;
+  } catch (e) {
+    debugPrint('Database init error: $e');
+  }
 
   // Read dark mode preference
-  final prefs = await SharedPreferences.getInstance();
-  final isDarkMode = prefs.getBool('is_dark_mode') ?? false;
+  bool isDarkMode = false;
+  try {
+    final prefs = await SharedPreferences.getInstance();
+    isDarkMode = prefs.getBool('is_dark_mode') ?? false;
+  } catch (e) {
+    debugPrint('SharedPreferences error: $e');
+  }
 
   runApp(LabLogApp(isDarkMode: isDarkMode));
 }
