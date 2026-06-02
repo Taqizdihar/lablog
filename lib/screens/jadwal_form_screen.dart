@@ -216,6 +216,7 @@ class _JadwalFormScreenState extends State<JadwalFormScreen> {
                           color: AppColors.slate700)),
                   const SizedBox(height: 8),
                   DropdownButtonFormField<int>(
+                    isExpanded: true,
                     value: _selectedMkId,
                     decoration: _deco('Pilih Mata Kuliah',
                         Icons.book_outlined),
@@ -224,7 +225,11 @@ class _JadwalFormScreenState extends State<JadwalFormScreen> {
                     items: mkList.map((mk) {
                       return DropdownMenuItem<int>(
                         value: mk.id,
-                        child: Text(mk.namaMk));
+                        child: Text(
+                          mk.namaMk,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      );
                     }).toList(),
                     onChanged: (v) => setState(() => _selectedMkId = v),
                     validator: (v) =>
@@ -240,6 +245,7 @@ class _JadwalFormScreenState extends State<JadwalFormScreen> {
                           color: AppColors.slate700)),
                   const SizedBox(height: 8),
                   DropdownButtonFormField<String>(
+                    isExpanded: true,
                     value: _selectedHari,
                     decoration: _deco('Pilih Hari',
                         Icons.calendar_today_outlined),

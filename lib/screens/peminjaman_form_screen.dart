@@ -196,6 +196,7 @@ class _PeminjamanFormScreenState extends State<PeminjamanFormScreen> {
 
               // Status
               DropdownButtonFormField<String>(
+                isExpanded: true,
                 value: _status,
                 decoration:
                     _deco('Status', Icons.flag_outlined),

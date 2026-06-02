@@ -162,6 +162,7 @@ class _MkFormScreenState extends State<MkFormScreen> {
               const SizedBox(height: 16),
 
               DropdownButtonFormField<String>(
+                isExpanded: true,
                 value: _selectedSemester,
                 decoration: _inputDecoration('Semester', Icons.calendar_today_outlined),
                 dropdownColor: AppColors.bgCard,

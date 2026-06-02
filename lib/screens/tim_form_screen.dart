@@ -154,6 +154,7 @@ class _TimFormScreenState extends State<TimFormScreen> {
               const SizedBox(height: 16),
 
               DropdownButtonFormField<String>(
+                isExpanded: true,
                 value: _peran,
                 decoration: _deco('Peran', Icons.assignment_ind_outlined),
                 dropdownColor: AppColors.bgCard,

@@ -164,6 +164,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       ),
                       const SizedBox(height: 16),
                       DropdownButtonFormField<String>(
+                        isExpanded: true,
                         value: _selectedSemester,
                         decoration: _inputDecoration(
                             'Semester Aktif', Icons.school_outlined),
@@ -204,6 +205,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     Padding(
                       padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
                       child: DropdownButtonFormField<String>(
+                        isExpanded: true,
                         value: _ukuranFont,
                         decoration: _inputDecoration(
                             'Ukuran Font', Icons.format_size_outlined),

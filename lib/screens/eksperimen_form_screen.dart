@@ -202,6 +202,7 @@ class _EksperimenFormScreenState extends State<EksperimenFormScreen> {
 
               // Status jurnal selector
               DropdownButtonFormField<String>(
+                isExpanded: true,
                 value: _statusJurnal,
                 decoration: _inputDeco('Status Jurnal'),
                 dropdownColor: AppColors.bgCard,
