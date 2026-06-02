@@ -5,8 +5,6 @@ import 'package:tubes_ppbl/models/mata_kuliah.dart';
 import 'package:tubes_ppbl/models/eksperimen.dart';
 import 'package:tubes_ppbl/sqlite/koneksi.dart';
 import 'package:tubes_ppbl/screens/eksperimen_form_screen.dart';
-import 'package:tubes_ppbl/screens/pengamatan_screen.dart';
-import 'package:tubes_ppbl/screens/sketsa_screen.dart';
 
 class MkDetailScreen extends StatefulWidget {
   final MataKuliah? mataKuliah;
@@ -46,20 +44,20 @@ class _MkDetailScreenState extends State<MkDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.bgPage,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(
-          widget.mataKuliah?.nama ?? 'Detail Mata Kuliah',
-          style: const TextStyle(color: Colors.white),
+          widget.mataKuliah?.namaMk ?? 'Detail Mata Kuliah',
+          style: TextStyle(color: Colors.white),
         ),
         backgroundColor: AppColors.slate900,
-        iconTheme: const IconThemeData(color: Colors.white),
+        iconTheme: IconThemeData(color: Colors.white),
       ),
       body: FutureBuilder<List<Eksperimen>>(
         future: _eksperimenFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator(color: AppColors.sage));
+            return Center(child: CircularProgressIndicator(color: AppColors.sage));
           }
 
           final list = snapshot.data ?? [];
@@ -70,11 +68,11 @@ class _MkDetailScreenState extends State<MkDetailScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(Icons.science_outlined, size: 64, color: AppColors.textPlaceholder),
-                  const SizedBox(height: 16),
-                  const Text('Belum ada eksperimen',
+                  SizedBox(height: 16),
+                  Text('Belum ada eksperimen',
                     style: TextStyle(fontSize: 18, color: AppColors.textMuted, fontWeight: FontWeight.w500)),
-                  const SizedBox(height: 8),
-                  const Text('Tekan tombol + untuk menambahkan',
+                  SizedBox(height: 8),
+                  Text('Tekan tombol + untuk menambahkan',
                     style: TextStyle(fontSize: 14, color: AppColors.textPlaceholder)),
                 ],
               ),
@@ -86,7 +84,7 @@ class _MkDetailScreenState extends State<MkDetailScreen> {
             padding: const EdgeInsets.all(16),
             itemBuilder: (context, index) {
               final eks = list[index];
-              final hasKesimpulan = eks.kesimpulan.isNotEmpty;
+              final isSelesai = eks.statusJurnal == 'Selesai';
               return Padding(
                 padding: const EdgeInsets.only(bottom: 12),
                 child: Slidable(
@@ -96,7 +94,7 @@ class _MkDetailScreenState extends State<MkDetailScreen> {
                     children: [
                       SlidableAction(
                         onPressed: (_) => _deleteEksperimen(eks.id!),
-                        backgroundColor: const Color(0xFFEF4444),
+                        backgroundColor: Color(0xFFEF4444),
                         foregroundColor: Colors.white,
                         icon: Icons.delete_outline,
                         label: 'Hapus',
@@ -105,7 +103,7 @@ class _MkDetailScreenState extends State<MkDetailScreen> {
                     ],
                   ),
                   child: Card(
-                    color: AppColors.bgCard,
+                    color: Theme.of(context).cardColor,
                     elevation: 2,
                     margin: EdgeInsets.zero,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -129,41 +127,28 @@ class _MkDetailScreenState extends State<MkDetailScreen> {
                               children: [
                                 Expanded(
                                   child: Text(eks.judul,
-                                    style: const TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.bold, fontSize: 16)),
+                                    style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color, fontWeight: FontWeight.bold, fontSize: 16)),
                                 ),
                                 Container(
                                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                                   decoration: BoxDecoration(
-                                    color: hasKesimpulan ? AppColors.selesaiBg : AppColors.baruBg,
+                                    color: isSelesai ? AppColors.selesaiBg : AppColors.baruBg,
                                     borderRadius: BorderRadius.circular(16),
-                                    border: Border.all(color: hasKesimpulan ? AppColors.sageBorder : Colors.transparent),
+                                    border: Border.all(color: isSelesai ? AppColors.sageBorder : Colors.transparent),
                                   ),
                                   child: Text(
-                                    hasKesimpulan ? 'Selesai' : 'Baru',
+                                    eks.statusJurnal,
                                     style: TextStyle(
-                                      color: hasKesimpulan ? AppColors.selesaiText : AppColors.baruText,
+                                      color: isSelesai ? AppColors.selesaiText : AppColors.baruText,
                                       fontSize: 12, fontWeight: FontWeight.bold,
                                     ),
                                   ),
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 8),
-                            Text(eks.tanggal, style: const TextStyle(color: AppColors.textSecondary)),
-                            const SizedBox(height: 12),
-                            Row(
-                              children: [
-                                _actionChip(Icons.analytics_outlined, 'Pengamatan', () {
-                                  Navigator.push(context,
-                                    MaterialPageRoute(builder: (_) => PengamatanScreen(eksperimenId: eks.id!)));
-                                }),
-                                const SizedBox(width: 8),
-                                _actionChip(Icons.brush_outlined, 'Sketsa', () {
-                                  Navigator.push(context,
-                                    MaterialPageRoute(builder: (_) => SketsaScreen(eksperimenId: eks.id!)));
-                                }),
-                              ],
-                            ),
+                            SizedBox(height: 8),
+                            Text(eks.tanggal, style: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color)),
+
                           ],
                         ),
                       ),
@@ -176,37 +161,15 @@ class _MkDetailScreenState extends State<MkDetailScreen> {
         },
       ),
       floatingActionButton: FloatingActionButton(
+        heroTag: null,
         backgroundColor: AppColors.sage,
-        child: const Icon(Icons.add, color: Colors.white),
+        child: Icon(Icons.add, color: Colors.white),
         onPressed: () async {
           final result = await Navigator.push(context,
             MaterialPageRoute(builder: (_) => EksperimenFormScreen(mkId: widget.mataKuliah!.id!)),
           );
           if (result == true) _refreshList();
         },
-      ),
-    );
-  }
-
-  Widget _actionChip(IconData icon, String label, VoidCallback onTap) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(16),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-        decoration: BoxDecoration(
-          color: AppColors.sageBg,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.sageBorder),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, size: 16, color: AppColors.sageText),
-            const SizedBox(width: 4),
-            Text(label, style: const TextStyle(color: AppColors.sageText, fontSize: 12, fontWeight: FontWeight.w500)),
-          ],
-        ),
       ),
     );
   }

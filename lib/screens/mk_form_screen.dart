@@ -46,10 +46,12 @@ class _MkFormScreenState extends State<MkFormScreen> {
   void initState() {
     super.initState();
     if (_isEditing) {
-      _namaController.text = widget.mataKuliah!.nama;
+      _namaController.text = widget.mataKuliah!.namaMk;
       _dosenController.text = widget.mataKuliah!.dosen;
-      _selectedSemester = widget.mataKuliah!.semester;
-      _selectedWarna = widget.mataKuliah!.warna;
+      final sem = widget.mataKuliah!.semester;
+      _selectedSemester = _semesterOptions.contains(sem) ? sem : _semesterOptions.first;
+      final warna = widget.mataKuliah!.warnaLabel;
+      _selectedWarna = _warnaOptions.containsKey(warna) ? warna : _warnaOptions.keys.first;
     }
   }
 
@@ -63,22 +65,23 @@ class _MkFormScreenState extends State<MkFormScreen> {
   InputDecoration _inputDecoration(String label, IconData icon) {
     return InputDecoration(
       labelText: label,
-      labelStyle: const TextStyle(color: AppColors.textSecondary),
+      labelStyle: const TextStyle(color: AppColors.slate700),
+      hintStyle: const TextStyle(color: AppColors.textPlaceholder),
       prefixIcon: Icon(icon, color: AppColors.textMuted),
       border: OutlineInputBorder(
-        borderSide: const BorderSide(color: AppColors.border),
+        borderSide: BorderSide(color: Theme.of(context).dividerColor),
         borderRadius: BorderRadius.circular(8),
       ),
       enabledBorder: OutlineInputBorder(
-        borderSide: const BorderSide(color: AppColors.border),
+        borderSide: BorderSide(color: Theme.of(context).dividerColor),
         borderRadius: BorderRadius.circular(8),
       ),
       focusedBorder: OutlineInputBorder(
-        borderSide: const BorderSide(color: AppColors.sage),
+        borderSide: BorderSide(color: AppColors.sage),
         borderRadius: BorderRadius.circular(8),
       ),
       filled: true,
-      fillColor: AppColors.bgCard,
+      fillColor: Colors.white,
     );
   }
 
@@ -87,10 +90,10 @@ class _MkFormScreenState extends State<MkFormScreen> {
 
     final mk = MataKuliah(
       id: widget.mataKuliah?.id,
-      nama: _namaController.text,
+      namaMk: _namaController.text,
       dosen: _dosenController.text,
       semester: _selectedSemester,
-      warna: _selectedWarna,
+      warnaLabel: _selectedWarna,
     );
 
     if (_isEditing) {
@@ -117,14 +120,14 @@ class _MkFormScreenState extends State<MkFormScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.bgPage,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(
           _isEditing ? 'Edit Mata Kuliah' : 'Tambah Mata Kuliah',
-          style: const TextStyle(color: Colors.white),
+          style: TextStyle(color: Colors.white),
         ),
         backgroundColor: AppColors.slate900,
-        iconTheme: const IconThemeData(color: Colors.white),
+        iconTheme: IconThemeData(color: Colors.white),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -136,7 +139,7 @@ class _MkFormScreenState extends State<MkFormScreen> {
               TextFormField(
                 controller: _namaController,
                 decoration: _inputDecoration('Nama Mata Kuliah', Icons.book_outlined),
-                style: const TextStyle(color: AppColors.textPrimary),
+                style: const TextStyle(color: AppColors.slate900),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Nama mata kuliah wajib diisi';
@@ -144,12 +147,12 @@ class _MkFormScreenState extends State<MkFormScreen> {
                   return null;
                 },
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
 
               TextFormField(
                 controller: _dosenController,
                 decoration: _inputDecoration('Dosen Pengampu', Icons.person_outline),
-                style: const TextStyle(color: AppColors.textPrimary),
+                style: const TextStyle(color: AppColors.slate900),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Dosen pengampu wajib diisi';
@@ -157,17 +160,18 @@ class _MkFormScreenState extends State<MkFormScreen> {
                   return null;
                 },
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
 
               DropdownButtonFormField<String>(
-                value: _selectedSemester,
+                isExpanded: true,
+                initialValue: _selectedSemester,
                 decoration: _inputDecoration('Semester', Icons.calendar_today_outlined),
-                dropdownColor: AppColors.bgCard,
-                style: const TextStyle(color: AppColors.textPrimary),
+                dropdownColor: Theme.of(context).cardColor,
+                style: const TextStyle(color: AppColors.slate900),
                 items: _semesterOptions.map((semester) {
                   return DropdownMenuItem<String>(
                     value: semester,
-                    child: Text(semester),
+                    child: Text(semester, style: const TextStyle(color: AppColors.slate900)),
                   );
                 }).toList(),
                 onChanged: (value) {
@@ -177,18 +181,18 @@ class _MkFormScreenState extends State<MkFormScreen> {
                 },
               ),
 
-              const SizedBox(height: 24),
-              const Text(
+              SizedBox(height: 24),
+              Text(
                 'Warna Label',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.slate700,
+                  color: Theme.of(context).textTheme.titleLarge?.color,
                 ),
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: 12),
 
-              // Horizontal color picker
+
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: _warnaOptions.entries.map((entry) {
@@ -220,14 +224,14 @@ class _MkFormScreenState extends State<MkFormScreen> {
                             : null,
                       ),
                       child: isSelected
-                          ? const Icon(Icons.check, color: AppColors.sage, size: 24)
+                          ? Icon(Icons.check, color: AppColors.sage, size: 24)
                           : null,
                     ),
                   );
                 }).toList(),
               ),
 
-              const SizedBox(height: 32),
+              SizedBox(height: 32),
 
               ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
@@ -244,7 +248,7 @@ class _MkFormScreenState extends State<MkFormScreen> {
                 ),
                 label: Text(
                   _isEditing ? 'Perbarui Mata Kuliah' : 'Simpan Mata Kuliah',
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: Colors.white,
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
