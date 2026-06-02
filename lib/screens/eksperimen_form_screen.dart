@@ -200,7 +200,7 @@ class _EksperimenFormScreenState extends State<EksperimenFormScreen> {
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.slate700)),
               const SizedBox(height: 12),
 
-              // Status jurnal selector
+
               DropdownButtonFormField<String>(
                 isExpanded: true,
                 value: _statusJurnal,

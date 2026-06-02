@@ -48,7 +48,7 @@ class _MkDashboardScreenState extends State<MkDashboardScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // Header
+
                 Container(
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
@@ -89,7 +89,7 @@ class _MkDashboardScreenState extends State<MkDashboardScreen> {
 
                 const SizedBox(height: 24),
 
-                // Menu Grid
+
                 Expanded(
                   child: GridView.count(
                     crossAxisCount: 2,

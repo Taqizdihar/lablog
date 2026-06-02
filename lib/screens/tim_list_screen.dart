@@ -143,7 +143,7 @@ class _TimListScreenState extends State<TimListScreen> {
                     padding: const EdgeInsets.all(16),
                     child: Row(
                       children: [
-                        // Avatar
+
                         Container(
                           width: 44,
                           height: 44,
@@ -163,7 +163,7 @@ class _TimListScreenState extends State<TimListScreen> {
                               size: 22),
                         ),
                         const SizedBox(width: 14),
-                        // Info
+
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -198,7 +198,7 @@ class _TimListScreenState extends State<TimListScreen> {
                             ],
                           ),
                         ),
-                        // Role badge
+
                         Container(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 10, vertical: 5),

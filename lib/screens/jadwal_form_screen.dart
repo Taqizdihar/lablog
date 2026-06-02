@@ -196,7 +196,7 @@ class _JadwalFormScreenState extends State<JadwalFormScreen> {
             );
           }
 
-          // Ensure selectedMkId is valid
+
           if (_selectedMkId != null &&
               !mkList.any((mk) => mk.id == _selectedMkId)) {
             _selectedMkId = null;
@@ -209,7 +209,7 @@ class _JadwalFormScreenState extends State<JadwalFormScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // ── Mata Kuliah dropdown ──
+
                   const Text('Mata Kuliah',
                       style: TextStyle(fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -238,7 +238,7 @@ class _JadwalFormScreenState extends State<JadwalFormScreen> {
 
                   const SizedBox(height: 20),
 
-                  // ── Hari dropdown ──
+
                   const Text('Hari',
                       style: TextStyle(fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -261,7 +261,7 @@ class _JadwalFormScreenState extends State<JadwalFormScreen> {
 
                   const SizedBox(height: 20),
 
-                  // ── Jam Mulai & Jam Selesai ──
+
                   const Text('Waktu',
                       style: TextStyle(fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -338,7 +338,7 @@ class _JadwalFormScreenState extends State<JadwalFormScreen> {
 
                   const SizedBox(height: 20),
 
-                  // ── Ruangan ──
+
                   const Text('Ruangan',
                       style: TextStyle(fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -354,7 +354,7 @@ class _JadwalFormScreenState extends State<JadwalFormScreen> {
 
                   const SizedBox(height: 32),
 
-                  // ── Save button ──
+
                   ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.sage,

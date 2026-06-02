@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tubes_ppbl/utils/app_colors.dart';
+import 'package:tubes_ppbl/main.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -13,11 +14,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
   final _formKey = GlobalKey<FormState>();
   final _namaController = TextEditingController();
   final _nimController = TextEditingController();
+  final _programStudiController = TextEditingController();
+  final _targetIpkController = TextEditingController();
 
   String _selectedSemester = 'Semester 1';
-  String _ukuranFont = 'Sedang';
   bool _isDarkMode = false;
-  bool _notifikasiAktif = true;
 
   bool _isLoading = true;
 
@@ -32,8 +33,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
     'Semester 8',
   ];
 
-  final List<String> _fontOptions = ['Kecil', 'Sedang', 'Besar'];
-
   @override
   void initState() {
     super.initState();
@@ -44,6 +43,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
   void dispose() {
     _namaController.dispose();
     _nimController.dispose();
+    _programStudiController.dispose();
+    _targetIpkController.dispose();
     super.dispose();
   }
 
@@ -52,10 +53,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
     setState(() {
       _namaController.text = prefs.getString('nama_praktikan') ?? '';
       _nimController.text = prefs.getString('nim_praktikan') ?? '';
+      _programStudiController.text = prefs.getString('program_studi') ?? '';
+      _targetIpkController.text = prefs.getString('target_ipk') ?? '';
       _selectedSemester = prefs.getString('semester_aktif') ?? 'Semester 1';
-      _ukuranFont = prefs.getString('ukuran_font') ?? 'Sedang';
       _isDarkMode = prefs.getBool('is_dark_mode') ?? false;
-      _notifikasiAktif = prefs.getBool('notifikasi_aktif') ?? true;
       _isLoading = false;
     });
   }
@@ -64,10 +65,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('nama_praktikan', _namaController.text);
     await prefs.setString('nim_praktikan', _nimController.text);
+    await prefs.setString('program_studi', _programStudiController.text);
+    await prefs.setString('target_ipk', _targetIpkController.text);
     await prefs.setString('semester_aktif', _selectedSemester);
-    await prefs.setString('ukuran_font', _ukuranFont);
     await prefs.setBool('is_dark_mode', _isDarkMode);
-    await prefs.setBool('notifikasi_aktif', _notifikasiAktif);
 
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -133,7 +134,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // ── Section: Profil Praktikan ──────────────────────────
+
               _buildSectionHeader(Icons.person_outline, 'Profil Praktikan'),
               const SizedBox(height: 12),
 
@@ -163,11 +164,28 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         keyboardType: TextInputType.number,
                       ),
                       const SizedBox(height: 16),
+                      TextFormField(
+                        controller: _programStudiController,
+                        decoration: _inputDecoration(
+                            'Program Studi', Icons.school_outlined),
+                        style:
+                            const TextStyle(color: AppColors.textPrimary),
+                      ),
+                      const SizedBox(height: 16),
+                      TextFormField(
+                        controller: _targetIpkController,
+                        decoration: _inputDecoration(
+                            'Target IPK', Icons.analytics_outlined),
+                        style:
+                            const TextStyle(color: AppColors.textPrimary),
+                        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                      ),
+                      const SizedBox(height: 16),
                       DropdownButtonFormField<String>(
                         isExpanded: true,
                         value: _selectedSemester,
                         decoration: _inputDecoration(
-                            'Semester Aktif', Icons.school_outlined),
+                            'Semester Aktif', Icons.calendar_today_outlined),
                         dropdownColor: AppColors.bgCard,
                         style:
                             const TextStyle(color: AppColors.textPrimary),
@@ -190,7 +208,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
               const SizedBox(height: 24),
 
-              // ── Section: Preferensi Tampilan ──────────────────────
+
               _buildSectionHeader(Icons.palette_outlined, 'Preferensi Tampilan'),
               const SizedBox(height: 12),
 
@@ -201,38 +219,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     borderRadius: BorderRadius.circular(12)),
                 child: Column(
                   children: [
-                    // Ukuran Font dropdown
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-                      child: DropdownButtonFormField<String>(
-                        isExpanded: true,
-                        value: _ukuranFont,
-                        decoration: _inputDecoration(
-                            'Ukuran Font', Icons.format_size_outlined),
-                        dropdownColor: AppColors.bgCard,
-                        style:
-                            const TextStyle(color: AppColors.textPrimary),
-                        items: _fontOptions.map((size) {
-                          return DropdownMenuItem<String>(
-                            value: size,
-                            child: Text(size),
-                          );
-                        }).toList(),
-                        onChanged: (value) {
-                          setState(() {
-                            _ukuranFont = value ?? 'Sedang';
-                          });
-                        },
-                      ),
-                    ),
-
-                    const Divider(
-                        height: 1,
-                        indent: 16,
-                        endIndent: 16,
-                        color: AppColors.border),
-
-                    // Dark Mode switch
                     SwitchListTile(
                       title: const Text('Dark Mode',
                           style: TextStyle(color: AppColors.textPrimary)),
@@ -242,40 +228,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             color: AppColors.textMuted, fontSize: 12),
                       ),
                       value: _isDarkMode,
-                      onChanged: (bool value) {
+                      onChanged: (bool value) async {
                         setState(() => _isDarkMode = value);
+                        final prefs = await SharedPreferences.getInstance();
+                        await prefs.setBool('is_dark_mode', value);
+                        themeNotifier.value = value ? ThemeMode.dark : ThemeMode.light;
                       },
                       activeColor: AppColors.sage,
                       secondary: Icon(
                         _isDarkMode ? Icons.dark_mode : Icons.light_mode,
-                        color: AppColors.textMuted,
-                      ),
-                    ),
-
-                    const Divider(
-                        height: 1,
-                        indent: 16,
-                        endIndent: 16,
-                        color: AppColors.border),
-
-                    // Notifikasi switch
-                    SwitchListTile(
-                      title: const Text('Notifikasi',
-                          style: TextStyle(color: AppColors.textPrimary)),
-                      subtitle: const Text(
-                        'Terima pengingat jadwal dan tenggat peminjaman',
-                        style: TextStyle(
-                            color: AppColors.textMuted, fontSize: 12),
-                      ),
-                      value: _notifikasiAktif,
-                      onChanged: (bool value) {
-                        setState(() => _notifikasiAktif = value);
-                      },
-                      activeColor: AppColors.sage,
-                      secondary: Icon(
-                        _notifikasiAktif
-                            ? Icons.notifications_active_outlined
-                            : Icons.notifications_off_outlined,
                         color: AppColors.textMuted,
                       ),
                     ),
@@ -286,7 +247,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
               const SizedBox(height: 32),
 
-              // ── Simpan Button ─────────────────────────────────────
+
               ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.sage,
@@ -310,7 +271,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
               const SizedBox(height: 24),
 
-              // ── App Info ──────────────────────────────────────────
+
               Center(
                 child: Column(
                   children: [

@@ -155,7 +155,7 @@ class _PeminjamanListScreenState extends State<PeminjamanListScreen> {
                     padding: const EdgeInsets.all(16),
                     child: Row(
                       children: [
-                        // Icon
+
                         Container(
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
@@ -167,7 +167,7 @@ class _PeminjamanListScreenState extends State<PeminjamanListScreen> {
                               color: _statusText(item.status)),
                         ),
                         const SizedBox(width: 14),
-                        // Info
+
                         Expanded(
                           child: Column(
                             crossAxisAlignment:
@@ -195,7 +195,7 @@ class _PeminjamanListScreenState extends State<PeminjamanListScreen> {
                             ],
                           ),
                         ),
-                        // Status badge
+
                         Container(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 10, vertical: 5),

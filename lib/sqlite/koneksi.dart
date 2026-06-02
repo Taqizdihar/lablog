@@ -38,7 +38,7 @@ class DatabaseHelper {
   }
 
   Future _onCreate(Database db, int version) async {
-    // Table 1: mata_kuliah
+
     await db.execute('''
       CREATE TABLE mata_kuliah(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -49,7 +49,7 @@ class DatabaseHelper {
       )
     ''');
 
-    // Table 2: peminjaman_alat
+
     await db.execute('''
       CREATE TABLE peminjaman_alat(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -60,7 +60,7 @@ class DatabaseHelper {
       )
     ''');
 
-    // Table 3: jadwal_praktikum (FK → mata_kuliah)
+
     await db.execute('''
       CREATE TABLE jadwal_praktikum(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -73,7 +73,7 @@ class DatabaseHelper {
       )
     ''');
 
-    // Table 4: eksperimen (FK → mata_kuliah)
+
     await db.execute('''
       CREATE TABLE eksperimen(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -88,7 +88,7 @@ class DatabaseHelper {
       )
     ''');
 
-    // Table 5: tim_kelompok (FK → mata_kuliah)
+
     await db.execute('''
       CREATE TABLE tim_kelompok(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -101,7 +101,7 @@ class DatabaseHelper {
       )
     ''');
 
-    // Table 6: referensi (FK → mata_kuliah)
+
     await db.execute('''
       CREATE TABLE referensi(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -115,7 +115,7 @@ class DatabaseHelper {
     ''');
   }
 
-  // ============ CRUD: Mata Kuliah ============
+
 
   Future<int> insertMataKuliah(MataKuliah mk) async {
     final db = await database;
@@ -147,7 +147,7 @@ class DatabaseHelper {
     );
   }
 
-  // ============ CRUD: Peminjaman Alat ============
+
 
   Future<int> insertPeminjamanAlat(PeminjamanAlat alat) async {
     final db = await database;
@@ -181,7 +181,7 @@ class DatabaseHelper {
     );
   }
 
-  // ============ CRUD: Jadwal Praktikum ============
+
 
   Future<int> insertJadwal(JadwalPraktikum jadwal) async {
     final db = await database;
@@ -225,7 +225,7 @@ class DatabaseHelper {
         maps.length, (i) => JadwalPraktikum.fromMap(maps[i]));
   }
 
-  // ============ CRUD: Eksperimen ============
+
 
   Future<int> insertEksperimen(Eksperimen eks) async {
     final db = await database;
@@ -261,7 +261,7 @@ class DatabaseHelper {
     );
   }
 
-  // ============ CRUD: Tim Kelompok ============
+
 
   Future<int> insertTimKelompok(TimKelompok tim) async {
     final db = await database;
@@ -298,7 +298,7 @@ class DatabaseHelper {
     );
   }
 
-  // ============ CRUD: Referensi ============
+
 
   Future<int> insertReferensi(Referensi ref) async {
     final db = await database;

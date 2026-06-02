@@ -4,10 +4,12 @@ import 'package:tubes_ppbl/utils/app_colors.dart';
 import 'package:tubes_ppbl/sqlite/koneksi.dart';
 import 'package:tubes_ppbl/screens/main_navigation.dart';
 
+final ValueNotifier<ThemeMode> themeNotifier = ValueNotifier(ThemeMode.light);
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Global error boundary — displays the error on screen instead of blank white
+
   ErrorWidget.builder = (FlutterErrorDetails details) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -43,14 +45,14 @@ void main() async {
     );
   };
 
-  // Initialize SQLite database early
+
   try {
     await DatabaseHelper().database;
   } catch (e) {
     debugPrint('Database init error: $e');
   }
 
-  // Read dark mode preference
+
   bool isDarkMode = false;
   try {
     final prefs = await SharedPreferences.getInstance();
@@ -59,27 +61,14 @@ void main() async {
     debugPrint('SharedPreferences error: $e');
   }
 
-  runApp(LabLogApp(isDarkMode: isDarkMode));
+  themeNotifier.value = isDarkMode ? ThemeMode.dark : ThemeMode.light;
+
+  runApp(const LabLogApp());
 }
 
-class LabLogApp extends StatefulWidget {
-  final bool isDarkMode;
-  const LabLogApp({super.key, required this.isDarkMode});
+class LabLogApp extends StatelessWidget {
+  const LabLogApp({super.key});
 
-  @override
-  State<LabLogApp> createState() => _LabLogAppState();
-}
-
-class _LabLogAppState extends State<LabLogApp> {
-  late bool _isDarkMode;
-
-  @override
-  void initState() {
-    super.initState();
-    _isDarkMode = widget.isDarkMode;
-  }
-
-  // Light theme using AppColors
   ThemeData get _lightTheme => ThemeData(
     brightness: Brightness.light,
     scaffoldBackgroundColor: AppColors.bgPage,
@@ -120,7 +109,7 @@ class _LabLogAppState extends State<LabLogApp> {
     dividerColor: AppColors.border,
   );
 
-  // Dark theme using AppColors as base
+
   ThemeData get _darkTheme => ThemeData(
     brightness: Brightness.dark,
     scaffoldBackgroundColor: const Color(0xFF0F172A),
@@ -155,13 +144,18 @@ class _LabLogAppState extends State<LabLogApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'LabLog',
-      debugShowCheckedModeBanner: false,
-      theme: _lightTheme,
-      darkTheme: _darkTheme,
-      themeMode: _isDarkMode ? ThemeMode.dark : ThemeMode.light,
-      home: const MainNavigation(),
+    return ValueListenableBuilder<ThemeMode>(
+      valueListenable: themeNotifier,
+      builder: (_, ThemeMode currentMode, __) {
+        return MaterialApp(
+          title: 'LabLog',
+          debugShowCheckedModeBanner: false,
+          theme: _lightTheme,
+          darkTheme: _darkTheme,
+          themeMode: currentMode,
+          home: const MainNavigation(),
+        );
+      },
     );
   }
 }

@@ -191,7 +191,7 @@ class _MkFormScreenState extends State<MkFormScreen> {
               ),
               const SizedBox(height: 12),
 
-              // Horizontal color picker
+
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: _warnaOptions.entries.map((entry) {

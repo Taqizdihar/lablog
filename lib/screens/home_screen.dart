@@ -25,7 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
     'mkRose': AppColors.mkRose,
   };
 
-  // Darker tints for text on label backgrounds
+
   final Map<String, Color> _warnaTextMap = {
     'mkBlue': const Color(0xFF1E40AF),
     'mkGreen': const Color(0xFF14532D),
@@ -223,7 +223,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       child: Row(
                         children: [
-                          // Color accent strip
+
                           Container(
                             width: 6,
                             height: 88,

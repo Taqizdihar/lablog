@@ -141,7 +141,7 @@ class _PeminjamanFormScreenState extends State<PeminjamanFormScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Nama Alat
+
               TextFormField(
                 controller: _namaAlatCtrl,
                 decoration: _deco('Nama Alat', Icons.build_outlined),
@@ -152,7 +152,7 @@ class _PeminjamanFormScreenState extends State<PeminjamanFormScreen> {
               ),
               const SizedBox(height: 16),
 
-              // Tanggal Pinjam
+
               TextFormField(
                 controller: _tanggalPinjamCtrl,
                 decoration:
@@ -173,7 +173,7 @@ class _PeminjamanFormScreenState extends State<PeminjamanFormScreen> {
               ),
               const SizedBox(height: 16),
 
-              // Tenggat Kembali
+
               TextFormField(
                 controller: _tenggatCtrl,
                 decoration:
@@ -194,7 +194,7 @@ class _PeminjamanFormScreenState extends State<PeminjamanFormScreen> {
               ),
               const SizedBox(height: 16),
 
-              // Status
+
               DropdownButtonFormField<String>(
                 isExpanded: true,
                 value: _status,
