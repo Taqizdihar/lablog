@@ -35,13 +35,13 @@ class _MkDashboardScreenState extends State<MkDashboardScreen> {
         }
 
         return Scaffold(
-          backgroundColor: AppColors.bgPage,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           appBar: AppBar(
             title: Text(title,
-                style: const TextStyle(
+                style: TextStyle(
                     color: Colors.white, fontWeight: FontWeight.bold)),
             backgroundColor: AppColors.slate900,
-            iconTheme: const IconThemeData(color: Colors.white),
+            iconTheme: IconThemeData(color: Colors.white),
           ),
           body: Padding(
             padding: const EdgeInsets.all(20),
@@ -52,9 +52,9 @@ class _MkDashboardScreenState extends State<MkDashboardScreen> {
                 Container(
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color: AppColors.bgCard,
+                    color: Theme.of(context).cardColor,
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: AppColors.border),
+                    border: Border.all(color: Theme.of(context).dividerColor),
                   ),
                   child: Row(children: [
                     Container(
@@ -63,21 +63,21 @@ class _MkDashboardScreenState extends State<MkDashboardScreen> {
                         color: AppColors.sageBg,
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: const Icon(Icons.dashboard_rounded,
+                      child: Icon(Icons.dashboard_rounded,
                           size: 28, color: AppColors.sage),
                     ),
-                    const SizedBox(width: 16),
+                    SizedBox(width: 16),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(title,
-                              style: const TextStyle(
+                              style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
-                                  color: AppColors.textPrimary)),
-                          const SizedBox(height: 4),
-                          const Text('Pilih menu di bawah',
+                                  color: Theme.of(context).textTheme.bodyLarge?.color)),
+                          SizedBox(height: 4),
+                          Text('Pilih menu di bawah',
                               style: TextStyle(
                                   fontSize: 13,
                                   color: AppColors.textMuted)),
@@ -87,7 +87,7 @@ class _MkDashboardScreenState extends State<MkDashboardScreen> {
                   ]),
                 ),
 
-                const SizedBox(height: 24),
+                SizedBox(height: 24),
 
 
                 Expanded(
@@ -101,7 +101,7 @@ class _MkDashboardScreenState extends State<MkDashboardScreen> {
                         context,
                         icon: Icons.science_outlined,
                         label: 'Jurnal\nEksperimen',
-                        color: const Color(0xFF3B82F6),
+                        color: Color(0xFF3B82F6),
                         bg: AppColors.baruBg,
                         onTap: () => Navigator.push(
                             context,
@@ -113,7 +113,7 @@ class _MkDashboardScreenState extends State<MkDashboardScreen> {
                         context,
                         icon: Icons.group_outlined,
                         label: 'Tim\nKelompok',
-                        color: const Color(0xFF8B5CF6),
+                        color: Color(0xFF8B5CF6),
                         bg: AppColors.mkPurple,
                         onTap: () => Navigator.push(
                             context,
@@ -125,7 +125,7 @@ class _MkDashboardScreenState extends State<MkDashboardScreen> {
                         context,
                         icon: Icons.menu_book_outlined,
                         label: 'Referensi',
-                        color: const Color(0xFFF59E0B),
+                        color: Color(0xFFF59E0B),
                         bg: AppColors.mkYellow,
                         onTap: () => Navigator.push(
                             context,
@@ -157,9 +157,9 @@ class _MkDashboardScreenState extends State<MkDashboardScreen> {
       borderRadius: BorderRadius.circular(16),
       child: Container(
         decoration: BoxDecoration(
-          color: AppColors.bgCard,
+          color: Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.border),
+          border: Border.all(color: Theme.of(context).dividerColor),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -172,13 +172,13 @@ class _MkDashboardScreenState extends State<MkDashboardScreen> {
               ),
               child: Icon(icon, size: 32, color: color),
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: 12),
             Text(label,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
+                style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
-                    color: AppColors.textPrimary,
+                    color: Theme.of(context).textTheme.bodyLarge?.color,
                     height: 1.3)),
           ],
         ),

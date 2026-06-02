@@ -44,20 +44,20 @@ class _MkDetailScreenState extends State<MkDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.bgPage,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(
           widget.mataKuliah?.namaMk ?? 'Detail Mata Kuliah',
-          style: const TextStyle(color: Colors.white),
+          style: TextStyle(color: Colors.white),
         ),
         backgroundColor: AppColors.slate900,
-        iconTheme: const IconThemeData(color: Colors.white),
+        iconTheme: IconThemeData(color: Colors.white),
       ),
       body: FutureBuilder<List<Eksperimen>>(
         future: _eksperimenFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator(color: AppColors.sage));
+            return Center(child: CircularProgressIndicator(color: AppColors.sage));
           }
 
           final list = snapshot.data ?? [];
@@ -68,11 +68,11 @@ class _MkDetailScreenState extends State<MkDetailScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(Icons.science_outlined, size: 64, color: AppColors.textPlaceholder),
-                  const SizedBox(height: 16),
-                  const Text('Belum ada eksperimen',
+                  SizedBox(height: 16),
+                  Text('Belum ada eksperimen',
                     style: TextStyle(fontSize: 18, color: AppColors.textMuted, fontWeight: FontWeight.w500)),
-                  const SizedBox(height: 8),
-                  const Text('Tekan tombol + untuk menambahkan',
+                  SizedBox(height: 8),
+                  Text('Tekan tombol + untuk menambahkan',
                     style: TextStyle(fontSize: 14, color: AppColors.textPlaceholder)),
                 ],
               ),
@@ -94,7 +94,7 @@ class _MkDetailScreenState extends State<MkDetailScreen> {
                     children: [
                       SlidableAction(
                         onPressed: (_) => _deleteEksperimen(eks.id!),
-                        backgroundColor: const Color(0xFFEF4444),
+                        backgroundColor: Color(0xFFEF4444),
                         foregroundColor: Colors.white,
                         icon: Icons.delete_outline,
                         label: 'Hapus',
@@ -103,7 +103,7 @@ class _MkDetailScreenState extends State<MkDetailScreen> {
                     ],
                   ),
                   child: Card(
-                    color: AppColors.bgCard,
+                    color: Theme.of(context).cardColor,
                     elevation: 2,
                     margin: EdgeInsets.zero,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -127,7 +127,7 @@ class _MkDetailScreenState extends State<MkDetailScreen> {
                               children: [
                                 Expanded(
                                   child: Text(eks.judul,
-                                    style: const TextStyle(color: AppColors.textPrimary, fontWeight: FontWeight.bold, fontSize: 16)),
+                                    style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color, fontWeight: FontWeight.bold, fontSize: 16)),
                                 ),
                                 Container(
                                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
@@ -146,8 +146,8 @@ class _MkDetailScreenState extends State<MkDetailScreen> {
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 8),
-                            Text(eks.tanggal, style: const TextStyle(color: AppColors.textSecondary)),
+                            SizedBox(height: 8),
+                            Text(eks.tanggal, style: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color)),
 
                           ],
                         ),
@@ -163,7 +163,7 @@ class _MkDetailScreenState extends State<MkDetailScreen> {
       floatingActionButton: FloatingActionButton(
         heroTag: null,
         backgroundColor: AppColors.sage,
-        child: const Icon(Icons.add, color: Colors.white),
+        child: Icon(Icons.add, color: Colors.white),
         onPressed: () async {
           final result = await Navigator.push(context,
             MaterialPageRoute(builder: (_) => EksperimenFormScreen(mkId: widget.mataKuliah!.id!)),

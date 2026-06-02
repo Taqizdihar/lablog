@@ -37,25 +37,25 @@ class _ReferensiListScreenState extends State<ReferensiListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.bgPage,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text('Referensi',
+        title: Text('Referensi',
             style: TextStyle(
                 color: Colors.white, fontWeight: FontWeight.bold)),
         backgroundColor: AppColors.slate900,
-        iconTheme: const IconThemeData(color: Colors.white),
+        iconTheme: IconThemeData(color: Colors.white),
       ),
       body: FutureBuilder<List<Referensi>>(
         future: _refFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
+            return Center(
                 child: CircularProgressIndicator(color: AppColors.sage));
           }
           if (snapshot.hasError) {
             return Center(
               child: Text('Error: ${snapshot.error}',
-                  style: const TextStyle(color: AppColors.textSecondary)),
+                  style: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color)),
             );
           }
 
@@ -68,18 +68,18 @@ class _ReferensiListScreenState extends State<ReferensiListScreen> {
                 children: [
                   Container(
                     padding: const EdgeInsets.all(20),
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                         color: AppColors.sageBg, shape: BoxShape.circle),
-                    child: const Icon(Icons.menu_book_outlined,
+                    child: Icon(Icons.menu_book_outlined,
                         size: 48, color: AppColors.sage),
                   ),
-                  const SizedBox(height: 20),
-                  const Text('Belum ada referensi',
+                  SizedBox(height: 20),
+                  Text('Belum ada referensi',
                       style: TextStyle(fontSize: 18,
                           color: AppColors.textMuted,
                           fontWeight: FontWeight.w600)),
-                  const SizedBox(height: 8),
-                  const Text('Tekan tombol + untuk menambahkan',
+                  SizedBox(height: 8),
+                  Text('Tekan tombol + untuk menambahkan',
                       style: TextStyle(fontSize: 14,
                           color: AppColors.textPlaceholder)),
                 ],
@@ -109,7 +109,7 @@ class _ReferensiListScreenState extends State<ReferensiListScreen> {
                                       referensi: ref)));
                           if (r == true) _refreshList();
                         },
-                        backgroundColor: const Color(0xFF3B82F6),
+                        backgroundColor: Color(0xFF3B82F6),
                         foregroundColor: Colors.white,
                         icon: Icons.edit_outlined,
                         label: 'Edit',
@@ -119,7 +119,7 @@ class _ReferensiListScreenState extends State<ReferensiListScreen> {
                       ),
                       SlidableAction(
                         onPressed: (_) => _deleteItem(ref.id!),
-                        backgroundColor: const Color(0xFFEF4444),
+                        backgroundColor: Color(0xFFEF4444),
                         foregroundColor: Colors.white,
                         icon: Icons.delete_outline,
                         label: 'Hapus',
@@ -131,9 +131,9 @@ class _ReferensiListScreenState extends State<ReferensiListScreen> {
                   ),
                   child: Container(
                     decoration: BoxDecoration(
-                      color: AppColors.bgCard,
+                      color: Theme.of(context).cardColor,
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: AppColors.border),
+                      border: Border.all(color: Theme.of(context).dividerColor),
                     ),
                     padding: const EdgeInsets.all(16),
                     child: Row(
@@ -145,36 +145,36 @@ class _ReferensiListScreenState extends State<ReferensiListScreen> {
                             color: AppColors.mkYellow,
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          child: const Icon(
+                          child: Icon(
                               Icons.auto_stories_outlined,
                               size: 22,
                               color: Color(0xFFF59E0B)),
                         ),
-                        const SizedBox(width: 14),
+                        SizedBox(width: 14),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(ref.judulBuku,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                       fontSize: 15,
                                       fontWeight: FontWeight.bold,
-                                      color: AppColors.textPrimary)),
-                              const SizedBox(height: 4),
+                                      color: Theme.of(context).textTheme.bodyLarge?.color)),
+                              SizedBox(height: 4),
                               Row(children: [
-                                const Icon(Icons.person_outline,
+                                Icon(Icons.person_outline,
                                     size: 13,
                                     color: AppColors.textMuted),
-                                const SizedBox(width: 4),
+                                SizedBox(width: 4),
                                 Expanded(
                                   child: Text(ref.penulis,
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                           fontSize: 13,
-                                          color: AppColors.textSecondary),
+                                          color: Theme.of(context).textTheme.bodyMedium?.color),
                                       overflow: TextOverflow.ellipsis),
                                 ),
                               ]),
-                              const SizedBox(height: 4),
+                              SizedBox(height: 4),
                               Row(children: [
                                 Container(
                                   padding: const EdgeInsets.symmetric(
@@ -184,20 +184,20 @@ class _ReferensiListScreenState extends State<ReferensiListScreen> {
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   child: Text(ref.tahunTerbit,
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                           fontSize: 11,
                                           fontWeight: FontWeight.w600,
                                           color: Color(0xFF713F12))),
                                 ),
                                 if (ref.tautanSumber.isNotEmpty) ...[
-                                  const SizedBox(width: 8),
-                                  const Icon(Icons.link,
+                                  SizedBox(width: 8),
+                                  Icon(Icons.link,
                                       size: 13,
                                       color: AppColors.textMuted),
-                                  const SizedBox(width: 4),
+                                  SizedBox(width: 4),
                                   Expanded(
                                     child: Text(ref.tautanSumber,
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                             fontSize: 12,
                                             color: AppColors.textMuted),
                                         overflow: TextOverflow.ellipsis),
@@ -220,7 +220,7 @@ class _ReferensiListScreenState extends State<ReferensiListScreen> {
         heroTag: null,
         backgroundColor: AppColors.sage,
         elevation: 4,
-        child: const Icon(Icons.add, color: Colors.white),
+        child: Icon(Icons.add, color: Colors.white),
         onPressed: () async {
           final result = await Navigator.push(context,
               MaterialPageRoute(builder: (_) =>

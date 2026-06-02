@@ -27,11 +27,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
 
   final Map<String, Color> _warnaTextMap = {
-    'mkBlue': const Color(0xFF1E40AF),
-    'mkGreen': const Color(0xFF14532D),
-    'mkYellow': const Color(0xFF713F12),
-    'mkPurple': const Color(0xFF581C87),
-    'mkRose': const Color(0xFF881337),
+    'mkBlue': Color(0xFF1E40AF),
+    'mkGreen': Color(0xFF14532D),
+    'mkYellow': Color(0xFF713F12),
+    'mkPurple': Color(0xFF581C87),
+    'mkRose': Color(0xFF881337),
   };
 
   @override
@@ -50,18 +50,18 @@ class _HomeScreenState extends State<HomeScreen> {
     final shouldDelete = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Hapus Mata Kuliah?'),
-        content: const Text(
+        title: Text('Hapus Mata Kuliah?'),
+        content: Text(
             'Semua data terkait (jadwal, eksperimen, tim, referensi) akan ikut terhapus.'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Batal'),
+            child: Text('Batal'),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
-            style: TextButton.styleFrom(foregroundColor: const Color(0xFFEF4444)),
-            child: const Text('Hapus'),
+            style: TextButton.styleFrom(foregroundColor: Color(0xFFEF4444)),
+            child: Text('Hapus'),
           ),
         ],
       ),
@@ -77,15 +77,15 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Color _getTextColor(String warnaKey) {
-    return _warnaTextMap[warnaKey] ?? const Color(0xFF1E40AF);
+    return _warnaTextMap[warnaKey] ?? Color(0xFF1E40AF);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.bgPage,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text('LabLog',
+        title: Text('LabLog',
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         backgroundColor: AppColors.slate900,
       ),
@@ -93,7 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
         future: _mataKuliahFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
+            return Center(
                 child: CircularProgressIndicator(color: AppColors.sage));
           }
 
@@ -102,11 +102,11 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.error_outline,
+                  Icon(Icons.error_outline,
                       size: 48, color: Color(0xFFEF4444)),
-                  const SizedBox(height: 12),
+                  SizedBox(height: 12),
                   Text('Error: ${snapshot.error}',
-                      style: const TextStyle(color: AppColors.textSecondary),
+                      style: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color),
                       textAlign: TextAlign.center),
                 ],
               ),
@@ -126,19 +126,19 @@ class _HomeScreenState extends State<HomeScreen> {
                       color: AppColors.sageBg,
                       shape: BoxShape.circle,
                     ),
-                    child: const Icon(Icons.science_outlined,
+                    child: Icon(Icons.science_outlined,
                         size: 48, color: AppColors.sage),
                   ),
-                  const SizedBox(height: 20),
-                  const Text(
+                  SizedBox(height: 20),
+                  Text(
                     'Belum ada mata kuliah',
                     style: TextStyle(
                         fontSize: 18,
                         color: AppColors.textMuted,
                         fontWeight: FontWeight.w600),
                   ),
-                  const SizedBox(height: 8),
-                  const Text(
+                  SizedBox(height: 8),
+                  Text(
                     'Tekan tombol + untuk menambahkan',
                     style:
                         TextStyle(fontSize: 14, color: AppColors.textPlaceholder),
@@ -174,7 +174,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           );
                           if (result == true) _refreshList();
                         },
-                        backgroundColor: const Color(0xFF3B82F6),
+                        backgroundColor: Color(0xFF3B82F6),
                         foregroundColor: Colors.white,
                         icon: Icons.edit_outlined,
                         label: 'Edit',
@@ -185,7 +185,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       SlidableAction(
                         onPressed: (_) => _deleteMataKuliah(mk.id!),
-                        backgroundColor: const Color(0xFFEF4444),
+                        backgroundColor: Color(0xFFEF4444),
                         foregroundColor: Colors.white,
                         icon: Icons.delete_outline,
                         label: 'Hapus',
@@ -210,9 +210,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     borderRadius: BorderRadius.circular(12),
                     child: Container(
                       decoration: BoxDecoration(
-                        color: AppColors.bgCard,
+                        color: Theme.of(context).cardColor,
                         borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: AppColors.border),
+                        border: Border.all(color: Theme.of(context).dividerColor),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withValues(alpha: 0.04),
@@ -244,29 +244,29 @@ class _HomeScreenState extends State<HomeScreen> {
                                 children: [
                                   Text(
                                     mk.namaMk,
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.bold,
-                                      color: AppColors.textPrimary,
+                                      color: Theme.of(context).textTheme.bodyLarge?.color,
                                     ),
                                   ),
-                                  const SizedBox(height: 4),
+                                  SizedBox(height: 4),
                                   Row(
                                     children: [
-                                      const Icon(Icons.person_outline,
+                                      Icon(Icons.person_outline,
                                           size: 14,
                                           color: AppColors.textMuted),
-                                      const SizedBox(width: 4),
+                                      SizedBox(width: 4),
                                       Text(
                                         mk.dosen,
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                           fontSize: 13,
-                                          color: AppColors.textSecondary,
+                                          color: Theme.of(context).textTheme.bodyMedium?.color,
                                         ),
                                       ),
                                     ],
                                   ),
-                                  const SizedBox(height: 8),
+                                  SizedBox(height: 8),
                                   Container(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 10, vertical: 4),
@@ -287,7 +287,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ),
                           ),
-                          const Padding(
+                          Padding(
                             padding: EdgeInsets.only(right: 12.0),
                             child: Icon(Icons.chevron_right,
                                 color: AppColors.textPlaceholder),
@@ -306,7 +306,7 @@ class _HomeScreenState extends State<HomeScreen> {
         heroTag: null,
         backgroundColor: AppColors.sage,
         elevation: 4,
-        child: const Icon(Icons.add, color: Colors.white),
+        child: Icon(Icons.add, color: Colors.white),
         onPressed: () async {
           final result = await Navigator.push(
             context,

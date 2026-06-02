@@ -27,11 +27,11 @@ class _JadwalListScreenState extends State<JadwalListScreen> {
   };
 
   final Map<String, Color> _warnaTextMap = {
-    'mkBlue': const Color(0xFF1E40AF),
-    'mkGreen': const Color(0xFF14532D),
-    'mkYellow': const Color(0xFF713F12),
-    'mkPurple': const Color(0xFF581C87),
-    'mkRose': const Color(0xFF881337),
+    'mkBlue': Color(0xFF1E40AF),
+    'mkGreen': Color(0xFF14532D),
+    'mkYellow': Color(0xFF713F12),
+    'mkPurple': Color(0xFF581C87),
+    'mkRose': Color(0xFF881337),
   };
 
   final Map<String, int> _dayOrder = {
@@ -72,9 +72,9 @@ class _JadwalListScreenState extends State<JadwalListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.bgPage,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text('Jadwal Praktikum',
+        title: Text('Jadwal Praktikum',
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         backgroundColor: AppColors.slate900,
       ),
@@ -82,14 +82,14 @@ class _JadwalListScreenState extends State<JadwalListScreen> {
         future: _jadwalFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
+            return Center(
                 child: CircularProgressIndicator(color: AppColors.sage));
           }
 
           if (snapshot.hasError) {
             return Center(
               child: Text('Error: ${snapshot.error}',
-                  style: const TextStyle(color: AppColors.textSecondary)),
+                  style: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color)),
             );
           }
 
@@ -102,18 +102,18 @@ class _JadwalListScreenState extends State<JadwalListScreen> {
                 children: [
                   Container(
                     padding: const EdgeInsets.all(20),
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                       color: AppColors.sageBg, shape: BoxShape.circle),
-                    child: const Icon(Icons.calendar_today_outlined,
+                    child: Icon(Icons.calendar_today_outlined,
                         size: 48, color: AppColors.sage),
                   ),
-                  const SizedBox(height: 20),
-                  const Text('Belum ada jadwal',
+                  SizedBox(height: 20),
+                  Text('Belum ada jadwal',
                       style: TextStyle(fontSize: 18,
                           color: AppColors.textMuted,
                           fontWeight: FontWeight.w600)),
-                  const SizedBox(height: 8),
-                  const Text('Tekan tombol + untuk menambahkan',
+                  SizedBox(height: 8),
+                  Text('Tekan tombol + untuk menambahkan',
                       style: TextStyle(fontSize: 14,
                           color: AppColors.textPlaceholder)),
                 ],
@@ -129,7 +129,7 @@ class _JadwalListScreenState extends State<JadwalListScreen> {
               final mk = _mkCache[jadwal.mkId];
               final warnaKey = mk?.warnaLabel ?? 'mkBlue';
               final cardColor = _warnaMap[warnaKey] ?? AppColors.mkBlue;
-              final textColor = _warnaTextMap[warnaKey] ?? const Color(0xFF1E40AF);
+              final textColor = _warnaTextMap[warnaKey] ?? Color(0xFF1E40AF);
 
               final showDayHeader =
                   index == 0 || list[index - 1].hari != jadwal.hari;
@@ -138,17 +138,17 @@ class _JadwalListScreenState extends State<JadwalListScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   if (showDayHeader) ...[
-                    if (index > 0) const SizedBox(height: 8),
+                    if (index > 0) SizedBox(height: 8),
                     Padding(
                       padding: const EdgeInsets.only(bottom: 8, top: 4),
                       child: Row(children: [
-                        const Icon(Icons.event, size: 18,
+                        Icon(Icons.event, size: 18,
                             color: AppColors.sage),
-                        const SizedBox(width: 8),
+                        SizedBox(width: 8),
                         Text(jadwal.hari,
-                            style: const TextStyle(fontSize: 15,
+                            style: TextStyle(fontSize: 15,
                                 fontWeight: FontWeight.bold,
-                                color: AppColors.slate700)),
+                                color: Theme.of(context).textTheme.titleLarge?.color)),
                       ]),
                     ),
                   ],
@@ -167,7 +167,7 @@ class _JadwalListScreenState extends State<JadwalListScreen> {
                                     JadwalFormScreen(jadwal: jadwal)));
                               if (r == true) _refreshList();
                             },
-                            backgroundColor: const Color(0xFF3B82F6),
+                            backgroundColor: Color(0xFF3B82F6),
                             foregroundColor: Colors.white,
                             icon: Icons.edit_outlined,
                             label: 'Edit',
@@ -177,7 +177,7 @@ class _JadwalListScreenState extends State<JadwalListScreen> {
                           ),
                           SlidableAction(
                             onPressed: (_) => _deleteJadwal(jadwal.id!),
-                            backgroundColor: const Color(0xFFEF4444),
+                            backgroundColor: Color(0xFFEF4444),
                             foregroundColor: Colors.white,
                             icon: Icons.delete_outline,
                             label: 'Hapus',
@@ -189,9 +189,9 @@ class _JadwalListScreenState extends State<JadwalListScreen> {
                       ),
                       child: Container(
                         decoration: BoxDecoration(
-                          color: AppColors.bgCard,
+                          color: Theme.of(context).cardColor,
                           borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: AppColors.border),
+                          border: Border.all(color: Theme.of(context).dividerColor),
                         ),
                         child: Row(children: [
                           Container(
@@ -222,24 +222,24 @@ class _JadwalListScreenState extends State<JadwalListScreen> {
                                           fontWeight: FontWeight.w600,
                                           color: textColor)),
                                   ),
-                                  const SizedBox(height: 8),
+                                  SizedBox(height: 8),
                                   Row(children: [
-                                    const Icon(Icons.access_time_outlined,
+                                    Icon(Icons.access_time_outlined,
                                         size: 15, color: AppColors.textMuted),
-                                    const SizedBox(width: 4),
+                                    SizedBox(width: 4),
                                     Text(
                                       '${jadwal.jamMulai} – ${jadwal.jamSelesai}',
-                                      style: const TextStyle(fontSize: 14,
+                                      style: TextStyle(fontSize: 14,
                                           fontWeight: FontWeight.w600,
-                                          color: AppColors.textPrimary)),
-                                    const SizedBox(width: 16),
-                                    const Icon(Icons.room_outlined,
+                                          color: Theme.of(context).textTheme.bodyLarge?.color)),
+                                    SizedBox(width: 16),
+                                    Icon(Icons.room_outlined,
                                         size: 15, color: AppColors.textMuted),
-                                    const SizedBox(width: 4),
+                                    SizedBox(width: 4),
                                     Expanded(
                                       child: Text(jadwal.ruangan,
-                                          style: const TextStyle(fontSize: 13,
-                                              color: AppColors.textSecondary),
+                                          style: TextStyle(fontSize: 13,
+                                              color: Theme.of(context).textTheme.bodyMedium?.color),
                                           overflow: TextOverflow.ellipsis),
                                     ),
                                   ]),
@@ -261,7 +261,7 @@ class _JadwalListScreenState extends State<JadwalListScreen> {
         heroTag: null,
         backgroundColor: AppColors.sage,
         elevation: 4,
-        child: const Icon(Icons.add, color: Colors.white),
+        child: Icon(Icons.add, color: Colors.white),
         onPressed: () async {
           final result = await Navigator.push(context,
             MaterialPageRoute(builder: (_) => const JadwalFormScreen()));

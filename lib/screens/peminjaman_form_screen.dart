@@ -47,16 +47,16 @@ class _PeminjamanFormScreenState extends State<PeminjamanFormScreen> {
   InputDecoration _deco(String label, IconData icon) {
     return InputDecoration(
       labelText: label,
-      labelStyle: const TextStyle(color: AppColors.textSecondary),
+      labelStyle: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color),
       prefixIcon: Icon(icon, color: AppColors.textMuted),
       border: OutlineInputBorder(
-          borderSide: const BorderSide(color: AppColors.border),
+          borderSide: BorderSide(color: Theme.of(context).dividerColor),
           borderRadius: BorderRadius.circular(8)),
       enabledBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: AppColors.border),
+          borderSide: BorderSide(color: Theme.of(context).dividerColor),
           borderRadius: BorderRadius.circular(8)),
       focusedBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: AppColors.sage),
+          borderSide: BorderSide(color: AppColors.sage),
           borderRadius: BorderRadius.circular(8)),
       filled: true,
       fillColor: AppColors.bgCard,
@@ -116,7 +116,7 @@ class _PeminjamanFormScreenState extends State<PeminjamanFormScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text('Gagal menyimpan: $e'),
-            backgroundColor: const Color(0xFFEF4444)));
+            backgroundColor: Color(0xFFEF4444)));
       }
     } finally {
       if (mounted) setState(() => _isSaving = false);
@@ -126,13 +126,13 @@ class _PeminjamanFormScreenState extends State<PeminjamanFormScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.bgPage,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(
             _isEditing ? 'Edit Peminjaman' : 'Tambah Peminjaman',
-            style: const TextStyle(color: Colors.white)),
+            style: TextStyle(color: Colors.white)),
         backgroundColor: AppColors.slate900,
-        iconTheme: const IconThemeData(color: Colors.white),
+        iconTheme: IconThemeData(color: Colors.white),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -145,12 +145,12 @@ class _PeminjamanFormScreenState extends State<PeminjamanFormScreen> {
               TextFormField(
                 controller: _namaAlatCtrl,
                 decoration: _deco('Nama Alat', Icons.build_outlined),
-                style: const TextStyle(color: AppColors.textPrimary),
+                style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
                 validator: (v) => v == null || v.isEmpty
                     ? 'Nama alat wajib diisi'
                     : null,
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
 
 
               TextFormField(
@@ -159,19 +159,19 @@ class _PeminjamanFormScreenState extends State<PeminjamanFormScreen> {
                     _deco('Tanggal Pinjam', Icons.calendar_today_outlined)
                         .copyWith(
                   suffixIcon: IconButton(
-                    icon: const Icon(Icons.event,
+                    icon: Icon(Icons.event,
                         color: AppColors.textMuted),
                     onPressed: () => _pickDate(_tanggalPinjamCtrl),
                   ),
                 ),
-                style: const TextStyle(color: AppColors.textPrimary),
+                style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
                 readOnly: true,
                 onTap: () => _pickDate(_tanggalPinjamCtrl),
                 validator: (v) => v == null || v.isEmpty
                     ? 'Tanggal pinjam wajib diisi'
                     : null,
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
 
 
               TextFormField(
@@ -180,28 +180,28 @@ class _PeminjamanFormScreenState extends State<PeminjamanFormScreen> {
                     _deco('Tenggat Kembali', Icons.event_outlined)
                         .copyWith(
                   suffixIcon: IconButton(
-                    icon: const Icon(Icons.event,
+                    icon: Icon(Icons.event,
                         color: AppColors.textMuted),
                     onPressed: () => _pickDate(_tenggatCtrl),
                   ),
                 ),
-                style: const TextStyle(color: AppColors.textPrimary),
+                style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
                 readOnly: true,
                 onTap: () => _pickDate(_tenggatCtrl),
                 validator: (v) => v == null || v.isEmpty
                     ? 'Tenggat kembali wajib diisi'
                     : null,
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
 
 
               DropdownButtonFormField<String>(
                 isExpanded: true,
-                value: _status,
+                initialValue: _status,
                 decoration:
                     _deco('Status', Icons.flag_outlined),
-                dropdownColor: AppColors.bgCard,
-                style: const TextStyle(color: AppColors.textPrimary),
+                dropdownColor: Theme.of(context).cardColor,
+                style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
                 items: _statusOptions.map((s) {
                   return DropdownMenuItem<String>(
                       value: s, child: Text(s));
@@ -210,7 +210,7 @@ class _PeminjamanFormScreenState extends State<PeminjamanFormScreen> {
                     setState(() => _status = v ?? 'Dipinjam'),
               ),
 
-              const SizedBox(height: 32),
+              SizedBox(height: 32),
 
               ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
@@ -230,7 +230,7 @@ class _PeminjamanFormScreenState extends State<PeminjamanFormScreen> {
                   _isEditing
                       ? 'Perbarui Peminjaman'
                       : 'Simpan Peminjaman',
-                  style: const TextStyle(
+                  style: TextStyle(
                       color: Colors.white,
                       fontSize: 16,
                       fontWeight: FontWeight.bold),

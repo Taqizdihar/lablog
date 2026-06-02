@@ -47,16 +47,16 @@ class _ReferensiFormScreenState extends State<ReferensiFormScreen> {
   InputDecoration _deco(String label, IconData icon) {
     return InputDecoration(
       labelText: label,
-      labelStyle: const TextStyle(color: AppColors.textSecondary),
+      labelStyle: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color),
       prefixIcon: Icon(icon, color: AppColors.textMuted),
       border: OutlineInputBorder(
-          borderSide: const BorderSide(color: AppColors.border),
+          borderSide: BorderSide(color: Theme.of(context).dividerColor),
           borderRadius: BorderRadius.circular(8)),
       enabledBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: AppColors.border),
+          borderSide: BorderSide(color: Theme.of(context).dividerColor),
           borderRadius: BorderRadius.circular(8)),
       focusedBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: AppColors.sage),
+          borderSide: BorderSide(color: AppColors.sage),
           borderRadius: BorderRadius.circular(8)),
       filled: true,
       fillColor: AppColors.bgCard,
@@ -98,7 +98,7 @@ class _ReferensiFormScreenState extends State<ReferensiFormScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text('Gagal menyimpan: $e'),
-            backgroundColor: const Color(0xFFEF4444)));
+            backgroundColor: Color(0xFFEF4444)));
       }
     } finally {
       if (mounted) setState(() => _isSaving = false);
@@ -108,13 +108,13 @@ class _ReferensiFormScreenState extends State<ReferensiFormScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.bgPage,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(
             _isEditing ? 'Edit Referensi' : 'Tambah Referensi',
-            style: const TextStyle(color: Colors.white)),
+            style: TextStyle(color: Colors.white)),
         backgroundColor: AppColors.slate900,
-        iconTheme: const IconThemeData(color: Colors.white),
+        iconTheme: IconThemeData(color: Colors.white),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -127,40 +127,40 @@ class _ReferensiFormScreenState extends State<ReferensiFormScreen> {
                 controller: _judulCtrl,
                 decoration:
                     _deco('Judul Buku / Jurnal', Icons.menu_book_outlined),
-                style: const TextStyle(color: AppColors.textPrimary),
+                style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
                 validator: (v) =>
                     v == null || v.isEmpty ? 'Judul wajib diisi' : null,
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
 
               TextFormField(
                 controller: _penulisCtrl,
                 decoration: _deco('Penulis', Icons.person_outline),
-                style: const TextStyle(color: AppColors.textPrimary),
+                style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
                 validator: (v) =>
                     v == null || v.isEmpty ? 'Penulis wajib diisi' : null,
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
 
               TextFormField(
                 controller: _tahunCtrl,
                 decoration:
                     _deco('Tahun Terbit', Icons.calendar_today_outlined),
-                style: const TextStyle(color: AppColors.textPrimary),
+                style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
                 keyboardType: TextInputType.number,
                 validator: (v) =>
                     v == null || v.isEmpty ? 'Tahun wajib diisi' : null,
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
 
               TextFormField(
                 controller: _tautanCtrl,
                 decoration: _deco('Tautan Sumber (opsional)', Icons.link),
-                style: const TextStyle(color: AppColors.textPrimary),
+                style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
                 keyboardType: TextInputType.url,
               ),
 
-              const SizedBox(height: 32),
+              SizedBox(height: 32),
 
               ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
@@ -178,7 +178,7 @@ class _ReferensiFormScreenState extends State<ReferensiFormScreen> {
                     color: Colors.white),
                 label: Text(
                   _isEditing ? 'Perbarui Referensi' : 'Simpan Referensi',
-                  style: const TextStyle(
+                  style: TextStyle(
                       color: Colors.white,
                       fontSize: 16,
                       fontWeight: FontWeight.bold),

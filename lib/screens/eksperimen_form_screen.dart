@@ -56,17 +56,17 @@ class _EksperimenFormScreenState extends State<EksperimenFormScreen> {
   InputDecoration _inputDeco(String label) {
     return InputDecoration(
       labelText: label,
-      labelStyle: const TextStyle(color: AppColors.textSecondary),
+      labelStyle: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color),
       border: OutlineInputBorder(
-        borderSide: const BorderSide(color: AppColors.border),
+        borderSide: BorderSide(color: Theme.of(context).dividerColor),
         borderRadius: BorderRadius.circular(8),
       ),
       enabledBorder: OutlineInputBorder(
-        borderSide: const BorderSide(color: AppColors.border),
+        borderSide: BorderSide(color: Theme.of(context).dividerColor),
         borderRadius: BorderRadius.circular(8),
       ),
       focusedBorder: OutlineInputBorder(
-        borderSide: const BorderSide(color: AppColors.sage),
+        borderSide: BorderSide(color: AppColors.sage),
         borderRadius: BorderRadius.circular(8),
       ),
       filled: true,
@@ -139,12 +139,12 @@ class _EksperimenFormScreenState extends State<EksperimenFormScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.bgPage,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(_isEditing ? 'Edit Eksperimen' : 'Form Eksperimen',
-          style: const TextStyle(color: Colors.white)),
+          style: TextStyle(color: Colors.white)),
         backgroundColor: AppColors.slate900,
-        iconTheme: const IconThemeData(color: Colors.white),
+        iconTheme: IconThemeData(color: Colors.white),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -156,57 +156,57 @@ class _EksperimenFormScreenState extends State<EksperimenFormScreen> {
               TextFormField(
                 controller: _judulCtrl,
                 decoration: _inputDeco('Judul Eksperimen'),
-                style: const TextStyle(color: AppColors.textPrimary),
+                style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
                 validator: (v) => v == null || v.isEmpty ? 'Judul wajib diisi' : null,
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
               TextFormField(
                 controller: _tanggalCtrl,
                 decoration: _inputDeco('Tanggal (YYYY-MM-DD)').copyWith(
                   suffixIcon: IconButton(
-                    icon: const Icon(Icons.calendar_today, color: AppColors.textMuted),
+                    icon: Icon(Icons.calendar_today, color: AppColors.textMuted),
                     onPressed: _selectDate,
                   ),
                 ),
-                style: const TextStyle(color: AppColors.textPrimary),
+                style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
                 readOnly: true,
                 onTap: _selectDate,
                 validator: (v) => v == null || v.isEmpty ? 'Tanggal wajib diisi' : null,
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
               TextFormField(
                 controller: _tujuanCtrl,
                 decoration: _inputDeco('Tujuan Eksperimen'),
-                style: const TextStyle(color: AppColors.textPrimary),
+                style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
                 maxLines: 2,
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
               TextFormField(
                 controller: _prosedurCtrl,
                 decoration: _inputDeco('Prosedur'),
-                style: const TextStyle(color: AppColors.textPrimary),
+                style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
                 maxLines: 3,
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
               TextFormField(
                 controller: _kesimpulanCtrl,
                 decoration: _inputDeco('Kesimpulan'),
-                style: const TextStyle(color: AppColors.textPrimary),
+                style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
                 maxLines: 2,
               ),
 
-              const SizedBox(height: 24),
-              const Text('Status Jurnal',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.slate700)),
-              const SizedBox(height: 12),
+              SizedBox(height: 24),
+              Text('Status Jurnal',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Theme.of(context).textTheme.titleLarge?.color)),
+              SizedBox(height: 12),
 
 
               DropdownButtonFormField<String>(
                 isExpanded: true,
-                value: _statusJurnal,
+                initialValue: _statusJurnal,
                 decoration: _inputDeco('Status Jurnal'),
-                dropdownColor: AppColors.bgCard,
-                style: const TextStyle(color: AppColors.textPrimary),
+                dropdownColor: Theme.of(context).cardColor,
+                style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
                 items: _statusOptions.map((status) {
                   return DropdownMenuItem<String>(
                     value: status,
@@ -220,7 +220,7 @@ class _EksperimenFormScreenState extends State<EksperimenFormScreen> {
                 },
               ),
 
-              const SizedBox(height: 32),
+              SizedBox(height: 32),
               ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.sage,
@@ -232,7 +232,7 @@ class _EksperimenFormScreenState extends State<EksperimenFormScreen> {
                   color: Colors.white),
                 label: Text(
                   _isEditing ? 'Perbarui Eksperimen' : 'Simpan Eksperimen',
-                  style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+                  style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
                 ),
               ),
             ],

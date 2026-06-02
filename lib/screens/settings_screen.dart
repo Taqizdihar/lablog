@@ -73,7 +73,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text('Pengaturan berhasil disimpan'),
+          content: Text('Pengaturan berhasil disimpan'),
           backgroundColor: AppColors.sage,
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
@@ -85,18 +85,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
   InputDecoration _inputDecoration(String label, IconData icon) {
     return InputDecoration(
       labelText: label,
-      labelStyle: const TextStyle(color: AppColors.textSecondary),
+      labelStyle: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color),
       prefixIcon: Icon(icon, color: AppColors.textMuted),
       border: OutlineInputBorder(
-        borderSide: const BorderSide(color: AppColors.border),
+        borderSide: BorderSide(color: Theme.of(context).dividerColor),
         borderRadius: BorderRadius.circular(8),
       ),
       enabledBorder: OutlineInputBorder(
-        borderSide: const BorderSide(color: AppColors.border),
+        borderSide: BorderSide(color: Theme.of(context).dividerColor),
         borderRadius: BorderRadius.circular(8),
       ),
       focusedBorder: OutlineInputBorder(
-        borderSide: const BorderSide(color: AppColors.sage),
+        borderSide: BorderSide(color: AppColors.sage),
         borderRadius: BorderRadius.circular(8),
       ),
       filled: true,
@@ -108,22 +108,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     if (_isLoading) {
       return Scaffold(
-        backgroundColor: AppColors.bgPage,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: AppBar(
-          title: const Text('Pengaturan',
+          title: Text('Pengaturan',
               style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
           backgroundColor: AppColors.slate900,
         ),
-        body: const Center(
+        body: Center(
           child: CircularProgressIndicator(color: AppColors.sage),
         ),
       );
     }
 
     return Scaffold(
-      backgroundColor: AppColors.bgPage,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text('Pengaturan',
+        title: Text('Pengaturan',
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         backgroundColor: AppColors.slate900,
       ),
@@ -136,10 +136,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
             children: [
 
               _buildSectionHeader(Icons.person_outline, 'Profil Praktikan'),
-              const SizedBox(height: 12),
+              SizedBox(height: 12),
 
               Card(
-                color: AppColors.bgCard,
+                color: Theme.of(context).cardColor,
                 elevation: 2,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12)),
@@ -152,43 +152,43 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         decoration: _inputDecoration(
                             'Nama Lengkap', Icons.person_outline),
                         style:
-                            const TextStyle(color: AppColors.textPrimary),
+                            TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
                       ),
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16),
                       TextFormField(
                         controller: _nimController,
                         decoration:
                             _inputDecoration('NIM', Icons.badge_outlined),
                         style:
-                            const TextStyle(color: AppColors.textPrimary),
+                            TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
                         keyboardType: TextInputType.number,
                       ),
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16),
                       TextFormField(
                         controller: _programStudiController,
                         decoration: _inputDecoration(
                             'Program Studi', Icons.school_outlined),
                         style:
-                            const TextStyle(color: AppColors.textPrimary),
+                            TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
                       ),
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16),
                       TextFormField(
                         controller: _targetIpkController,
                         decoration: _inputDecoration(
                             'Target IPK', Icons.analytics_outlined),
                         style:
-                            const TextStyle(color: AppColors.textPrimary),
+                            TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
                         keyboardType: const TextInputType.numberWithOptions(decimal: true),
                       ),
-                      const SizedBox(height: 16),
+                      SizedBox(height: 16),
                       DropdownButtonFormField<String>(
                         isExpanded: true,
-                        value: _selectedSemester,
+                        initialValue: _selectedSemester,
                         decoration: _inputDecoration(
                             'Semester Aktif', Icons.calendar_today_outlined),
-                        dropdownColor: AppColors.bgCard,
+                        dropdownColor: Theme.of(context).cardColor,
                         style:
-                            const TextStyle(color: AppColors.textPrimary),
+                            TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
                         items: _semesterOptions.map((semester) {
                           return DropdownMenuItem<String>(
                             value: semester,
@@ -206,23 +206,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
               ),
 
-              const SizedBox(height: 24),
+              SizedBox(height: 24),
 
 
               _buildSectionHeader(Icons.palette_outlined, 'Preferensi Tampilan'),
-              const SizedBox(height: 12),
+              SizedBox(height: 12),
 
               Card(
-                color: AppColors.bgCard,
+                color: Theme.of(context).cardColor,
                 elevation: 2,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12)),
                 child: Column(
                   children: [
                     SwitchListTile(
-                      title: const Text('Dark Mode',
-                          style: TextStyle(color: AppColors.textPrimary)),
-                      subtitle: const Text(
+                      title: Text('Dark Mode',
+                          style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color)),
+                      subtitle: Text(
                         'Aktifkan tema gelap untuk tampilan lebih nyaman',
                         style: TextStyle(
                             color: AppColors.textMuted, fontSize: 12),
@@ -234,18 +234,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         await prefs.setBool('is_dark_mode', value);
                         themeNotifier.value = value ? ThemeMode.dark : ThemeMode.light;
                       },
-                      activeColor: AppColors.sage,
+                      activeThumbColor: AppColors.sage,
                       secondary: Icon(
                         _isDarkMode ? Icons.dark_mode : Icons.light_mode,
                         color: AppColors.textMuted,
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    SizedBox(height: 8),
                   ],
                 ),
               ),
 
-              const SizedBox(height: 32),
+              SizedBox(height: 32),
 
 
               ElevatedButton.icon(
@@ -258,8 +258,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   elevation: 2,
                 ),
                 onPressed: _savePreferences,
-                icon: const Icon(Icons.save_outlined, color: Colors.white),
-                label: const Text(
+                icon: Icon(Icons.save_outlined, color: Colors.white),
+                label: Text(
                   'Simpan Pengaturan',
                   style: TextStyle(
                     color: Colors.white,
@@ -269,7 +269,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
               ),
 
-              const SizedBox(height: 24),
+              SizedBox(height: 24),
 
 
               Center(
@@ -282,7 +282,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         color: AppColors.sageBg,
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      child: const Text(
+                      child: Text(
                         'LabLog v1.0.0',
                         style: TextStyle(
                           color: AppColors.sageText,
@@ -291,8 +291,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 8),
-                    const Text(
+                    SizedBox(height: 8),
+                    Text(
                       'Aplikasi Catatan Laboratorium',
                       style: TextStyle(
                           color: AppColors.textPlaceholder, fontSize: 12),
@@ -300,7 +300,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ],
                 ),
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
             ],
           ),
         ),
@@ -319,13 +319,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
           child: Icon(icon, color: AppColors.sage, size: 20),
         ),
-        const SizedBox(width: 12),
+        SizedBox(width: 12),
         Text(
           title,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
-            color: AppColors.slate700,
+            color: Theme.of(context).textTheme.titleLarge?.color,
           ),
         ),
       ],

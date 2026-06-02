@@ -53,16 +53,16 @@ class _JadwalFormScreenState extends State<JadwalFormScreen> {
   InputDecoration _deco(String label, IconData icon) {
     return InputDecoration(
       labelText: label,
-      labelStyle: const TextStyle(color: AppColors.textSecondary),
+      labelStyle: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color),
       prefixIcon: Icon(icon, color: AppColors.textMuted),
       border: OutlineInputBorder(
-        borderSide: const BorderSide(color: AppColors.border),
+        borderSide: BorderSide(color: Theme.of(context).dividerColor),
         borderRadius: BorderRadius.circular(8)),
       enabledBorder: OutlineInputBorder(
-        borderSide: const BorderSide(color: AppColors.border),
+        borderSide: BorderSide(color: Theme.of(context).dividerColor),
         borderRadius: BorderRadius.circular(8)),
       focusedBorder: OutlineInputBorder(
-        borderSide: const BorderSide(color: AppColors.sage),
+        borderSide: BorderSide(color: AppColors.sage),
         borderRadius: BorderRadius.circular(8)),
       filled: true,
       fillColor: AppColors.bgCard,
@@ -136,7 +136,7 @@ class _JadwalFormScreenState extends State<JadwalFormScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text('Gagal menyimpan: $e'),
-          backgroundColor: const Color(0xFFEF4444)));
+          backgroundColor: Color(0xFFEF4444)));
       }
     } finally {
       if (mounted) setState(() => _isSaving = false);
@@ -146,18 +146,18 @@ class _JadwalFormScreenState extends State<JadwalFormScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.bgPage,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(_isEditing ? 'Edit Jadwal' : 'Tambah Jadwal',
-            style: const TextStyle(color: Colors.white)),
+            style: TextStyle(color: Colors.white)),
         backgroundColor: AppColors.slate900,
-        iconTheme: const IconThemeData(color: Colors.white),
+        iconTheme: IconThemeData(color: Colors.white),
       ),
       body: FutureBuilder<List<MataKuliah>>(
         future: _mkListFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
+            return Center(
                 child: CircularProgressIndicator(color: AppColors.sage));
           }
 
@@ -170,24 +170,24 @@ class _JadwalFormScreenState extends State<JadwalFormScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(Icons.warning_amber_outlined,
+                    Icon(Icons.warning_amber_outlined,
                         size: 48, color: Color(0xFFF59E0B)),
-                    const SizedBox(height: 16),
-                    const Text('Belum ada Mata Kuliah',
+                    SizedBox(height: 16),
+                    Text('Belum ada Mata Kuliah',
                         style: TextStyle(fontSize: 16,
                             fontWeight: FontWeight.w600,
-                            color: AppColors.textPrimary)),
-                    const SizedBox(height: 8),
-                    const Text(
+                            color: Theme.of(context).textTheme.bodyLarge?.color)),
+                    SizedBox(height: 8),
+                    Text(
                         'Tambahkan mata kuliah terlebih dahulu di tab Beranda.',
                         style: TextStyle(color: AppColors.textMuted),
                         textAlign: TextAlign.center),
-                    const SizedBox(height: 20),
+                    SizedBox(height: 20),
                     OutlinedButton(
                       onPressed: () => Navigator.pop(context),
                       style: OutlinedButton.styleFrom(
-                        side: const BorderSide(color: AppColors.sage)),
-                      child: const Text('Kembali',
+                        side: BorderSide(color: AppColors.sage)),
+                      child: Text('Kembali',
                           style: TextStyle(color: AppColors.sage)),
                     ),
                   ],
@@ -210,18 +210,18 @@ class _JadwalFormScreenState extends State<JadwalFormScreen> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
 
-                  const Text('Mata Kuliah',
+                  Text('Mata Kuliah',
                       style: TextStyle(fontSize: 16,
                           fontWeight: FontWeight.bold,
-                          color: AppColors.slate700)),
-                  const SizedBox(height: 8),
+                          color: Theme.of(context).textTheme.titleLarge?.color)),
+                  SizedBox(height: 8),
                   DropdownButtonFormField<int>(
                     isExpanded: true,
-                    value: _selectedMkId,
+                    initialValue: _selectedMkId,
                     decoration: _deco('Pilih Mata Kuliah',
                         Icons.book_outlined),
-                    dropdownColor: AppColors.bgCard,
-                    style: const TextStyle(color: AppColors.textPrimary),
+                    dropdownColor: Theme.of(context).cardColor,
+                    style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
                     items: mkList.map((mk) {
                       return DropdownMenuItem<int>(
                         value: mk.id,
@@ -236,21 +236,21 @@ class _JadwalFormScreenState extends State<JadwalFormScreen> {
                         v == null ? 'Mata kuliah wajib dipilih' : null,
                   ),
 
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20),
 
 
-                  const Text('Hari',
+                  Text('Hari',
                       style: TextStyle(fontSize: 16,
                           fontWeight: FontWeight.bold,
-                          color: AppColors.slate700)),
-                  const SizedBox(height: 8),
+                          color: Theme.of(context).textTheme.titleLarge?.color)),
+                  SizedBox(height: 8),
                   DropdownButtonFormField<String>(
                     isExpanded: true,
-                    value: _selectedHari,
+                    initialValue: _selectedHari,
                     decoration: _deco('Pilih Hari',
                         Icons.calendar_today_outlined),
-                    dropdownColor: AppColors.bgCard,
-                    style: const TextStyle(color: AppColors.textPrimary),
+                    dropdownColor: Theme.of(context).cardColor,
+                    style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
                     items: _hariOptions.map((h) {
                       return DropdownMenuItem<String>(
                         value: h, child: Text(h));
@@ -259,14 +259,14 @@ class _JadwalFormScreenState extends State<JadwalFormScreen> {
                         setState(() => _selectedHari = v ?? 'Senin'),
                   ),
 
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20),
 
 
-                  const Text('Waktu',
+                  Text('Waktu',
                       style: TextStyle(fontSize: 16,
                           fontWeight: FontWeight.bold,
-                          color: AppColors.slate700)),
-                  const SizedBox(height: 8),
+                          color: Theme.of(context).textTheme.titleLarge?.color)),
+                  SizedBox(height: 8),
                   Row(children: [
                     Expanded(
                       child: InkWell(
@@ -276,30 +276,30 @@ class _JadwalFormScreenState extends State<JadwalFormScreen> {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 14, vertical: 16),
                           decoration: BoxDecoration(
-                            color: AppColors.bgCard,
-                            border: Border.all(color: AppColors.border),
+                            color: Theme.of(context).cardColor,
+                            border: Border.all(color: Theme.of(context).dividerColor),
                             borderRadius: BorderRadius.circular(8)),
                           child: Row(children: [
-                            const Icon(Icons.access_time,
+                            Icon(Icons.access_time,
                                 size: 18, color: AppColors.textMuted),
-                            const SizedBox(width: 8),
+                            SizedBox(width: 8),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text('Mulai',
+                                Text('Mulai',
                                     style: TextStyle(fontSize: 11,
                                         color: AppColors.textMuted)),
                                 Text(_jamMulai,
-                                    style: const TextStyle(fontSize: 16,
+                                    style: TextStyle(fontSize: 16,
                                         fontWeight: FontWeight.w600,
-                                        color: AppColors.textPrimary)),
+                                        color: Theme.of(context).textTheme.bodyLarge?.color)),
                               ],
                             ),
                           ]),
                         ),
                       ),
                     ),
-                    const Padding(
+                    Padding(
                       padding: EdgeInsets.symmetric(horizontal: 12),
                       child: Icon(Icons.arrow_forward,
                           color: AppColors.textPlaceholder, size: 20)),
@@ -311,23 +311,23 @@ class _JadwalFormScreenState extends State<JadwalFormScreen> {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 14, vertical: 16),
                           decoration: BoxDecoration(
-                            color: AppColors.bgCard,
-                            border: Border.all(color: AppColors.border),
+                            color: Theme.of(context).cardColor,
+                            border: Border.all(color: Theme.of(context).dividerColor),
                             borderRadius: BorderRadius.circular(8)),
                           child: Row(children: [
-                            const Icon(Icons.access_time,
+                            Icon(Icons.access_time,
                                 size: 18, color: AppColors.textMuted),
-                            const SizedBox(width: 8),
+                            SizedBox(width: 8),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text('Selesai',
+                                Text('Selesai',
                                     style: TextStyle(fontSize: 11,
                                         color: AppColors.textMuted)),
                                 Text(_jamSelesai,
-                                    style: const TextStyle(fontSize: 16,
+                                    style: TextStyle(fontSize: 16,
                                         fontWeight: FontWeight.w600,
-                                        color: AppColors.textPrimary)),
+                                        color: Theme.of(context).textTheme.bodyLarge?.color)),
                               ],
                             ),
                           ]),
@@ -336,23 +336,23 @@ class _JadwalFormScreenState extends State<JadwalFormScreen> {
                     ),
                   ]),
 
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20),
 
 
-                  const Text('Ruangan',
+                  Text('Ruangan',
                       style: TextStyle(fontSize: 16,
                           fontWeight: FontWeight.bold,
-                          color: AppColors.slate700)),
-                  const SizedBox(height: 8),
+                          color: Theme.of(context).textTheme.titleLarge?.color)),
+                  SizedBox(height: 8),
                   TextFormField(
                     controller: _ruanganCtrl,
                     decoration: _deco('Nama Ruangan', Icons.room_outlined),
-                    style: const TextStyle(color: AppColors.textPrimary),
+                    style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
                     validator: (v) =>
                         v == null || v.isEmpty ? 'Ruangan wajib diisi' : null,
                   ),
 
-                  const SizedBox(height: 32),
+                  SizedBox(height: 32),
 
 
                   ElevatedButton.icon(
@@ -369,7 +369,7 @@ class _JadwalFormScreenState extends State<JadwalFormScreen> {
                         color: Colors.white),
                     label: Text(
                       _isEditing ? 'Perbarui Jadwal' : 'Simpan Jadwal',
-                      style: const TextStyle(color: Colors.white,
+                      style: TextStyle(color: Colors.white,
                           fontSize: 16, fontWeight: FontWeight.bold)),
                   ),
                 ],

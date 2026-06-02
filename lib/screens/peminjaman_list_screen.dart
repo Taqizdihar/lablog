@@ -52,9 +52,9 @@ class _PeminjamanListScreenState extends State<PeminjamanListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.bgPage,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text('Peminjaman Alat',
+        title: Text('Peminjaman Alat',
             style: TextStyle(
                 color: Colors.white, fontWeight: FontWeight.bold)),
         backgroundColor: AppColors.slate900,
@@ -63,14 +63,14 @@ class _PeminjamanListScreenState extends State<PeminjamanListScreen> {
         future: _peminjamanFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
+            return Center(
                 child: CircularProgressIndicator(color: AppColors.sage));
           }
 
           if (snapshot.hasError) {
             return Center(
               child: Text('Error: ${snapshot.error}',
-                  style: const TextStyle(color: AppColors.textSecondary)),
+                  style: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color)),
             );
           }
 
@@ -83,19 +83,19 @@ class _PeminjamanListScreenState extends State<PeminjamanListScreen> {
                 children: [
                   Container(
                     padding: const EdgeInsets.all(20),
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                         color: AppColors.sageBg, shape: BoxShape.circle),
-                    child: const Icon(Icons.inventory_2_outlined,
+                    child: Icon(Icons.inventory_2_outlined,
                         size: 48, color: AppColors.sage),
                   ),
-                  const SizedBox(height: 20),
-                  const Text('Belum ada peminjaman',
+                  SizedBox(height: 20),
+                  Text('Belum ada peminjaman',
                       style: TextStyle(
                           fontSize: 18,
                           color: AppColors.textMuted,
                           fontWeight: FontWeight.w600)),
-                  const SizedBox(height: 8),
-                  const Text('Tekan tombol + untuk menambahkan',
+                  SizedBox(height: 8),
+                  Text('Tekan tombol + untuk menambahkan',
                       style: TextStyle(
                           fontSize: 14,
                           color: AppColors.textPlaceholder)),
@@ -126,7 +126,7 @@ class _PeminjamanListScreenState extends State<PeminjamanListScreen> {
                                       peminjaman: item)));
                           if (r == true) _refreshList();
                         },
-                        backgroundColor: const Color(0xFF3B82F6),
+                        backgroundColor: Color(0xFF3B82F6),
                         foregroundColor: Colors.white,
                         icon: Icons.edit_outlined,
                         label: 'Edit',
@@ -136,7 +136,7 @@ class _PeminjamanListScreenState extends State<PeminjamanListScreen> {
                       ),
                       SlidableAction(
                         onPressed: (_) => _deleteItem(item.id!),
-                        backgroundColor: const Color(0xFFEF4444),
+                        backgroundColor: Color(0xFFEF4444),
                         foregroundColor: Colors.white,
                         icon: Icons.delete_outline,
                         label: 'Hapus',
@@ -148,9 +148,9 @@ class _PeminjamanListScreenState extends State<PeminjamanListScreen> {
                   ),
                   child: Container(
                     decoration: BoxDecoration(
-                      color: AppColors.bgCard,
+                      color: Theme.of(context).cardColor,
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: AppColors.border),
+                      border: Border.all(color: Theme.of(context).dividerColor),
                     ),
                     padding: const EdgeInsets.all(16),
                     child: Row(
@@ -166,7 +166,7 @@ class _PeminjamanListScreenState extends State<PeminjamanListScreen> {
                               size: 24,
                               color: _statusText(item.status)),
                         ),
-                        const SizedBox(width: 14),
+                        SizedBox(width: 14),
 
                         Expanded(
                           child: Column(
@@ -174,23 +174,22 @@ class _PeminjamanListScreenState extends State<PeminjamanListScreen> {
                                 CrossAxisAlignment.start,
                             children: [
                               Text(item.namaAlat,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                       fontSize: 15,
                                       fontWeight: FontWeight.bold,
-                                      color: AppColors.textPrimary)),
-                              const SizedBox(height: 4),
+                                      color: Theme.of(context).textTheme.bodyLarge?.color)),
+                              SizedBox(height: 4),
                               Row(children: [
-                                const Icon(
+                                Icon(
                                     Icons.calendar_today_outlined,
                                     size: 13,
                                     color: AppColors.textMuted),
-                                const SizedBox(width: 4),
+                                SizedBox(width: 4),
                                 Text(
                                     '${item.tanggalPinjam}  →  ${item.tenggatKembali}',
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                         fontSize: 12,
-                                        color:
-                                            AppColors.textSecondary)),
+                                        color: Theme.of(context).textTheme.bodyMedium?.color)),
                               ]),
                             ],
                           ),
@@ -222,7 +221,7 @@ class _PeminjamanListScreenState extends State<PeminjamanListScreen> {
         heroTag: null,
         backgroundColor: AppColors.sage,
         elevation: 4,
-        child: const Icon(Icons.add, color: Colors.white),
+        child: Icon(Icons.add, color: Colors.white),
         onPressed: () async {
           final result = await Navigator.push(context,
               MaterialPageRoute(

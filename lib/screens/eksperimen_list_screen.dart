@@ -59,19 +59,19 @@ class _EksperimenListScreenState extends State<EksperimenListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.bgPage,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text('Jurnal Eksperimen',
+        title: Text('Jurnal Eksperimen',
             style: TextStyle(
                 color: Colors.white, fontWeight: FontWeight.bold)),
         backgroundColor: AppColors.slate900,
-        iconTheme: const IconThemeData(color: Colors.white),
+        iconTheme: IconThemeData(color: Colors.white),
       ),
       body: FutureBuilder<List<Eksperimen>>(
         future: _eksFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
+            return Center(
                 child: CircularProgressIndicator(color: AppColors.sage));
           }
 
@@ -79,7 +79,7 @@ class _EksperimenListScreenState extends State<EksperimenListScreen> {
             return Center(
               child: Text('Error: ${snapshot.error}',
                   style:
-                      const TextStyle(color: AppColors.textSecondary)),
+                      TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color)),
             );
           }
 
@@ -92,20 +92,20 @@ class _EksperimenListScreenState extends State<EksperimenListScreen> {
                 children: [
                   Container(
                     padding: const EdgeInsets.all(20),
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                         color: AppColors.sageBg,
                         shape: BoxShape.circle),
-                    child: const Icon(Icons.science_outlined,
+                    child: Icon(Icons.science_outlined,
                         size: 48, color: AppColors.sage),
                   ),
-                  const SizedBox(height: 20),
-                  const Text('Belum ada eksperimen',
+                  SizedBox(height: 20),
+                  Text('Belum ada eksperimen',
                       style: TextStyle(
                           fontSize: 18,
                           color: AppColors.textMuted,
                           fontWeight: FontWeight.w600)),
-                  const SizedBox(height: 8),
-                  const Text('Tekan tombol + untuk menambahkan',
+                  SizedBox(height: 8),
+                  Text('Tekan tombol + untuk menambahkan',
                       style: TextStyle(
                           fontSize: 14,
                           color: AppColors.textPlaceholder)),
@@ -138,7 +138,7 @@ class _EksperimenListScreenState extends State<EksperimenListScreen> {
                                           mkId: widget.mkId)));
                           if (r == true) _refreshList();
                         },
-                        backgroundColor: const Color(0xFF3B82F6),
+                        backgroundColor: Color(0xFF3B82F6),
                         foregroundColor: Colors.white,
                         icon: Icons.edit_outlined,
                         label: 'Edit',
@@ -148,7 +148,7 @@ class _EksperimenListScreenState extends State<EksperimenListScreen> {
                       ),
                       SlidableAction(
                         onPressed: (_) => _deleteItem(eks.id!),
-                        backgroundColor: const Color(0xFFEF4444),
+                        backgroundColor: Color(0xFFEF4444),
                         foregroundColor: Colors.white,
                         icon: Icons.delete_outline,
                         label: 'Hapus',
@@ -171,9 +171,9 @@ class _EksperimenListScreenState extends State<EksperimenListScreen> {
                     borderRadius: BorderRadius.circular(12),
                     child: Container(
                       decoration: BoxDecoration(
-                        color: AppColors.bgCard,
+                        color: Theme.of(context).cardColor,
                         borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: AppColors.border),
+                        border: Border.all(color: Theme.of(context).dividerColor),
                       ),
                       padding: const EdgeInsets.all(16),
                       child: Column(
@@ -183,11 +183,10 @@ class _EksperimenListScreenState extends State<EksperimenListScreen> {
                           Row(children: [
                             Expanded(
                               child: Text(eks.judul,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                       fontSize: 15,
                                       fontWeight: FontWeight.bold,
-                                      color:
-                                          AppColors.textPrimary)),
+                                      color: Theme.of(context).textTheme.bodyLarge?.color)),
                             ),
                             Container(
                               padding: const EdgeInsets.symmetric(
@@ -206,25 +205,24 @@ class _EksperimenListScreenState extends State<EksperimenListScreen> {
                                           eks.statusJurnal))),
                             ),
                           ]),
-                          const SizedBox(height: 8),
+                          SizedBox(height: 8),
                           Row(children: [
-                            const Icon(
+                            Icon(
                                 Icons.calendar_today_outlined,
                                 size: 13,
                                 color: AppColors.textMuted),
-                            const SizedBox(width: 4),
+                            SizedBox(width: 4),
                             Text(eks.tanggal,
-                                style: const TextStyle(
+                                style: TextStyle(
                                     fontSize: 13,
-                                    color:
-                                        AppColors.textSecondary)),
+                                    color: Theme.of(context).textTheme.bodyMedium?.color)),
                           ]),
                           if (eks.tujuan.isNotEmpty) ...[
-                            const SizedBox(height: 6),
+                            SizedBox(height: 6),
                             Text(eks.tujuan,
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
+                                style: TextStyle(
                                     fontSize: 13,
                                     color: AppColors.textMuted)),
                           ],
@@ -242,7 +240,7 @@ class _EksperimenListScreenState extends State<EksperimenListScreen> {
         heroTag: null,
         backgroundColor: AppColors.sage,
         elevation: 4,
-        child: const Icon(Icons.add, color: Colors.white),
+        child: Icon(Icons.add, color: Colors.white),
         onPressed: () async {
           final result = await Navigator.push(
               context,

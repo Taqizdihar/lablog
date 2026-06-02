@@ -37,26 +37,26 @@ class _TimListScreenState extends State<TimListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.bgPage,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: const Text('Tim Kelompok',
+        title: Text('Tim Kelompok',
             style: TextStyle(
                 color: Colors.white, fontWeight: FontWeight.bold)),
         backgroundColor: AppColors.slate900,
-        iconTheme: const IconThemeData(color: Colors.white),
+        iconTheme: IconThemeData(color: Colors.white),
       ),
       body: FutureBuilder<List<TimKelompok>>(
         future: _timFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
+            return Center(
                 child: CircularProgressIndicator(color: AppColors.sage));
           }
 
           if (snapshot.hasError) {
             return Center(
               child: Text('Error: ${snapshot.error}',
-                  style: const TextStyle(color: AppColors.textSecondary)),
+                  style: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color)),
             );
           }
 
@@ -69,19 +69,19 @@ class _TimListScreenState extends State<TimListScreen> {
                 children: [
                   Container(
                     padding: const EdgeInsets.all(20),
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                         color: AppColors.sageBg, shape: BoxShape.circle),
-                    child: const Icon(Icons.group_outlined,
+                    child: Icon(Icons.group_outlined,
                         size: 48, color: AppColors.sage),
                   ),
-                  const SizedBox(height: 20),
-                  const Text('Belum ada anggota tim',
+                  SizedBox(height: 20),
+                  Text('Belum ada anggota tim',
                       style: TextStyle(
                           fontSize: 18,
                           color: AppColors.textMuted,
                           fontWeight: FontWeight.w600)),
-                  const SizedBox(height: 8),
-                  const Text('Tekan tombol + untuk menambahkan',
+                  SizedBox(height: 8),
+                  Text('Tekan tombol + untuk menambahkan',
                       style: TextStyle(
                           fontSize: 14,
                           color: AppColors.textPlaceholder)),
@@ -114,7 +114,7 @@ class _TimListScreenState extends State<TimListScreen> {
                                       timKelompok: tim)));
                           if (r == true) _refreshList();
                         },
-                        backgroundColor: const Color(0xFF3B82F6),
+                        backgroundColor: Color(0xFF3B82F6),
                         foregroundColor: Colors.white,
                         icon: Icons.edit_outlined,
                         label: 'Edit',
@@ -124,7 +124,7 @@ class _TimListScreenState extends State<TimListScreen> {
                       ),
                       SlidableAction(
                         onPressed: (_) => _deleteItem(tim.id!),
-                        backgroundColor: const Color(0xFFEF4444),
+                        backgroundColor: Color(0xFFEF4444),
                         foregroundColor: Colors.white,
                         icon: Icons.delete_outline,
                         label: 'Hapus',
@@ -136,9 +136,9 @@ class _TimListScreenState extends State<TimListScreen> {
                   ),
                   child: Container(
                     decoration: BoxDecoration(
-                      color: AppColors.bgCard,
+                      color: Theme.of(context).cardColor,
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: AppColors.border),
+                      border: Border.all(color: Theme.of(context).dividerColor),
                     ),
                     padding: const EdgeInsets.all(16),
                     child: Row(
@@ -158,41 +158,40 @@ class _TimListScreenState extends State<TimListScreen> {
                                   ? Icons.star_rounded
                                   : Icons.person_outline,
                               color: isKetua
-                                  ? const Color(0xFF8B5CF6)
-                                  : const Color(0xFF3B82F6),
+                                  ? Color(0xFF8B5CF6)
+                                  : Color(0xFF3B82F6),
                               size: 22),
                         ),
-                        const SizedBox(width: 14),
+                        SizedBox(width: 14),
 
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(tim.namaAnggota,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                       fontSize: 15,
                                       fontWeight: FontWeight.bold,
-                                      color: AppColors.textPrimary)),
-                              const SizedBox(height: 4),
+                                      color: Theme.of(context).textTheme.bodyLarge?.color)),
+                              SizedBox(height: 4),
                               Row(children: [
-                                const Icon(Icons.badge_outlined,
+                                Icon(Icons.badge_outlined,
                                     size: 13, color: AppColors.textMuted),
-                                const SizedBox(width: 4),
+                                SizedBox(width: 4),
                                 Text(tim.nim,
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                         fontSize: 13,
-                                        color: AppColors.textSecondary)),
+                                        color: Theme.of(context).textTheme.bodyMedium?.color)),
                                 if (tim.noHp.isNotEmpty) ...[
-                                  const SizedBox(width: 12),
-                                  const Icon(Icons.phone_outlined,
+                                  SizedBox(width: 12),
+                                  Icon(Icons.phone_outlined,
                                       size: 13,
                                       color: AppColors.textMuted),
-                                  const SizedBox(width: 4),
+                                  SizedBox(width: 4),
                                   Text(tim.noHp,
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                           fontSize: 13,
-                                          color:
-                                              AppColors.textSecondary)),
+                                          color: Theme.of(context).textTheme.bodyMedium?.color)),
                                 ],
                               ]),
                             ],
@@ -213,8 +212,8 @@ class _TimListScreenState extends State<TimListScreen> {
                                   fontSize: 11,
                                   fontWeight: FontWeight.w600,
                                   color: isKetua
-                                      ? const Color(0xFF581C87)
-                                      : const Color(0xFF1E40AF))),
+                                      ? Color(0xFF581C87)
+                                      : Color(0xFF1E40AF))),
                         ),
                       ],
                     ),
@@ -229,7 +228,7 @@ class _TimListScreenState extends State<TimListScreen> {
         heroTag: null,
         backgroundColor: AppColors.sage,
         elevation: 4,
-        child: const Icon(Icons.add, color: Colors.white),
+        child: Icon(Icons.add, color: Colors.white),
         onPressed: () async {
           final result = await Navigator.push(
               context,

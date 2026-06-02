@@ -48,16 +48,16 @@ class _TimFormScreenState extends State<TimFormScreen> {
   InputDecoration _deco(String label, IconData icon) {
     return InputDecoration(
       labelText: label,
-      labelStyle: const TextStyle(color: AppColors.textSecondary),
+      labelStyle: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color),
       prefixIcon: Icon(icon, color: AppColors.textMuted),
       border: OutlineInputBorder(
-          borderSide: const BorderSide(color: AppColors.border),
+          borderSide: BorderSide(color: Theme.of(context).dividerColor),
           borderRadius: BorderRadius.circular(8)),
       enabledBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: AppColors.border),
+          borderSide: BorderSide(color: Theme.of(context).dividerColor),
           borderRadius: BorderRadius.circular(8)),
       focusedBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: AppColors.sage),
+          borderSide: BorderSide(color: AppColors.sage),
           borderRadius: BorderRadius.circular(8)),
       filled: true,
       fillColor: AppColors.bgCard,
@@ -99,7 +99,7 @@ class _TimFormScreenState extends State<TimFormScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text('Gagal menyimpan: $e'),
-            backgroundColor: const Color(0xFFEF4444)));
+            backgroundColor: Color(0xFFEF4444)));
       }
     } finally {
       if (mounted) setState(() => _isSaving = false);
@@ -109,13 +109,13 @@ class _TimFormScreenState extends State<TimFormScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.bgPage,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(
             _isEditing ? 'Edit Anggota' : 'Tambah Anggota',
-            style: const TextStyle(color: Colors.white)),
+            style: TextStyle(color: Colors.white)),
         backgroundColor: AppColors.slate900,
-        iconTheme: const IconThemeData(color: Colors.white),
+        iconTheme: IconThemeData(color: Colors.white),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -127,38 +127,38 @@ class _TimFormScreenState extends State<TimFormScreen> {
               TextFormField(
                 controller: _namaCtrl,
                 decoration: _deco('Nama Anggota', Icons.person_outline),
-                style: const TextStyle(color: AppColors.textPrimary),
+                style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
                 validator: (v) => v == null || v.isEmpty
                     ? 'Nama wajib diisi'
                     : null,
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
 
               TextFormField(
                 controller: _nimCtrl,
                 decoration: _deco('NIM', Icons.badge_outlined),
-                style: const TextStyle(color: AppColors.textPrimary),
+                style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
                 keyboardType: TextInputType.number,
                 validator: (v) => v == null || v.isEmpty
                     ? 'NIM wajib diisi'
                     : null,
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
 
               TextFormField(
                 controller: _noHpCtrl,
                 decoration: _deco('No HP', Icons.phone_outlined),
-                style: const TextStyle(color: AppColors.textPrimary),
+                style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
                 keyboardType: TextInputType.phone,
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 16),
 
               DropdownButtonFormField<String>(
                 isExpanded: true,
-                value: _peran,
+                initialValue: _peran,
                 decoration: _deco('Peran', Icons.assignment_ind_outlined),
-                dropdownColor: AppColors.bgCard,
-                style: const TextStyle(color: AppColors.textPrimary),
+                dropdownColor: Theme.of(context).cardColor,
+                style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
                 items: _peranOptions.map((p) {
                   return DropdownMenuItem<String>(
                       value: p, child: Text(p));
@@ -167,7 +167,7 @@ class _TimFormScreenState extends State<TimFormScreen> {
                     setState(() => _peran = v ?? 'Anggota'),
               ),
 
-              const SizedBox(height: 32),
+              SizedBox(height: 32),
 
               ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
@@ -185,7 +185,7 @@ class _TimFormScreenState extends State<TimFormScreen> {
                     color: Colors.white),
                 label: Text(
                   _isEditing ? 'Perbarui Anggota' : 'Simpan Anggota',
-                  style: const TextStyle(
+                  style: TextStyle(
                       color: Colors.white,
                       fontSize: 16,
                       fontWeight: FontWeight.bold),
