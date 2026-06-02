@@ -127,7 +127,7 @@ class _ReferensiFormScreenState extends State<ReferensiFormScreen> {
                 controller: _judulCtrl,
                 decoration:
                     _deco('Judul Buku / Jurnal', Icons.menu_book_outlined),
-                style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
+                style: const TextStyle(color: AppColors.slate900),
                 validator: (v) =>
                     v == null || v.isEmpty ? 'Judul wajib diisi' : null,
               ),
@@ -136,7 +136,7 @@ class _ReferensiFormScreenState extends State<ReferensiFormScreen> {
               TextFormField(
                 controller: _penulisCtrl,
                 decoration: _deco('Penulis', Icons.person_outline),
-                style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
+                style: const TextStyle(color: AppColors.slate900),
                 validator: (v) =>
                     v == null || v.isEmpty ? 'Penulis wajib diisi' : null,
               ),
@@ -146,7 +146,7 @@ class _ReferensiFormScreenState extends State<ReferensiFormScreen> {
                 controller: _tahunCtrl,
                 decoration:
                     _deco('Tahun Terbit', Icons.calendar_today_outlined),
-                style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
+                style: const TextStyle(color: AppColors.slate900),
                 keyboardType: TextInputType.number,
                 validator: (v) =>
                     v == null || v.isEmpty ? 'Tahun wajib diisi' : null,
@@ -156,7 +156,7 @@ class _ReferensiFormScreenState extends State<ReferensiFormScreen> {
               TextFormField(
                 controller: _tautanCtrl,
                 decoration: _deco('Tautan Sumber (opsional)', Icons.link),
-                style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
+                style: const TextStyle(color: AppColors.slate900),
                 keyboardType: TextInputType.url,
               ),
 

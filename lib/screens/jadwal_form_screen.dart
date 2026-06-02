@@ -221,13 +221,14 @@ class _JadwalFormScreenState extends State<JadwalFormScreen> {
                     decoration: _deco('Pilih Mata Kuliah',
                         Icons.book_outlined),
                     dropdownColor: Theme.of(context).cardColor,
-                    style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
+                    style: const TextStyle(color: AppColors.slate900),
                     items: mkList.map((mk) {
                       return DropdownMenuItem<int>(
                         value: mk.id,
                         child: Text(
                           mk.namaMk,
                           overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(color: AppColors.slate900),
                         ),
                       );
                     }).toList(),
@@ -250,10 +251,10 @@ class _JadwalFormScreenState extends State<JadwalFormScreen> {
                     decoration: _deco('Pilih Hari',
                         Icons.calendar_today_outlined),
                     dropdownColor: Theme.of(context).cardColor,
-                    style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
+                    style: const TextStyle(color: AppColors.slate900),
                     items: _hariOptions.map((h) {
                       return DropdownMenuItem<String>(
-                        value: h, child: Text(h));
+                        value: h, child: Text(h, style: const TextStyle(color: AppColors.slate900)));
                     }).toList(),
                     onChanged: (v) =>
                         setState(() => _selectedHari = v ?? 'Senin'),
@@ -347,7 +348,7 @@ class _JadwalFormScreenState extends State<JadwalFormScreen> {
                   TextFormField(
                     controller: _ruanganCtrl,
                     decoration: _deco('Nama Ruangan', Icons.room_outlined),
-                    style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
+                    style: const TextStyle(color: AppColors.slate900),
                     validator: (v) =>
                         v == null || v.isEmpty ? 'Ruangan wajib diisi' : null,
                   ),

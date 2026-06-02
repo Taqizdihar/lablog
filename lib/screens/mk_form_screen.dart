@@ -138,7 +138,7 @@ class _MkFormScreenState extends State<MkFormScreen> {
               TextFormField(
                 controller: _namaController,
                 decoration: _inputDecoration('Nama Mata Kuliah', Icons.book_outlined),
-                style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
+                style: const TextStyle(color: AppColors.slate900),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Nama mata kuliah wajib diisi';
@@ -151,7 +151,7 @@ class _MkFormScreenState extends State<MkFormScreen> {
               TextFormField(
                 controller: _dosenController,
                 decoration: _inputDecoration('Dosen Pengampu', Icons.person_outline),
-                style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
+                style: const TextStyle(color: AppColors.slate900),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Dosen pengampu wajib diisi';
@@ -166,11 +166,11 @@ class _MkFormScreenState extends State<MkFormScreen> {
                 initialValue: _selectedSemester,
                 decoration: _inputDecoration('Semester', Icons.calendar_today_outlined),
                 dropdownColor: Theme.of(context).cardColor,
-                style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
+                style: const TextStyle(color: AppColors.slate900),
                 items: _semesterOptions.map((semester) {
                   return DropdownMenuItem<String>(
                     value: semester,
-                    child: Text(semester),
+                    child: Text(semester, style: const TextStyle(color: AppColors.slate900)),
                   );
                 }).toList(),
                 onChanged: (value) {

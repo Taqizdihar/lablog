@@ -156,7 +156,7 @@ class _EksperimenFormScreenState extends State<EksperimenFormScreen> {
               TextFormField(
                 controller: _judulCtrl,
                 decoration: _inputDeco('Judul Eksperimen'),
-                style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
+                style: const TextStyle(color: AppColors.slate900),
                 validator: (v) => v == null || v.isEmpty ? 'Judul wajib diisi' : null,
               ),
               SizedBox(height: 16),
@@ -168,7 +168,7 @@ class _EksperimenFormScreenState extends State<EksperimenFormScreen> {
                     onPressed: _selectDate,
                   ),
                 ),
-                style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
+                style: const TextStyle(color: AppColors.slate900),
                 readOnly: true,
                 onTap: _selectDate,
                 validator: (v) => v == null || v.isEmpty ? 'Tanggal wajib diisi' : null,
@@ -177,21 +177,21 @@ class _EksperimenFormScreenState extends State<EksperimenFormScreen> {
               TextFormField(
                 controller: _tujuanCtrl,
                 decoration: _inputDeco('Tujuan Eksperimen'),
-                style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
+                style: const TextStyle(color: AppColors.slate900),
                 maxLines: 2,
               ),
               SizedBox(height: 16),
               TextFormField(
                 controller: _prosedurCtrl,
                 decoration: _inputDeco('Prosedur'),
-                style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
+                style: const TextStyle(color: AppColors.slate900),
                 maxLines: 3,
               ),
               SizedBox(height: 16),
               TextFormField(
                 controller: _kesimpulanCtrl,
                 decoration: _inputDeco('Kesimpulan'),
-                style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
+                style: const TextStyle(color: AppColors.slate900),
                 maxLines: 2,
               ),
 
@@ -206,11 +206,11 @@ class _EksperimenFormScreenState extends State<EksperimenFormScreen> {
                 initialValue: _statusJurnal,
                 decoration: _inputDeco('Status Jurnal'),
                 dropdownColor: Theme.of(context).cardColor,
-                style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
+                style: const TextStyle(color: AppColors.slate900),
                 items: _statusOptions.map((status) {
                   return DropdownMenuItem<String>(
                     value: status,
-                    child: Text(status),
+                    child: Text(status, style: const TextStyle(color: AppColors.slate900)),
                   );
                 }).toList(),
                 onChanged: (value) {

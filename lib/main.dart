@@ -134,6 +134,14 @@ class LabLogApp extends StatelessWidget {
         foregroundColor: Colors.white,
       ),
     ),
+    inputDecorationTheme: const InputDecorationTheme(
+      filled: true,
+      fillColor: Colors.white,
+      hintStyle: TextStyle(color: AppColors.textPlaceholder),
+      prefixIconColor: AppColors.slate700,
+      iconColor: AppColors.slate700,
+      labelStyle: TextStyle(color: AppColors.slate700),
+    ),
     cardTheme: CardThemeData(
       color: const Color(0xFF1E293B),
       elevation: 2,

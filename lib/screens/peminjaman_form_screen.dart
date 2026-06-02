@@ -145,7 +145,7 @@ class _PeminjamanFormScreenState extends State<PeminjamanFormScreen> {
               TextFormField(
                 controller: _namaAlatCtrl,
                 decoration: _deco('Nama Alat', Icons.build_outlined),
-                style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
+                style: const TextStyle(color: AppColors.slate900),
                 validator: (v) => v == null || v.isEmpty
                     ? 'Nama alat wajib diisi'
                     : null,
@@ -164,7 +164,7 @@ class _PeminjamanFormScreenState extends State<PeminjamanFormScreen> {
                     onPressed: () => _pickDate(_tanggalPinjamCtrl),
                   ),
                 ),
-                style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
+                style: const TextStyle(color: AppColors.slate900),
                 readOnly: true,
                 onTap: () => _pickDate(_tanggalPinjamCtrl),
                 validator: (v) => v == null || v.isEmpty
@@ -185,7 +185,7 @@ class _PeminjamanFormScreenState extends State<PeminjamanFormScreen> {
                     onPressed: () => _pickDate(_tenggatCtrl),
                   ),
                 ),
-                style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
+                style: const TextStyle(color: AppColors.slate900),
                 readOnly: true,
                 onTap: () => _pickDate(_tenggatCtrl),
                 validator: (v) => v == null || v.isEmpty
@@ -201,10 +201,10 @@ class _PeminjamanFormScreenState extends State<PeminjamanFormScreen> {
                 decoration:
                     _deco('Status', Icons.flag_outlined),
                 dropdownColor: Theme.of(context).cardColor,
-                style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
+                style: const TextStyle(color: AppColors.slate900),
                 items: _statusOptions.map((s) {
                   return DropdownMenuItem<String>(
-                      value: s, child: Text(s));
+                      value: s, child: Text(s, style: const TextStyle(color: AppColors.slate900)));
                 }).toList(),
                 onChanged: (v) =>
                     setState(() => _status = v ?? 'Dipinjam'),

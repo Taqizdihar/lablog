@@ -127,7 +127,7 @@ class _TimFormScreenState extends State<TimFormScreen> {
               TextFormField(
                 controller: _namaCtrl,
                 decoration: _deco('Nama Anggota', Icons.person_outline),
-                style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
+                style: const TextStyle(color: AppColors.slate900),
                 validator: (v) => v == null || v.isEmpty
                     ? 'Nama wajib diisi'
                     : null,
@@ -137,7 +137,7 @@ class _TimFormScreenState extends State<TimFormScreen> {
               TextFormField(
                 controller: _nimCtrl,
                 decoration: _deco('NIM', Icons.badge_outlined),
-                style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
+                style: const TextStyle(color: AppColors.slate900),
                 keyboardType: TextInputType.number,
                 validator: (v) => v == null || v.isEmpty
                     ? 'NIM wajib diisi'
@@ -148,7 +148,7 @@ class _TimFormScreenState extends State<TimFormScreen> {
               TextFormField(
                 controller: _noHpCtrl,
                 decoration: _deco('No HP', Icons.phone_outlined),
-                style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
+                style: const TextStyle(color: AppColors.slate900),
                 keyboardType: TextInputType.phone,
               ),
               SizedBox(height: 16),
@@ -158,10 +158,10 @@ class _TimFormScreenState extends State<TimFormScreen> {
                 initialValue: _peran,
                 decoration: _deco('Peran', Icons.assignment_ind_outlined),
                 dropdownColor: Theme.of(context).cardColor,
-                style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
+                style: const TextStyle(color: AppColors.slate900),
                 items: _peranOptions.map((p) {
                   return DropdownMenuItem<String>(
-                      value: p, child: Text(p));
+                      value: p, child: Text(p, style: const TextStyle(color: AppColors.slate900)));
                 }).toList(),
                 onChanged: (v) =>
                     setState(() => _peran = v ?? 'Anggota'),

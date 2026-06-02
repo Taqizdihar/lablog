@@ -152,7 +152,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         decoration: _inputDecoration(
                             'Nama Lengkap', Icons.person_outline),
                         style:
-                            TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
+                            const TextStyle(color: AppColors.slate900),
                       ),
                       SizedBox(height: 16),
                       TextFormField(
@@ -160,7 +160,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         decoration:
                             _inputDecoration('NIM', Icons.badge_outlined),
                         style:
-                            TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
+                            const TextStyle(color: AppColors.slate900),
                         keyboardType: TextInputType.number,
                       ),
                       SizedBox(height: 16),
@@ -169,7 +169,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         decoration: _inputDecoration(
                             'Program Studi', Icons.school_outlined),
                         style:
-                            TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
+                            const TextStyle(color: AppColors.slate900),
                       ),
                       SizedBox(height: 16),
                       TextFormField(
@@ -177,7 +177,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         decoration: _inputDecoration(
                             'Target IPK', Icons.analytics_outlined),
                         style:
-                            TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
+                            const TextStyle(color: AppColors.slate900),
                         keyboardType: const TextInputType.numberWithOptions(decimal: true),
                       ),
                       SizedBox(height: 16),
@@ -188,11 +188,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             'Semester Aktif', Icons.calendar_today_outlined),
                         dropdownColor: Theme.of(context).cardColor,
                         style:
-                            TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
+                            const TextStyle(color: AppColors.slate900),
                         items: _semesterOptions.map((semester) {
                           return DropdownMenuItem<String>(
                             value: semester,
-                            child: Text(semester),
+                            child: Text(semester, style: const TextStyle(color: AppColors.slate900)),
                           );
                         }).toList(),
                         onChanged: (value) {
@@ -221,7 +221,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   children: [
                     SwitchListTile(
                       title: Text('Dark Mode',
-                          style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color)),
+                          style: const TextStyle(color: AppColors.slate900)),
                       subtitle: Text(
                         'Aktifkan tema gelap untuk tampilan lebih nyaman',
                         style: TextStyle(
