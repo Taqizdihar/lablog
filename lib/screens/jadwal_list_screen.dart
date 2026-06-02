@@ -258,6 +258,7 @@ class _JadwalListScreenState extends State<JadwalListScreen> {
         },
       ),
       floatingActionButton: FloatingActionButton(
+        heroTag: null,
         backgroundColor: AppColors.sage,
         elevation: 4,
         child: const Icon(Icons.add, color: Colors.white),

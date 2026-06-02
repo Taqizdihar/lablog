@@ -226,6 +226,7 @@ class _TimListScreenState extends State<TimListScreen> {
         },
       ),
       floatingActionButton: FloatingActionButton(
+        heroTag: null,
         backgroundColor: AppColors.sage,
         elevation: 4,
         child: const Icon(Icons.add, color: Colors.white),

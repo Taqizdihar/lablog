@@ -39,7 +39,7 @@ class _EksperimenFormScreenState extends State<EksperimenFormScreen> {
       _tujuanCtrl.text = e.tujuan;
       _prosedurCtrl.text = e.prosedur;
       _kesimpulanCtrl.text = e.kesimpulan;
-      _statusJurnal = e.statusJurnal;
+      _statusJurnal = _statusOptions.contains(e.statusJurnal) ? e.statusJurnal : _statusOptions.first;
     }
   }
 

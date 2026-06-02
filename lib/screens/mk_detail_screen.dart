@@ -161,6 +161,7 @@ class _MkDetailScreenState extends State<MkDetailScreen> {
         },
       ),
       floatingActionButton: FloatingActionButton(
+        heroTag: null,
         backgroundColor: AppColors.sage,
         child: const Icon(Icons.add, color: Colors.white),
         onPressed: () async {

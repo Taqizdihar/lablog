@@ -33,7 +33,7 @@ class _TimFormScreenState extends State<TimFormScreen> {
       _namaCtrl.text = t.namaAnggota;
       _nimCtrl.text = t.nim;
       _noHpCtrl.text = t.noHp;
-      _peran = t.peran;
+      _peran = _peranOptions.contains(t.peran) ? t.peran : _peranOptions.first;
     }
   }
 

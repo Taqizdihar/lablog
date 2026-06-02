@@ -48,8 +48,10 @@ class _MkFormScreenState extends State<MkFormScreen> {
     if (_isEditing) {
       _namaController.text = widget.mataKuliah!.namaMk;
       _dosenController.text = widget.mataKuliah!.dosen;
-      _selectedSemester = widget.mataKuliah!.semester;
-      _selectedWarna = widget.mataKuliah!.warnaLabel;
+      final sem = widget.mataKuliah!.semester;
+      _selectedSemester = _semesterOptions.contains(sem) ? sem : _semesterOptions.first;
+      final warna = widget.mataKuliah!.warnaLabel;
+      _selectedWarna = _warnaOptions.containsKey(warna) ? warna : _warnaOptions.keys.first;
     }
   }
 

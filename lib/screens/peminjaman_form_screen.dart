@@ -32,7 +32,7 @@ class _PeminjamanFormScreenState extends State<PeminjamanFormScreen> {
       _namaAlatCtrl.text = p.namaAlat;
       _tanggalPinjamCtrl.text = p.tanggalPinjam;
       _tenggatCtrl.text = p.tenggatKembali;
-      _status = p.status;
+      _status = _statusOptions.contains(p.status) ? p.status : _statusOptions.first;
     }
   }
 

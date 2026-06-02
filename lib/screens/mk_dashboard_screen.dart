@@ -6,18 +6,31 @@ import 'package:tubes_ppbl/screens/eksperimen_list_screen.dart';
 import 'package:tubes_ppbl/screens/tim_list_screen.dart';
 import 'package:tubes_ppbl/screens/referensi_list_screen.dart';
 
-class MkDashboardScreen extends StatelessWidget {
+class MkDashboardScreen extends StatefulWidget {
   final int mkId;
   const MkDashboardScreen({super.key, required this.mkId});
 
   @override
+  State<MkDashboardScreen> createState() => _MkDashboardScreenState();
+}
+
+class _MkDashboardScreenState extends State<MkDashboardScreen> {
+  late Future<List<MataKuliah>> _mkListFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _mkListFuture = DatabaseHelper().getMataKuliahList();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<MataKuliah>>(
-      future: DatabaseHelper().getMataKuliahList(),
+      future: _mkListFuture,
       builder: (context, snapshot) {
         String title = 'Dashboard';
         if (snapshot.hasData) {
-          final match = snapshot.data!.where((mk) => mk.id == mkId);
+          final match = snapshot.data!.where((mk) => mk.id == widget.mkId);
           if (match.isNotEmpty) title = match.first.namaMk;
         }
 
@@ -94,7 +107,7 @@ class MkDashboardScreen extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                                 builder: (_) => EksperimenListScreen(
-                                    mkId: mkId))),
+                                    mkId: widget.mkId))),
                       ),
                       _buildMenuCard(
                         context,
@@ -106,7 +119,7 @@ class MkDashboardScreen extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                                 builder: (_) => TimListScreen(
-                                    mkId: mkId))),
+                                    mkId: widget.mkId))),
                       ),
                       _buildMenuCard(
                         context,
@@ -118,7 +131,7 @@ class MkDashboardScreen extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                                 builder: (_) => ReferensiListScreen(
-                                    mkId: mkId))),
+                                    mkId: widget.mkId))),
                       ),
                     ],
                   ),

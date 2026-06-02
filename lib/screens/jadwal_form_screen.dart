@@ -37,7 +37,7 @@ class _JadwalFormScreenState extends State<JadwalFormScreen> {
     if (_isEditing) {
       final j = widget.jadwal!;
       _selectedMkId = j.mkId;
-      _selectedHari = j.hari;
+      _selectedHari = _hariOptions.contains(j.hari) ? j.hari : _hariOptions.first;
       _jamMulai = j.jamMulai;
       _jamSelesai = j.jamSelesai;
       _ruanganCtrl.text = j.ruangan;
