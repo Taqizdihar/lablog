@@ -29,11 +29,11 @@ class TimKelompok {
   factory TimKelompok.fromMap(Map<String, dynamic> map) {
     return TimKelompok(
       id: map['id'] as int?,
-      mkId: map['mk_id'] as int,
-      namaAnggota: map['nama_anggota'] as String,
-      nim: map['nim'] as String,
-      peran: map['peran'] as String,
-      noHp: map['no_hp'] as String,
+      mkId: map['mk_id'] as int? ?? 0,
+      namaAnggota: map['nama_anggota']?.toString() ?? '',
+      nim: map['nim']?.toString() ?? '',
+      peran: map['peran']?.toString() ?? '',
+      noHp: map['no_hp']?.toString() ?? '',
     );
   }
 }

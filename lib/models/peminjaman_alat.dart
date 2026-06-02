@@ -26,10 +26,10 @@ class PeminjamanAlat {
   factory PeminjamanAlat.fromMap(Map<String, dynamic> map) {
     return PeminjamanAlat(
       id: map['id'] as int?,
-      namaAlat: map['nama_alat'] as String,
-      tanggalPinjam: map['tanggal_pinjam'] as String,
-      tenggatKembali: map['tenggat_kembali'] as String,
-      status: map['status'] as String,
+      namaAlat: map['nama_alat']?.toString() ?? '',
+      tanggalPinjam: map['tanggal_pinjam']?.toString() ?? '',
+      tenggatKembali: map['tenggat_kembali']?.toString() ?? '',
+      status: map['status']?.toString() ?? '',
     );
   }
 }

@@ -26,10 +26,10 @@ class MataKuliah {
   factory MataKuliah.fromMap(Map<String, dynamic> map) {
     return MataKuliah(
       id: map['id'] as int?,
-      namaMk: map['nama_mk'] as String,
-      dosen: map['dosen'] as String,
-      semester: map['semester'] as String,
-      warnaLabel: map['warna_label'] as String,
+      namaMk: map['nama_mk']?.toString() ?? '',
+      dosen: map['dosen']?.toString() ?? '',
+      semester: map['semester']?.toString() ?? '',
+      warnaLabel: map['warna_label']?.toString() ?? '',
     );
   }
 }

@@ -35,13 +35,13 @@ class Eksperimen {
   factory Eksperimen.fromMap(Map<String, dynamic> map) {
     return Eksperimen(
       id: map['id'] as int?,
-      mkId: map['mk_id'] as int,
-      judul: map['judul'] as String,
-      tanggal: map['tanggal'] as String,
-      tujuan: map['tujuan'] as String,
-      prosedur: map['prosedur'] as String,
-      kesimpulan: map['kesimpulan'] as String,
-      statusJurnal: map['status_jurnal'] as String,
+      mkId: map['mk_id'] as int? ?? 0,
+      judul: map['judul']?.toString() ?? '',
+      tanggal: map['tanggal']?.toString() ?? '',
+      tujuan: map['tujuan']?.toString() ?? '',
+      prosedur: map['prosedur']?.toString() ?? '',
+      kesimpulan: map['kesimpulan']?.toString() ?? '',
+      statusJurnal: map['status_jurnal']?.toString() ?? '',
     );
   }
 }

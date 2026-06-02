@@ -29,11 +29,11 @@ class Referensi {
   factory Referensi.fromMap(Map<String, dynamic> map) {
     return Referensi(
       id: map['id'] as int?,
-      mkId: map['mk_id'] as int,
-      judulBuku: map['judul_buku'] as String,
-      penulis: map['penulis'] as String,
-      tahunTerbit: map['tahun_terbit'] as String,
-      tautanSumber: map['tautan_sumber'] as String,
+      mkId: map['mk_id'] as int? ?? 0,
+      judulBuku: map['judul_buku']?.toString() ?? '',
+      penulis: map['penulis']?.toString() ?? '',
+      tahunTerbit: map['tahun_terbit']?.toString() ?? '',
+      tautanSumber: map['tautan_sumber']?.toString() ?? '',
     );
   }
 }

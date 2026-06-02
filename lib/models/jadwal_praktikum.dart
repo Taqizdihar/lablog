@@ -29,11 +29,11 @@ class JadwalPraktikum {
   factory JadwalPraktikum.fromMap(Map<String, dynamic> map) {
     return JadwalPraktikum(
       id: map['id'] as int?,
-      mkId: map['mk_id'] as int,
-      hari: map['hari'] as String,
-      jamMulai: map['jam_mulai'] as String,
-      jamSelesai: map['jam_selesai'] as String,
-      ruangan: map['ruangan'] as String,
+      mkId: map['mk_id'] as int? ?? 0,
+      hari: map['hari']?.toString() ?? '',
+      jamMulai: map['jam_mulai']?.toString() ?? '',
+      jamSelesai: map['jam_selesai']?.toString() ?? '',
+      ruangan: map['ruangan']?.toString() ?? '',
     );
   }
 }
