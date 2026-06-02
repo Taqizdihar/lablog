@@ -5,8 +5,6 @@ import 'package:tubes_ppbl/models/mata_kuliah.dart';
 import 'package:tubes_ppbl/models/eksperimen.dart';
 import 'package:tubes_ppbl/sqlite/koneksi.dart';
 import 'package:tubes_ppbl/screens/eksperimen_form_screen.dart';
-import 'package:tubes_ppbl/screens/pengamatan_screen.dart';
-import 'package:tubes_ppbl/screens/sketsa_screen.dart';
 
 class MkDetailScreen extends StatefulWidget {
   final MataKuliah? mataKuliah;
@@ -49,7 +47,7 @@ class _MkDetailScreenState extends State<MkDetailScreen> {
       backgroundColor: AppColors.bgPage,
       appBar: AppBar(
         title: Text(
-          widget.mataKuliah?.nama ?? 'Detail Mata Kuliah',
+          widget.mataKuliah?.namaMk ?? 'Detail Mata Kuliah',
           style: const TextStyle(color: Colors.white),
         ),
         backgroundColor: AppColors.slate900,
@@ -86,7 +84,7 @@ class _MkDetailScreenState extends State<MkDetailScreen> {
             padding: const EdgeInsets.all(16),
             itemBuilder: (context, index) {
               final eks = list[index];
-              final hasKesimpulan = eks.kesimpulan.isNotEmpty;
+              final isSelesai = eks.statusJurnal == 'Selesai';
               return Padding(
                 padding: const EdgeInsets.only(bottom: 12),
                 child: Slidable(
@@ -134,14 +132,14 @@ class _MkDetailScreenState extends State<MkDetailScreen> {
                                 Container(
                                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                                   decoration: BoxDecoration(
-                                    color: hasKesimpulan ? AppColors.selesaiBg : AppColors.baruBg,
+                                    color: isSelesai ? AppColors.selesaiBg : AppColors.baruBg,
                                     borderRadius: BorderRadius.circular(16),
-                                    border: Border.all(color: hasKesimpulan ? AppColors.sageBorder : Colors.transparent),
+                                    border: Border.all(color: isSelesai ? AppColors.sageBorder : Colors.transparent),
                                   ),
                                   child: Text(
-                                    hasKesimpulan ? 'Selesai' : 'Baru',
+                                    eks.statusJurnal,
                                     style: TextStyle(
-                                      color: hasKesimpulan ? AppColors.selesaiText : AppColors.baruText,
+                                      color: isSelesai ? AppColors.selesaiText : AppColors.baruText,
                                       fontSize: 12, fontWeight: FontWeight.bold,
                                     ),
                                   ),
@@ -150,20 +148,7 @@ class _MkDetailScreenState extends State<MkDetailScreen> {
                             ),
                             const SizedBox(height: 8),
                             Text(eks.tanggal, style: const TextStyle(color: AppColors.textSecondary)),
-                            const SizedBox(height: 12),
-                            Row(
-                              children: [
-                                _actionChip(Icons.analytics_outlined, 'Pengamatan', () {
-                                  Navigator.push(context,
-                                    MaterialPageRoute(builder: (_) => PengamatanScreen(eksperimenId: eks.id!)));
-                                }),
-                                const SizedBox(width: 8),
-                                _actionChip(Icons.brush_outlined, 'Sketsa', () {
-                                  Navigator.push(context,
-                                    MaterialPageRoute(builder: (_) => SketsaScreen(eksperimenId: eks.id!)));
-                                }),
-                              ],
-                            ),
+
                           ],
                         ),
                       ),
@@ -184,29 +169,6 @@ class _MkDetailScreenState extends State<MkDetailScreen> {
           );
           if (result == true) _refreshList();
         },
-      ),
-    );
-  }
-
-  Widget _actionChip(IconData icon, String label, VoidCallback onTap) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(16),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-        decoration: BoxDecoration(
-          color: AppColors.sageBg,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.sageBorder),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, size: 16, color: AppColors.sageText),
-            const SizedBox(width: 4),
-            Text(label, style: const TextStyle(color: AppColors.sageText, fontSize: 12, fontWeight: FontWeight.w500)),
-          ],
-        ),
       ),
     );
   }

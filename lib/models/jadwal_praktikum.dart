@@ -3,6 +3,7 @@ class JadwalPraktikum {
   int mkId;
   String hari;
   String jamMulai;
+  String jamSelesai;
   String ruangan;
 
   JadwalPraktikum({
@@ -10,6 +11,7 @@ class JadwalPraktikum {
     required this.mkId,
     required this.hari,
     required this.jamMulai,
+    required this.jamSelesai,
     required this.ruangan,
   });
 
@@ -19,17 +21,19 @@ class JadwalPraktikum {
       'mk_id': mkId,
       'hari': hari,
       'jam_mulai': jamMulai,
+      'jam_selesai': jamSelesai,
       'ruangan': ruangan,
     };
   }
 
   factory JadwalPraktikum.fromMap(Map<String, dynamic> map) {
     return JadwalPraktikum(
-      id: map['id'],
-      mkId: map['mk_id'],
-      hari: map['hari'],
-      jamMulai: map['jam_mulai'],
-      ruangan: map['ruangan'],
+      id: map['id'] as int?,
+      mkId: map['mk_id'] as int,
+      hari: map['hari'] as String,
+      jamMulai: map['jam_mulai'] as String,
+      jamSelesai: map['jam_selesai'] as String,
+      ruangan: map['ruangan'] as String,
     );
   }
 }

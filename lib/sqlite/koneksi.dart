@@ -1,13 +1,11 @@
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:sqflite/sqflite.dart';
-import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
 import 'package:path/path.dart';
 import 'package:tubes_ppbl/models/mata_kuliah.dart';
+import 'package:tubes_ppbl/models/peminjaman_alat.dart';
 import 'package:tubes_ppbl/models/jadwal_praktikum.dart';
 import 'package:tubes_ppbl/models/eksperimen.dart';
-import 'package:tubes_ppbl/models/alat_bahan.dart';
-import 'package:tubes_ppbl/models/pengamatan.dart';
-import 'package:tubes_ppbl/models/lampiran_media.dart';
+import 'package:tubes_ppbl/models/tim_kelompok.dart';
+import 'package:tubes_ppbl/models/referensi.dart';
 
 class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._internal();
@@ -26,17 +24,9 @@ class DatabaseHelper {
   }
 
   Future<Database> _initDatabase() async {
-    // Configure database factory for web platform
-    if (kIsWeb) {
-      databaseFactory = databaseFactoryFfiWebNoWebWorker;
-    }
-
-    String path = 'lablog_database.db';
-    if (!kIsWeb) {
-      path = join(await getDatabasesPath(), 'lablog_database.db');
-    }
+    final dbPath = join(await getDatabasesPath(), 'lablog_database.db');
     return await openDatabase(
-      path,
+      dbPath,
       version: 1,
       onCreate: _onCreate,
       onConfigure: _onConfigure,
@@ -44,8 +34,7 @@ class DatabaseHelper {
   }
 
   Future _onConfigure(Database db) async {
-    // Enable foreign keys
-    await db.execute('PRAGMA foreign_keys = ON');
+    await db.execute('PRAGMA foreign_keys = ON;');
   }
 
   Future _onCreate(Database db, int version) async {
@@ -53,73 +42,75 @@ class DatabaseHelper {
     await db.execute('''
       CREATE TABLE mata_kuliah(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        nama TEXT,
-        dosen TEXT,
-        semester TEXT,
-        warna TEXT
+        nama_mk TEXT NOT NULL,
+        dosen TEXT NOT NULL,
+        semester TEXT NOT NULL,
+        warna_label TEXT NOT NULL
       )
     ''');
 
-    // Table 2: jadwal_praktikum
+    // Table 2: peminjaman_alat
+    await db.execute('''
+      CREATE TABLE peminjaman_alat(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        nama_alat TEXT NOT NULL,
+        tanggal_pinjam TEXT NOT NULL,
+        tenggat_kembali TEXT NOT NULL,
+        status TEXT NOT NULL
+      )
+    ''');
+
+    // Table 3: jadwal_praktikum (FK → mata_kuliah)
     await db.execute('''
       CREATE TABLE jadwal_praktikum(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        mk_id INTEGER,
-        hari TEXT,
-        jam_mulai TEXT,
-        ruangan TEXT,
-        FOREIGN KEY (mk_id) REFERENCES mata_kuliah (id) ON DELETE CASCADE
+        mk_id INTEGER NOT NULL,
+        hari TEXT NOT NULL,
+        jam_mulai TEXT NOT NULL,
+        jam_selesai TEXT NOT NULL,
+        ruangan TEXT NOT NULL,
+        FOREIGN KEY (mk_id) REFERENCES mata_kuliah(id) ON DELETE CASCADE
       )
     ''');
 
-    // Table 3: eksperimen
+    // Table 4: eksperimen (FK → mata_kuliah)
     await db.execute('''
       CREATE TABLE eksperimen(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        mk_id INTEGER,
-        judul TEXT,
-        tanggal TEXT,
-        tujuan TEXT,
-        alat TEXT,
-        prosedur TEXT,
-        kesimpulan TEXT,
-        FOREIGN KEY (mk_id) REFERENCES mata_kuliah (id) ON DELETE CASCADE
+        mk_id INTEGER NOT NULL,
+        judul TEXT NOT NULL,
+        tanggal TEXT NOT NULL,
+        tujuan TEXT NOT NULL,
+        prosedur TEXT NOT NULL,
+        kesimpulan TEXT NOT NULL,
+        status_jurnal TEXT NOT NULL,
+        FOREIGN KEY (mk_id) REFERENCES mata_kuliah(id) ON DELETE CASCADE
       )
     ''');
 
-    // Table 4: alat_bahan
+    // Table 5: tim_kelompok (FK → mata_kuliah)
     await db.execute('''
-      CREATE TABLE alat_bahan(
+      CREATE TABLE tim_kelompok(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        eksperimen_id INTEGER,
-        nama_item TEXT,
-        jumlah INTEGER,
-        is_ready INTEGER,
-        FOREIGN KEY (eksperimen_id) REFERENCES eksperimen (id) ON DELETE CASCADE
+        mk_id INTEGER NOT NULL,
+        nama_anggota TEXT NOT NULL,
+        nim TEXT NOT NULL,
+        peran TEXT NOT NULL,
+        no_hp TEXT NOT NULL,
+        FOREIGN KEY (mk_id) REFERENCES mata_kuliah(id) ON DELETE CASCADE
       )
     ''');
 
-    // Table 5: pengamatan
+    // Table 6: referensi (FK → mata_kuliah)
     await db.execute('''
-      CREATE TABLE pengamatan(
+      CREATE TABLE referensi(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        eksperimen_id INTEGER,
-        variabel TEXT,
-        nilai REAL,
-        satuan TEXT,
-        FOREIGN KEY (eksperimen_id) REFERENCES eksperimen (id) ON DELETE CASCADE
-      )
-    ''');
-
-    // Table 6: lampiran_media
-    await db.execute('''
-      CREATE TABLE lampiran_media(
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        eksperimen_id INTEGER,
-        file_path TEXT,
-        jenis_media TEXT,
-        waktu_diambil TEXT,
-        FOREIGN KEY (eksperimen_id) REFERENCES eksperimen (id) ON DELETE CASCADE
+        mk_id INTEGER NOT NULL,
+        judul_buku TEXT NOT NULL,
+        penulis TEXT NOT NULL,
+        tahun_terbit TEXT NOT NULL,
+        tautan_sumber TEXT NOT NULL,
+        FOREIGN KEY (mk_id) REFERENCES mata_kuliah(id) ON DELETE CASCADE
       )
     ''');
   }
@@ -156,6 +147,40 @@ class DatabaseHelper {
     );
   }
 
+  // ============ CRUD: Peminjaman Alat ============
+
+  Future<int> insertPeminjamanAlat(PeminjamanAlat alat) async {
+    final db = await database;
+    return await db.insert('peminjaman_alat', alat.toMap());
+  }
+
+  Future<List<PeminjamanAlat>> getPeminjamanAlatList() async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps =
+        await db.query('peminjaman_alat');
+    return List.generate(
+        maps.length, (i) => PeminjamanAlat.fromMap(maps[i]));
+  }
+
+  Future<int> updatePeminjamanAlat(PeminjamanAlat alat) async {
+    final db = await database;
+    return await db.update(
+      'peminjaman_alat',
+      alat.toMap(),
+      where: 'id = ?',
+      whereArgs: [alat.id],
+    );
+  }
+
+  Future<int> deletePeminjamanAlat(int id) async {
+    final db = await database;
+    return await db.delete(
+      'peminjaman_alat',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
   // ============ CRUD: Jadwal Praktikum ============
 
   Future<int> insertJadwal(JadwalPraktikum jadwal) async {
@@ -163,62 +188,41 @@ class DatabaseHelper {
     return await db.insert('jadwal_praktikum', jadwal.toMap());
   }
 
-  Future<List<JadwalPraktikum>> getJadwalList() async {
+  Future<List<JadwalPraktikum>> getJadwalList(int mkId) async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      'jadwal_praktikum',
+      where: 'mk_id = ?',
+      whereArgs: [mkId],
+    );
+    return List.generate(
+        maps.length, (i) => JadwalPraktikum.fromMap(maps[i]));
+  }
+
+  Future<int> updateJadwal(JadwalPraktikum jadwal) async {
+    final db = await database;
+    return await db.update(
+      'jadwal_praktikum',
+      jadwal.toMap(),
+      where: 'id = ?',
+      whereArgs: [jadwal.id],
+    );
+  }
+
+  Future<int> deleteJadwal(int id) async {
+    final db = await database;
+    return await db.delete(
+      'jadwal_praktikum',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+  Future<List<JadwalPraktikum>> getAllJadwalList() async {
     final db = await database;
     final List<Map<String, dynamic>> maps = await db.query('jadwal_praktikum');
-    return List.generate(maps.length, (i) => JadwalPraktikum.fromMap(maps[i]));
-  }
-
-  // ============ CRUD: Pengamatan ============
-
-  Future<int> insertPengamatan(Pengamatan data) async {
-    final db = await database;
-    return await db.insert('pengamatan', data.toMap());
-  }
-
-  Future<List<Pengamatan>> getPengamatanList(int eksperimenId) async {
-    final db = await database;
-    final List<Map<String, dynamic>> maps = await db.query(
-      'pengamatan',
-      where: 'eksperimen_id = ?',
-      whereArgs: [eksperimenId],
-    );
-    return List.generate(maps.length, (i) => Pengamatan.fromMap(maps[i]));
-  }
-
-  Future<int> deletePengamatan(int id) async {
-    final db = await database;
-    return await db.delete(
-      'pengamatan',
-      where: 'id = ?',
-      whereArgs: [id],
-    );
-  }
-
-  // ============ CRUD: Lampiran Media ============
-
-  Future<int> insertLampiran(LampiranMedia media) async {
-    final db = await database;
-    return await db.insert('lampiran_media', media.toMap());
-  }
-
-  Future<List<LampiranMedia>> getLampiranList(int eksperimenId) async {
-    final db = await database;
-    final List<Map<String, dynamic>> maps = await db.query(
-      'lampiran_media',
-      where: 'eksperimen_id = ?',
-      whereArgs: [eksperimenId],
-    );
-    return List.generate(maps.length, (i) => LampiranMedia.fromMap(maps[i]));
-  }
-
-  Future<int> deleteLampiran(int id) async {
-    final db = await database;
-    return await db.delete(
-      'lampiran_media',
-      where: 'id = ?',
-      whereArgs: [id],
-    );
+    return List.generate(
+        maps.length, (i) => JadwalPraktikum.fromMap(maps[i]));
   }
 
   // ============ CRUD: Eksperimen ============
@@ -257,30 +261,76 @@ class DatabaseHelper {
     );
   }
 
-  // ============ CRUD: Alat Bahan ============
+  // ============ CRUD: Tim Kelompok ============
 
-  Future<int> insertAlatBahan(AlatBahan alat) async {
+  Future<int> insertTimKelompok(TimKelompok tim) async {
     final db = await database;
-    return await db.insert('alat_bahan', alat.toMap());
+    return await db.insert('tim_kelompok', tim.toMap());
   }
 
-  Future<List<AlatBahan>> getAlatBahanList(int eksperimenId) async {
+  Future<List<TimKelompok>> getTimKelompokList(int mkId) async {
     final db = await database;
     final List<Map<String, dynamic>> maps = await db.query(
-      'alat_bahan',
-      where: 'eksperimen_id = ?',
-      whereArgs: [eksperimenId],
+      'tim_kelompok',
+      where: 'mk_id = ?',
+      whereArgs: [mkId],
     );
-    return List.generate(maps.length, (i) => AlatBahan.fromMap(maps[i]));
+    return List.generate(
+        maps.length, (i) => TimKelompok.fromMap(maps[i]));
   }
 
-  Future<int> updateAlatBahan(AlatBahan alat) async {
+  Future<int> updateTimKelompok(TimKelompok tim) async {
     final db = await database;
     return await db.update(
-      'alat_bahan',
-      alat.toMap(),
+      'tim_kelompok',
+      tim.toMap(),
       where: 'id = ?',
-      whereArgs: [alat.id],
+      whereArgs: [tim.id],
+    );
+  }
+
+  Future<int> deleteTimKelompok(int id) async {
+    final db = await database;
+    return await db.delete(
+      'tim_kelompok',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+  // ============ CRUD: Referensi ============
+
+  Future<int> insertReferensi(Referensi ref) async {
+    final db = await database;
+    return await db.insert('referensi', ref.toMap());
+  }
+
+  Future<List<Referensi>> getReferensiList(int mkId) async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query(
+      'referensi',
+      where: 'mk_id = ?',
+      whereArgs: [mkId],
+    );
+    return List.generate(maps.length, (i) => Referensi.fromMap(maps[i]));
+  }
+
+  Future<int> updateReferensi(Referensi ref) async {
+    final db = await database;
+    return await db.update(
+      'referensi',
+      ref.toMap(),
+      where: 'id = ?',
+      whereArgs: [ref.id],
+    );
+  }
+
+  Future<int> deleteReferensi(int id) async {
+    final db = await database;
+    return await db.delete(
+      'referensi',
+      where: 'id = ?',
+      whereArgs: [id],
     );
   }
 }

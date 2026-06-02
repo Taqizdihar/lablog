@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tubes_ppbl/utils/app_colors.dart';
 import 'package:tubes_ppbl/sqlite/koneksi.dart';
-import 'package:tubes_ppbl/screens/home_screen.dart';
-import 'package:tubes_ppbl/screens/settings_screen.dart';
+import 'package:tubes_ppbl/screens/main_navigation.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -162,10 +161,7 @@ class _LabLogAppState extends State<LabLogApp> {
       theme: _lightTheme,
       darkTheme: _darkTheme,
       themeMode: _isDarkMode ? ThemeMode.dark : ThemeMode.light,
-      home: const HomeScreen(),
-      routes: {
-        '/settings': (context) => const SettingsScreen(),
-      },
+      home: const MainNavigation(),
     );
   }
 }

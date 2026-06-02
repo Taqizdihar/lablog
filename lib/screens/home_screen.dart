@@ -4,8 +4,7 @@ import 'package:tubes_ppbl/utils/app_colors.dart';
 import 'package:tubes_ppbl/models/mata_kuliah.dart';
 import 'package:tubes_ppbl/sqlite/koneksi.dart';
 import 'package:tubes_ppbl/screens/mk_form_screen.dart';
-import 'package:tubes_ppbl/screens/mk_detail_screen.dart';
-import 'package:tubes_ppbl/screens/settings_screen.dart';
+import 'package:tubes_ppbl/screens/mk_dashboard_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -26,6 +25,15 @@ class _HomeScreenState extends State<HomeScreen> {
     'mkRose': AppColors.mkRose,
   };
 
+  // Darker tints for text on label backgrounds
+  final Map<String, Color> _warnaTextMap = {
+    'mkBlue': const Color(0xFF1E40AF),
+    'mkGreen': const Color(0xFF14532D),
+    'mkYellow': const Color(0xFF713F12),
+    'mkPurple': const Color(0xFF581C87),
+    'mkRose': const Color(0xFF881337),
+  };
+
   @override
   void initState() {
     super.initState();
@@ -39,12 +47,37 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _deleteMataKuliah(int id) async {
-    await _dbHelper.deleteMataKuliah(id);
-    _refreshList();
+    final shouldDelete = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Hapus Mata Kuliah?'),
+        content: const Text(
+            'Semua data terkait (jadwal, eksperimen, tim, referensi) akan ikut terhapus.'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Batal'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            style: TextButton.styleFrom(foregroundColor: const Color(0xFFEF4444)),
+            child: const Text('Hapus'),
+          ),
+        ],
+      ),
+    );
+    if (shouldDelete == true) {
+      await _dbHelper.deleteMataKuliah(id);
+      _refreshList();
+    }
   }
 
   Color _getCardColor(String warnaKey) {
     return _warnaMap[warnaKey] ?? AppColors.mkBlue;
+  }
+
+  Color _getTextColor(String warnaKey) {
+    return _warnaTextMap[warnaKey] ?? const Color(0xFF1E40AF);
   }
 
   @override
@@ -52,30 +85,31 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: AppColors.bgPage,
       appBar: AppBar(
-        title: const Text('LabLog', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+        title: const Text('LabLog',
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         backgroundColor: AppColors.slate900,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.settings_outlined, color: Colors.white),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const SettingsScreen()),
-              );
-            },
-          ),
-        ],
       ),
       body: FutureBuilder<List<MataKuliah>>(
         future: _mataKuliahFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator(color: AppColors.sage));
+            return const Center(
+                child: CircularProgressIndicator(color: AppColors.sage));
           }
 
           if (snapshot.hasError) {
             return Center(
-              child: Text('Error: ${snapshot.error}', style: const TextStyle(color: AppColors.textSecondary)),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.error_outline,
+                      size: 48, color: Color(0xFFEF4444)),
+                  const SizedBox(height: 12),
+                  Text('Error: ${snapshot.error}',
+                      style: const TextStyle(color: AppColors.textSecondary),
+                      textAlign: TextAlign.center),
+                ],
+              ),
             );
           }
 
@@ -86,16 +120,28 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.science_outlined, size: 64, color: AppColors.textPlaceholder),
-                  const SizedBox(height: 16),
+                  Container(
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: AppColors.sageBg,
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(Icons.science_outlined,
+                        size: 48, color: AppColors.sage),
+                  ),
+                  const SizedBox(height: 20),
                   const Text(
                     'Belum ada mata kuliah',
-                    style: TextStyle(fontSize: 18, color: AppColors.textMuted, fontWeight: FontWeight.w500),
+                    style: TextStyle(
+                        fontSize: 18,
+                        color: AppColors.textMuted,
+                        fontWeight: FontWeight.w600),
                   ),
                   const SizedBox(height: 8),
                   const Text(
                     'Tekan tombol + untuk menambahkan',
-                    style: TextStyle(fontSize: 14, color: AppColors.textPlaceholder),
+                    style:
+                        TextStyle(fontSize: 14, color: AppColors.textPlaceholder),
                   ),
                 ],
               ),
@@ -107,7 +153,8 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: const EdgeInsets.all(16.0),
             itemBuilder: (context, index) {
               final mk = list[index];
-              final cardColor = _getCardColor(mk.warna);
+              final cardColor = _getCardColor(mk.warnaLabel);
+              final textColor = _getTextColor(mk.warnaLabel);
 
               return Padding(
                 padding: const EdgeInsets.only(bottom: 12.0),
@@ -115,16 +162,37 @@ class _HomeScreenState extends State<HomeScreen> {
                   key: ValueKey(mk.id),
                   endActionPane: ActionPane(
                     motion: const BehindMotion(),
+                    extentRatio: 0.4,
                     children: [
                       SlidableAction(
-                        onPressed: (context) {
-                          _deleteMataKuliah(mk.id!);
+                        onPressed: (_) async {
+                          final result = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) =>
+                                    MkFormScreen(mataKuliah: mk)),
+                          );
+                          if (result == true) _refreshList();
                         },
+                        backgroundColor: const Color(0xFF3B82F6),
+                        foregroundColor: Colors.white,
+                        icon: Icons.edit_outlined,
+                        label: 'Edit',
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(12),
+                          bottomLeft: Radius.circular(12),
+                        ),
+                      ),
+                      SlidableAction(
+                        onPressed: (_) => _deleteMataKuliah(mk.id!),
                         backgroundColor: const Color(0xFFEF4444),
                         foregroundColor: Colors.white,
                         icon: Icons.delete_outline,
                         label: 'Hapus',
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: const BorderRadius.only(
+                          topRight: Radius.circular(12),
+                          bottomRight: Radius.circular(12),
+                        ),
                       ),
                     ],
                   ),
@@ -133,84 +201,98 @@ class _HomeScreenState extends State<HomeScreen> {
                       await Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => MkDetailScreen(mataKuliah: mk),
+                          builder: (_) =>
+                              MkDashboardScreen(mkId: mk.id!),
                         ),
                       );
                       _refreshList();
                     },
                     borderRadius: BorderRadius.circular(12),
-                    child: Card(
-                      elevation: 2,
-                      margin: EdgeInsets.zero,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: AppColors.bgCard,
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: AppColors.border),
-                        ),
-                        child: Row(
-                          children: [
-                            // Color accent strip
-                            Container(
-                              width: 6,
-                              height: 80,
-                              decoration: BoxDecoration(
-                                color: cardColor,
-                                borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(12),
-                                  bottomLeft: Radius.circular(12),
-                                ),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: AppColors.bgCard,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: AppColors.border),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.04),
+                            blurRadius: 8,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          // Color accent strip
+                          Container(
+                            width: 6,
+                            height: 88,
+                            decoration: BoxDecoration(
+                              color: cardColor,
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(12),
+                                bottomLeft: Radius.circular(12),
                               ),
                             ),
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      mk.nama,
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                        color: AppColors.textPrimary,
-                                      ),
+                          ),
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 16.0, vertical: 14.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    mk.namaMk,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColors.textPrimary,
                                     ),
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      mk.dosen,
-                                      style: const TextStyle(
-                                        fontSize: 14,
-                                        color: AppColors.textSecondary,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 6),
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                                      decoration: BoxDecoration(
-                                        color: cardColor.withOpacity(0.5),
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                      child: Text(
-                                        mk.semester,
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Row(
+                                    children: [
+                                      const Icon(Icons.person_outline,
+                                          size: 14,
+                                          color: AppColors.textMuted),
+                                      const SizedBox(width: 4),
+                                      Text(
+                                        mk.dosen,
                                         style: const TextStyle(
-                                          fontSize: 12,
-                                          color: AppColors.textMuted,
-                                          fontWeight: FontWeight.w500,
+                                          fontSize: 13,
+                                          color: AppColors.textSecondary,
                                         ),
                                       ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 4),
+                                    decoration: BoxDecoration(
+                                      color: cardColor,
+                                      borderRadius: BorderRadius.circular(12),
                                     ),
-                                  ],
-                                ),
+                                    child: Text(
+                                      mk.semester,
+                                      style: TextStyle(
+                                        fontSize: 11,
+                                        color: textColor,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                            const Padding(
-                              padding: EdgeInsets.only(right: 12.0),
-                              child: Icon(Icons.chevron_right, color: AppColors.textPlaceholder),
-                            ),
-                          ],
-                        ),
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.only(right: 12.0),
+                            child: Icon(Icons.chevron_right,
+                                color: AppColors.textPlaceholder),
+                          ),
+                        ],
                       ),
                     ),
                   ),
@@ -222,11 +304,12 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors.sage,
+        elevation: 4,
         child: const Icon(Icons.add, color: Colors.white),
         onPressed: () async {
           final result = await Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const MkFormScreen()),
+            MaterialPageRoute(builder: (_) => const MkFormScreen()),
           );
           if (result == true) {
             _refreshList();

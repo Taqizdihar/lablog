@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tubes_ppbl/utils/app_colors.dart';
 import 'package:tubes_ppbl/models/eksperimen.dart';
-import 'package:tubes_ppbl/models/alat_bahan.dart';
 import 'package:tubes_ppbl/sqlite/koneksi.dart';
 
 class EksperimenFormScreen extends StatefulWidget {
@@ -23,11 +22,12 @@ class _EksperimenFormScreenState extends State<EksperimenFormScreen> {
   final _tujuanCtrl = TextEditingController();
   final _prosedurCtrl = TextEditingController();
   final _kesimpulanCtrl = TextEditingController();
-  final _alatNamaCtrl = TextEditingController();
 
   bool get _isEditing => widget.eksperimen != null;
-  List<AlatBahan> _alatList = [];
+  String _statusJurnal = 'Draft';
   bool _isSaving = false;
+
+  final List<String> _statusOptions = ['Draft', 'Selesai', 'Revisi'];
 
   @override
   void initState() {
@@ -39,14 +39,7 @@ class _EksperimenFormScreenState extends State<EksperimenFormScreen> {
       _tujuanCtrl.text = e.tujuan;
       _prosedurCtrl.text = e.prosedur;
       _kesimpulanCtrl.text = e.kesimpulan;
-      _loadAlatBahan();
-    }
-  }
-
-  Future<void> _loadAlatBahan() async {
-    if (widget.eksperimen?.id != null) {
-      final list = await _dbHelper.getAlatBahanList(widget.eksperimen!.id!);
-      setState(() => _alatList = list);
+      _statusJurnal = e.statusJurnal;
     }
   }
 
@@ -57,7 +50,6 @@ class _EksperimenFormScreenState extends State<EksperimenFormScreen> {
     _tujuanCtrl.dispose();
     _prosedurCtrl.dispose();
     _kesimpulanCtrl.dispose();
-    _alatNamaCtrl.dispose();
     super.dispose();
   }
 
@@ -82,31 +74,6 @@ class _EksperimenFormScreenState extends State<EksperimenFormScreen> {
     );
   }
 
-  void _addAlatBahanLocal() {
-    final name = _alatNamaCtrl.text.trim();
-    if (name.isEmpty) return;
-    setState(() {
-      _alatList.add(AlatBahan(
-        eksperimenId: widget.eksperimen?.id ?? 0,
-        namaItem: name,
-        jumlah: 1,
-        isReady: 0,
-      ));
-    });
-    _alatNamaCtrl.clear();
-  }
-
-  void _toggleReady(int index) {
-    setState(() {
-      final item = _alatList[index];
-      item.isReady = item.isReady == 1 ? 0 : 1;
-    });
-  }
-
-  void _removeAlat(int index) {
-    setState(() => _alatList.removeAt(index));
-  }
-
   Future<void> _saveEksperimen() async {
     if (!_formKey.currentState!.validate()) return;
     if (_isSaving) return;
@@ -119,27 +86,15 @@ class _EksperimenFormScreenState extends State<EksperimenFormScreen> {
         judul: _judulCtrl.text,
         tanggal: _tanggalCtrl.text,
         tujuan: _tujuanCtrl.text,
-        alat: _alatList.map((a) => a.namaItem).join(', '),
         prosedur: _prosedurCtrl.text,
         kesimpulan: _kesimpulanCtrl.text,
+        statusJurnal: _statusJurnal,
       );
 
-      int eksId;
       if (_isEditing) {
         await _dbHelper.updateEksperimen(eks);
-        eksId = eks.id!;
       } else {
-        eksId = await _dbHelper.insertEksperimen(eks);
-      }
-
-      // Save alat bahan items
-      for (final alat in _alatList) {
-        alat.eksperimenId = eksId;
-        if (alat.id != null) {
-          await _dbHelper.updateAlatBahan(alat);
-        } else {
-          await _dbHelper.insertAlatBahan(alat);
-        }
+        await _dbHelper.insertEksperimen(eks);
       }
 
       if (mounted) {
@@ -241,68 +196,27 @@ class _EksperimenFormScreenState extends State<EksperimenFormScreen> {
               ),
 
               const SizedBox(height: 24),
-              const Text('Alat & Bahan',
+              const Text('Status Jurnal',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.slate700)),
               const SizedBox(height: 12),
 
-              // Add alat input
-              Row(
-                children: [
-                  Expanded(
-                    child: TextFormField(
-                      controller: _alatNamaCtrl,
-                      decoration: _inputDeco('Nama alat/bahan'),
-                      style: const TextStyle(color: AppColors.textPrimary),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  IconButton(
-                    onPressed: _addAlatBahanLocal,
-                    icon: const Icon(Icons.add_circle, color: AppColors.sage, size: 36),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12),
-
-              // Alat bahan checklist
-              Container(
-                decoration: BoxDecoration(
-                  color: AppColors.bgCard,
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: AppColors.border),
-                ),
-                child: _alatList.isEmpty
-                    ? const Padding(
-                        padding: EdgeInsets.all(16),
-                        child: Center(child: Text('Belum ada alat/bahan',
-                          style: TextStyle(color: AppColors.textMuted))),
-                      )
-                    : ListView.separated(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: _alatList.length,
-                        separatorBuilder: (_, __) => const Divider(height: 1, color: AppColors.border),
-                        itemBuilder: (context, index) {
-                          final alat = _alatList[index];
-                          return CheckboxListTile(
-                            title: Text(alat.namaItem,
-                              style: TextStyle(
-                                color: AppColors.textPrimary,
-                                decoration: alat.isReady == 1 ? TextDecoration.lineThrough : null,
-                              )),
-                            value: alat.isReady == 1,
-                            onChanged: (_) => _toggleReady(index),
-                            controlAffinity: ListTileControlAffinity.leading,
-                            contentPadding: const EdgeInsets.symmetric(horizontal: 8),
-                            activeColor: AppColors.sage,
-                            checkColor: Colors.white,
-                            secondary: IconButton(
-                              icon: const Icon(Icons.close, color: Color(0xFFEF4444), size: 18),
-                              onPressed: () => _removeAlat(index),
-                            ),
-                          );
-                        },
-                      ),
+              // Status jurnal selector
+              DropdownButtonFormField<String>(
+                value: _statusJurnal,
+                decoration: _inputDeco('Status Jurnal'),
+                dropdownColor: AppColors.bgCard,
+                style: const TextStyle(color: AppColors.textPrimary),
+                items: _statusOptions.map((status) {
+                  return DropdownMenuItem<String>(
+                    value: status,
+                    child: Text(status),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() {
+                    _statusJurnal = value ?? 'Draft';
+                  });
+                },
               ),
 
               const SizedBox(height: 32),

@@ -46,10 +46,10 @@ class _MkFormScreenState extends State<MkFormScreen> {
   void initState() {
     super.initState();
     if (_isEditing) {
-      _namaController.text = widget.mataKuliah!.nama;
+      _namaController.text = widget.mataKuliah!.namaMk;
       _dosenController.text = widget.mataKuliah!.dosen;
       _selectedSemester = widget.mataKuliah!.semester;
-      _selectedWarna = widget.mataKuliah!.warna;
+      _selectedWarna = widget.mataKuliah!.warnaLabel;
     }
   }
 
@@ -87,10 +87,10 @@ class _MkFormScreenState extends State<MkFormScreen> {
 
     final mk = MataKuliah(
       id: widget.mataKuliah?.id,
-      nama: _namaController.text,
+      namaMk: _namaController.text,
       dosen: _dosenController.text,
       semester: _selectedSemester,
-      warna: _selectedWarna,
+      warnaLabel: _selectedWarna,
     );
 
     if (_isEditing) {
