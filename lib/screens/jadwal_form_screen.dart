@@ -53,7 +53,8 @@ class _JadwalFormScreenState extends State<JadwalFormScreen> {
   InputDecoration _deco(String label, IconData icon) {
     return InputDecoration(
       labelText: label,
-      labelStyle: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color),
+      labelStyle: const TextStyle(color: AppColors.slate700),
+      hintStyle: const TextStyle(color: AppColors.textPlaceholder),
       prefixIcon: Icon(icon, color: AppColors.textMuted),
       border: OutlineInputBorder(
         borderSide: BorderSide(color: Theme.of(context).dividerColor),
@@ -65,7 +66,7 @@ class _JadwalFormScreenState extends State<JadwalFormScreen> {
         borderSide: BorderSide(color: AppColors.sage),
         borderRadius: BorderRadius.circular(8)),
       filled: true,
-      fillColor: AppColors.bgCard,
+      fillColor: Colors.white,
     );
   }
 

@@ -56,7 +56,8 @@ class _EksperimenFormScreenState extends State<EksperimenFormScreen> {
   InputDecoration _inputDeco(String label) {
     return InputDecoration(
       labelText: label,
-      labelStyle: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color),
+      labelStyle: const TextStyle(color: AppColors.slate700),
+      hintStyle: const TextStyle(color: AppColors.textPlaceholder),
       border: OutlineInputBorder(
         borderSide: BorderSide(color: Theme.of(context).dividerColor),
         borderRadius: BorderRadius.circular(8),
@@ -70,7 +71,7 @@ class _EksperimenFormScreenState extends State<EksperimenFormScreen> {
         borderRadius: BorderRadius.circular(8),
       ),
       filled: true,
-      fillColor: AppColors.bgCard,
+      fillColor: Colors.white,
     );
   }
 
