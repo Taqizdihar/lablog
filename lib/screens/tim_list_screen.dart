@@ -174,26 +174,38 @@ class _TimListScreenState extends State<TimListScreen> {
                                       fontWeight: FontWeight.bold,
                                       color: Theme.of(context).textTheme.bodyLarge?.color)),
                               SizedBox(height: 4),
-                              Row(children: [
-                                Icon(Icons.badge_outlined,
-                                    size: 13, color: AppColors.textMuted),
-                                SizedBox(width: 4),
-                                Text(tim.nim,
-                                    style: TextStyle(
-                                        fontSize: 13,
-                                        color: Theme.of(context).textTheme.bodyMedium?.color)),
-                                if (tim.noHp.isNotEmpty) ...[
-                                  SizedBox(width: 12),
-                                  Icon(Icons.phone_outlined,
-                                      size: 13,
-                                      color: AppColors.textMuted),
-                                  SizedBox(width: 4),
-                                  Text(tim.noHp,
-                                      style: TextStyle(
-                                          fontSize: 13,
-                                          color: Theme.of(context).textTheme.bodyMedium?.color)),
+                              Wrap(
+                                spacing: 12,
+                                runSpacing: 4,
+                                children: [
+                                  Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(Icons.badge_outlined,
+                                          size: 13, color: AppColors.textMuted),
+                                      SizedBox(width: 4),
+                                      Text(tim.nim,
+                                          style: TextStyle(
+                                              fontSize: 13,
+                                              color: Theme.of(context).textTheme.bodyMedium?.color)),
+                                    ],
+                                  ),
+                                  if (tim.noHp.isNotEmpty)
+                                    Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Icon(Icons.phone_outlined,
+                                            size: 13,
+                                            color: AppColors.textMuted),
+                                        SizedBox(width: 4),
+                                        Text(tim.noHp,
+                                            style: TextStyle(
+                                                fontSize: 13,
+                                                color: Theme.of(context).textTheme.bodyMedium?.color)),
+                                      ],
+                                    ),
                                 ],
-                              ]),
+                              ),
                             ],
                           ),
                         ),

@@ -185,11 +185,16 @@ class _PeminjamanListScreenState extends State<PeminjamanListScreen> {
                                     size: 13,
                                     color: AppColors.textMuted),
                                 SizedBox(width: 4),
-                                Text(
-                                    '${item.tanggalPinjam}  →  ${item.tenggatKembali}',
-                                    style: TextStyle(
-                                        fontSize: 12,
-                                        color: Theme.of(context).textTheme.bodyMedium?.color)),
+                                Expanded(
+                                  child: Text(
+                                      '${item.tanggalPinjam}  →  ${item.tenggatKembali}',
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          color: Theme.of(context).textTheme.bodyMedium?.color),
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                  ),
+                                ),
                               ]),
                             ],
                           ),
