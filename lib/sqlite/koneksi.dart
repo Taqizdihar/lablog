@@ -27,7 +27,13 @@ class DatabaseHelper {
 
   Future<Database> _initDatabase() async {
     if (kIsWeb) {
-      var factory = databaseFactoryFfiWebNoWebWorker;
+      var factory = createDatabaseFactoryFfiWeb(
+        noWebWorker: true,
+        options: SqfliteFfiWebOptions(
+          inMemory: false,
+          indexedDbName: 'lablog_idb',
+        ),
+      );
       return await factory.openDatabase(
         'lablog_database.db',
         options: OpenDatabaseOptions(
