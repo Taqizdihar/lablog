@@ -27,14 +27,18 @@ class DatabaseHelper {
 
   Future<Database> _initDatabase() async {
     if (kIsWeb) {
+      debugPrint(
+        'DatabaseHelper: running on web; opening web database (indexedDbName=lablog_databases)',
+      );
       var factory = createDatabaseFactoryFfiWeb(
         noWebWorker: true,
         options: SqfliteFfiWebOptions(
           inMemory: false,
-          indexedDbName: 'lablog_idb',
+          indexedDbName: 'lablog_databases',
         ),
       );
-      return await factory.openDatabase(
+      debugPrint('DatabaseHelper: created web database factory');
+      final db = await factory.openDatabase(
         'lablog_database.db',
         options: OpenDatabaseOptions(
           version: 1,
@@ -42,15 +46,20 @@ class DatabaseHelper {
           onConfigure: _onConfigure,
         ),
       );
+      debugPrint('DatabaseHelper: web database opened');
+      return db;
     }
 
     final dbPath = join(await getDatabasesPath(), 'lablog_database.db');
-    return await openDatabase(
+    debugPrint('DatabaseHelper: opening local DB at $dbPath');
+    final db = await openDatabase(
       dbPath,
       version: 1,
       onCreate: _onCreate,
       onConfigure: _onConfigure,
     );
+    debugPrint('DatabaseHelper: local DB opened at $dbPath');
+    return db;
   }
 
   Future _onConfigure(Database db) async {
@@ -58,6 +67,9 @@ class DatabaseHelper {
   }
 
   Future _onCreate(Database db, int version) async {
+    debugPrint(
+      'DatabaseHelper: _onCreate called (version=$version) - creating tables',
+    );
 
     await db.execute('''
       CREATE TABLE mata_kuliah(
@@ -69,7 +81,6 @@ class DatabaseHelper {
       )
     ''');
 
-
     await db.execute('''
       CREATE TABLE peminjaman_alat(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -79,7 +90,6 @@ class DatabaseHelper {
         status TEXT NOT NULL
       )
     ''');
-
 
     await db.execute('''
       CREATE TABLE jadwal_praktikum(
@@ -92,7 +102,6 @@ class DatabaseHelper {
         FOREIGN KEY (mk_id) REFERENCES mata_kuliah(id) ON DELETE CASCADE
       )
     ''');
-
 
     await db.execute('''
       CREATE TABLE eksperimen(
@@ -108,7 +117,6 @@ class DatabaseHelper {
       )
     ''');
 
-
     await db.execute('''
       CREATE TABLE tim_kelompok(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -120,7 +128,6 @@ class DatabaseHelper {
         FOREIGN KEY (mk_id) REFERENCES mata_kuliah(id) ON DELETE CASCADE
       )
     ''');
-
 
     await db.execute('''
       CREATE TABLE referensi(
@@ -134,8 +141,6 @@ class DatabaseHelper {
       )
     ''');
   }
-
-
 
   Future<int> insertMataKuliah(MataKuliah mk) async {
     final db = await database;
@@ -160,14 +165,8 @@ class DatabaseHelper {
 
   Future<int> deleteMataKuliah(int id) async {
     final db = await database;
-    return await db.delete(
-      'mata_kuliah',
-      where: 'id = ?',
-      whereArgs: [id],
-    );
+    return await db.delete('mata_kuliah', where: 'id = ?', whereArgs: [id]);
   }
-
-
 
   Future<int> insertPeminjamanAlat(PeminjamanAlat alat) async {
     final db = await database;
@@ -176,10 +175,8 @@ class DatabaseHelper {
 
   Future<List<PeminjamanAlat>> getPeminjamanAlatList() async {
     final db = await database;
-    final List<Map<String, dynamic>> maps =
-        await db.query('peminjaman_alat');
-    return List.generate(
-        maps.length, (i) => PeminjamanAlat.fromMap(maps[i]));
+    final List<Map<String, dynamic>> maps = await db.query('peminjaman_alat');
+    return List.generate(maps.length, (i) => PeminjamanAlat.fromMap(maps[i]));
   }
 
   Future<int> updatePeminjamanAlat(PeminjamanAlat alat) async {
@@ -194,14 +191,8 @@ class DatabaseHelper {
 
   Future<int> deletePeminjamanAlat(int id) async {
     final db = await database;
-    return await db.delete(
-      'peminjaman_alat',
-      where: 'id = ?',
-      whereArgs: [id],
-    );
+    return await db.delete('peminjaman_alat', where: 'id = ?', whereArgs: [id]);
   }
-
-
 
   Future<int> insertJadwal(JadwalPraktikum jadwal) async {
     final db = await database;
@@ -215,8 +206,7 @@ class DatabaseHelper {
       where: 'mk_id = ?',
       whereArgs: [mkId],
     );
-    return List.generate(
-        maps.length, (i) => JadwalPraktikum.fromMap(maps[i]));
+    return List.generate(maps.length, (i) => JadwalPraktikum.fromMap(maps[i]));
   }
 
   Future<int> updateJadwal(JadwalPraktikum jadwal) async {
@@ -241,11 +231,8 @@ class DatabaseHelper {
   Future<List<JadwalPraktikum>> getAllJadwalList() async {
     final db = await database;
     final List<Map<String, dynamic>> maps = await db.query('jadwal_praktikum');
-    return List.generate(
-        maps.length, (i) => JadwalPraktikum.fromMap(maps[i]));
+    return List.generate(maps.length, (i) => JadwalPraktikum.fromMap(maps[i]));
   }
-
-
 
   Future<int> insertEksperimen(Eksperimen eks) async {
     final db = await database;
@@ -274,14 +261,8 @@ class DatabaseHelper {
 
   Future<int> deleteEksperimen(int id) async {
     final db = await database;
-    return await db.delete(
-      'eksperimen',
-      where: 'id = ?',
-      whereArgs: [id],
-    );
+    return await db.delete('eksperimen', where: 'id = ?', whereArgs: [id]);
   }
-
-
 
   Future<int> insertTimKelompok(TimKelompok tim) async {
     final db = await database;
@@ -295,8 +276,7 @@ class DatabaseHelper {
       where: 'mk_id = ?',
       whereArgs: [mkId],
     );
-    return List.generate(
-        maps.length, (i) => TimKelompok.fromMap(maps[i]));
+    return List.generate(maps.length, (i) => TimKelompok.fromMap(maps[i]));
   }
 
   Future<int> updateTimKelompok(TimKelompok tim) async {
@@ -311,14 +291,8 @@ class DatabaseHelper {
 
   Future<int> deleteTimKelompok(int id) async {
     final db = await database;
-    return await db.delete(
-      'tim_kelompok',
-      where: 'id = ?',
-      whereArgs: [id],
-    );
+    return await db.delete('tim_kelompok', where: 'id = ?', whereArgs: [id]);
   }
-
-
 
   Future<int> insertReferensi(Referensi ref) async {
     final db = await database;
@@ -347,10 +321,6 @@ class DatabaseHelper {
 
   Future<int> deleteReferensi(int id) async {
     final db = await database;
-    return await db.delete(
-      'referensi',
-      where: 'id = ?',
-      whereArgs: [id],
-    );
+    return await db.delete('referensi', where: 'id = ?', whereArgs: [id]);
   }
 }
