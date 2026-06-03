@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
+import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
 import 'package:tubes_ppbl/models/mata_kuliah.dart';
 import 'package:tubes_ppbl/models/peminjaman_alat.dart';
 import 'package:tubes_ppbl/models/jadwal_praktikum.dart';
@@ -24,6 +26,18 @@ class DatabaseHelper {
   }
 
   Future<Database> _initDatabase() async {
+    if (kIsWeb) {
+      var factory = databaseFactoryFfiWebNoWebWorker;
+      return await factory.openDatabase(
+        'lablog_database.db',
+        options: OpenDatabaseOptions(
+          version: 1,
+          onCreate: _onCreate,
+          onConfigure: _onConfigure,
+        ),
+      );
+    }
+
     final dbPath = join(await getDatabasesPath(), 'lablog_database.db');
     return await openDatabase(
       dbPath,
