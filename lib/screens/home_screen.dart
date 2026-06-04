@@ -5,6 +5,7 @@ import 'package:tubes_ppbl/models/mata_kuliah.dart';
 import 'package:tubes_ppbl/sqlite/koneksi.dart';
 import 'package:tubes_ppbl/screens/mk_form_screen.dart';
 import 'package:tubes_ppbl/screens/mk_dashboard_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -34,10 +35,24 @@ class _HomeScreenState extends State<HomeScreen> {
     'mkRose': Color(0xFF881337),
   };
 
+  bool _isGridView = false;
+  String _semesterAktif = 'Semua Semester';
+
   @override
   void initState() {
     super.initState();
+    _loadPreferences();
     _refreshList();
+  }
+
+  Future<void> _loadPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (mounted) {
+      setState(() {
+        _isGridView = prefs.getBool('is_grid_view') ?? false;
+        _semesterAktif = prefs.getString('semester_aktif') ?? 'Semua Semester';
+      });
+    }
   }
 
   void _refreshList() {
@@ -68,6 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
     if (shouldDelete == true) {
       await _dbHelper.deleteMataKuliah(id);
+      _loadPreferences();
       _refreshList();
     }
   }
@@ -114,8 +130,11 @@ class _HomeScreenState extends State<HomeScreen> {
           }
 
           final list = snapshot.data ?? [];
+          final filteredList = _semesterAktif == 'Semua Semester'
+              ? list
+              : list.where((mk) => mk.semester == _semesterAktif).toList();
 
-          if (list.isEmpty) {
+          if (filteredList.isEmpty) {
             return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -148,158 +167,192 @@ class _HomeScreenState extends State<HomeScreen> {
             );
           }
 
-          return ListView.builder(
-            itemCount: list.length,
-            padding: const EdgeInsets.all(16.0),
-            itemBuilder: (context, index) {
-              final mk = list[index];
-              final cardColor = _getCardColor(mk.warnaLabel);
-              final textColor = _getTextColor(mk.warnaLabel);
+          Widget buildItem(BuildContext context, int index) {
+            final mk = filteredList[index];
+            final cardColor = _getCardColor(mk.warnaLabel);
+            final textColor = _getTextColor(mk.warnaLabel);
 
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 12.0),
-                child: Slidable(
-                  key: ValueKey(mk.id),
-                  endActionPane: ActionPane(
-                    motion: const BehindMotion(),
-                    extentRatio: 0.4,
-                    children: [
-                      SlidableAction(
-                        onPressed: (_) async {
-                          final result = await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (_) =>
-                                    MkFormScreen(mataKuliah: mk)),
-                          );
-                          if (result == true) _refreshList();
-                        },
-                        backgroundColor: Color(0xFF3B82F6),
-                        foregroundColor: Colors.white,
-                        icon: Icons.edit_outlined,
-                        label: 'Edit',
+            Widget cardContent = Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).cardColor,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: Theme.of(context).dividerColor),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.04),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: IntrinsicHeight(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Container(
+                      width: 6,
+                      decoration: BoxDecoration(
+                        color: cardColor,
                         borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(12),
                           bottomLeft: Radius.circular(12),
                         ),
                       ),
-                      SlidableAction(
-                        onPressed: (_) => _deleteMataKuliah(mk.id!),
-                        backgroundColor: Color(0xFFEF4444),
-                        foregroundColor: Colors.white,
-                        icon: Icons.delete_outline,
-                        label: 'Hapus',
-                        borderRadius: const BorderRadius.only(
-                          topRight: Radius.circular(12),
-                          bottomRight: Radius.circular(12),
-                        ),
-                      ),
-                    ],
-                  ),
-                  child: InkWell(
-                    onTap: () async {
-                      await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) =>
-                              MkDashboardScreen(mkId: mk.id!),
-                        ),
-                      );
-                      _refreshList();
-                    },
-                    borderRadius: BorderRadius.circular(12),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).cardColor,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Theme.of(context).dividerColor),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.04),
-                            blurRadius: 8,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: Row(
-                        children: [
-
-                          Container(
-                            width: 6,
-                            height: 88,
-                            decoration: BoxDecoration(
-                              color: cardColor,
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(12),
-                                bottomLeft: Radius.circular(12),
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              mk.namaMk,
+                              style: TextStyle(
+                                fontSize: _isGridView ? 14 : 16,
+                                fontWeight: FontWeight.bold,
+                                color: Theme.of(context).textTheme.bodyLarge?.color,
                               ),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
                             ),
-                          ),
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 16.0, vertical: 14.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    mk.namaMk,
+                            SizedBox(height: 4),
+                            Row(
+                              children: [
+                                Icon(Icons.person_outline,
+                                    size: 14,
+                                    color: AppColors.textMuted),
+                                SizedBox(width: 4),
+                                Expanded(
+                                  child: Text(
+                                    mk.dosen,
                                     style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: Theme.of(context).textTheme.bodyLarge?.color,
+                                      fontSize: 12,
+                                      color: Theme.of(context).textTheme.bodyMedium?.color,
                                     ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
-                                  SizedBox(height: 4),
-                                  Row(
-                                    children: [
-                                      Icon(Icons.person_outline,
-                                          size: 14,
-                                          color: AppColors.textMuted),
-                                      SizedBox(width: 4),
-                                      Text(
-                                        mk.dosen,
-                                        style: TextStyle(
-                                          fontSize: 13,
-                                          color: Theme.of(context).textTheme.bodyMedium?.color,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(height: 8),
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 10, vertical: 4),
-                                    decoration: BoxDecoration(
-                                      color: cardColor,
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    child: Text(
-                                      mk.semester,
-                                      style: TextStyle(
-                                        fontSize: 11,
-                                        color: textColor,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 8),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 4),
+                              decoration: BoxDecoration(
+                                color: cardColor,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Text(
+                                mk.semester,
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  color: textColor,
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
                             ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(right: 12.0),
-                            child: Icon(Icons.chevron_right,
-                                color: AppColors.textPlaceholder),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
-                  ),
+                    if (!_isGridView)
+                      Padding(
+                        padding: EdgeInsets.only(right: 12.0),
+                        child: Icon(Icons.chevron_right,
+                            color: AppColors.textPlaceholder),
+                      ),
+                  ],
                 ),
-              );
-            },
-          );
+              ),
+            );
+
+            Widget item = Slidable(
+              key: ValueKey(mk.id),
+              endActionPane: ActionPane(
+                motion: const BehindMotion(),
+                extentRatio: 0.4,
+                children: [
+                  SlidableAction(
+                    onPressed: (_) async {
+                      final result = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) =>
+                                MkFormScreen(mataKuliah: mk)),
+                      );
+                      if (result == true) {
+                        _loadPreferences();
+                        _refreshList();
+                      }
+                    },
+                    backgroundColor: Color(0xFF3B82F6),
+                    foregroundColor: Colors.white,
+                    icon: Icons.edit_outlined,
+                    label: 'Edit',
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(12),
+                      bottomLeft: Radius.circular(12),
+                    ),
+                  ),
+                  SlidableAction(
+                    onPressed: (_) => _deleteMataKuliah(mk.id!),
+                    backgroundColor: Color(0xFFEF4444),
+                    foregroundColor: Colors.white,
+                    icon: Icons.delete_outline,
+                    label: 'Hapus',
+                    borderRadius: const BorderRadius.only(
+                      topRight: Radius.circular(12),
+                      bottomRight: Radius.circular(12),
+                    ),
+                  ),
+                ],
+              ),
+              child: InkWell(
+                onTap: () async {
+                  await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) =>
+                          MkDashboardScreen(mkId: mk.id!),
+                    ),
+                  );
+                  _loadPreferences();
+                  _refreshList();
+                },
+                borderRadius: BorderRadius.circular(12),
+                child: cardContent,
+              ),
+            );
+
+            return _isGridView
+                ? item
+                : Padding(
+                    padding: const EdgeInsets.only(bottom: 12.0),
+                    child: item,
+                  );
+          }
+
+          if (_isGridView) {
+            return GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+                childAspectRatio: 1.2,
+              ),
+              itemCount: filteredList.length,
+              padding: const EdgeInsets.all(16.0),
+              itemBuilder: buildItem,
+            );
+          } else {
+            return ListView.builder(
+              itemCount: filteredList.length,
+              padding: const EdgeInsets.all(16.0),
+              itemBuilder: buildItem,
+            );
+          }
         },
       ),
       floatingActionButton: FloatingActionButton(
@@ -313,6 +366,7 @@ class _HomeScreenState extends State<HomeScreen> {
             MaterialPageRoute(builder: (_) => const MkFormScreen()),
           );
           if (result == true) {
+            _loadPreferences();
             _refreshList();
           }
         },

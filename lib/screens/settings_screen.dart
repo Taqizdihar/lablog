@@ -14,15 +14,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
   final _formKey = GlobalKey<FormState>();
   final _namaController = TextEditingController();
   final _nimController = TextEditingController();
-  final _programStudiController = TextEditingController();
-  final _targetIpkController = TextEditingController();
-
-  String _selectedSemester = 'Semester 1';
+  String _selectedSemester = 'Semua Semester';
   bool _isDarkMode = false;
+  bool _isGridView = false;
+  bool _highlightTodaySchedule = true;
 
   bool _isLoading = true;
 
   final List<String> _semesterOptions = [
+    'Semua Semester',
     'Semester 1',
     'Semester 2',
     'Semester 3',
@@ -43,8 +43,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
   void dispose() {
     _namaController.dispose();
     _nimController.dispose();
-    _programStudiController.dispose();
-    _targetIpkController.dispose();
     super.dispose();
   }
 
@@ -53,10 +51,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
     setState(() {
       _namaController.text = prefs.getString('nama_praktikan') ?? '';
       _nimController.text = prefs.getString('nim_praktikan') ?? '';
-      _programStudiController.text = prefs.getString('program_studi') ?? '';
-      _targetIpkController.text = prefs.getString('target_ipk') ?? '';
-      _selectedSemester = prefs.getString('semester_aktif') ?? 'Semester 1';
+      _selectedSemester = prefs.getString('semester_aktif') ?? 'Semua Semester';
       _isDarkMode = prefs.getBool('is_dark_mode') ?? false;
+      _isGridView = prefs.getBool('is_grid_view') ?? false;
+      _highlightTodaySchedule = prefs.getBool('highlight_today_schedule') ?? true;
       _isLoading = false;
     });
   }
@@ -65,10 +63,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('nama_praktikan', _namaController.text);
     await prefs.setString('nim_praktikan', _nimController.text);
-    await prefs.setString('program_studi', _programStudiController.text);
-    await prefs.setString('target_ipk', _targetIpkController.text);
     await prefs.setString('semester_aktif', _selectedSemester);
     await prefs.setBool('is_dark_mode', _isDarkMode);
+    await prefs.setBool('is_grid_view', _isGridView);
+    await prefs.setBool('highlight_today_schedule', _highlightTodaySchedule);
 
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -165,23 +163,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         keyboardType: TextInputType.number,
                       ),
                       SizedBox(height: 16),
-                      TextFormField(
-                        controller: _programStudiController,
-                        decoration: _inputDecoration(
-                            'Program Studi', Icons.school_outlined),
-                        style:
-                            const TextStyle(color: AppColors.slate900),
-                      ),
-                      SizedBox(height: 16),
-                      TextFormField(
-                        controller: _targetIpkController,
-                        decoration: _inputDecoration(
-                            'Target IPK', Icons.analytics_outlined),
-                        style:
-                            const TextStyle(color: AppColors.slate900),
-                        keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                      ),
-                      SizedBox(height: 16),
                       DropdownButtonFormField<String>(
                         isExpanded: true,
                         initialValue: _selectedSemester,
@@ -198,7 +179,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         }).toList(),
                         onChanged: (value) {
                           setState(() {
-                            _selectedSemester = value ?? 'Semester 1';
+                            _selectedSemester = value ?? 'Semua Semester';
                           });
                         },
                       ),
@@ -238,6 +219,48 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       activeThumbColor: AppColors.sage,
                       secondary: Icon(
                         _isDarkMode ? Icons.dark_mode : Icons.light_mode,
+                        color: AppColors.textMuted,
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    SwitchListTile(
+                      title: Text('Tata Letak Grid',
+                          style: const TextStyle(color: AppColors.slate900)),
+                      subtitle: Text(
+                        'Tampilkan mata kuliah dalam bentuk grid',
+                        style: TextStyle(
+                            color: AppColors.textMuted, fontSize: 12),
+                      ),
+                      value: _isGridView,
+                      onChanged: (bool value) async {
+                        setState(() => _isGridView = value);
+                        final prefs = await SharedPreferences.getInstance();
+                        await prefs.setBool('is_grid_view', value);
+                      },
+                      activeThumbColor: AppColors.sage,
+                      secondary: Icon(
+                        _isGridView ? Icons.grid_view : Icons.view_list,
+                        color: AppColors.textMuted,
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    SwitchListTile(
+                      title: Text('Sorot Jadwal Hari Ini',
+                          style: const TextStyle(color: AppColors.slate900)),
+                      subtitle: Text(
+                        'Sorot jadwal praktikum hari ini',
+                        style: TextStyle(
+                            color: AppColors.textMuted, fontSize: 12),
+                      ),
+                      value: _highlightTodaySchedule,
+                      onChanged: (bool value) async {
+                        setState(() => _highlightTodaySchedule = value);
+                        final prefs = await SharedPreferences.getInstance();
+                        await prefs.setBool('highlight_today_schedule', value);
+                      },
+                      activeThumbColor: AppColors.sage,
+                      secondary: Icon(
+                        _highlightTodaySchedule ? Icons.event_available : Icons.event,
                         color: AppColors.textMuted,
                       ),
                     ),

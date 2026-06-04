@@ -5,6 +5,7 @@ import 'package:tubes_ppbl/models/jadwal_praktikum.dart';
 import 'package:tubes_ppbl/models/mata_kuliah.dart';
 import 'package:tubes_ppbl/sqlite/koneksi.dart';
 import 'package:tubes_ppbl/screens/jadwal_form_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class JadwalListScreen extends StatefulWidget {
   const JadwalListScreen({super.key});
@@ -39,10 +40,36 @@ class _JadwalListScreenState extends State<JadwalListScreen> {
     'Jumat': 5, 'Sabtu': 6, 'Minggu': 7,
   };
 
+  bool _highlightTodaySchedule = true;
+
   @override
   void initState() {
     super.initState();
+    _loadPreferences();
     _refreshList();
+  }
+
+  Future<void> _loadPreferences() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (mounted) {
+      setState(() {
+        _highlightTodaySchedule = prefs.getBool('highlight_today_schedule') ?? true;
+      });
+    }
+  }
+
+  String _getTodayDayName() {
+    final weekday = DateTime.now().weekday;
+    switch (weekday) {
+      case 1: return 'Senin';
+      case 2: return 'Selasa';
+      case 3: return 'Rabu';
+      case 4: return 'Kamis';
+      case 5: return 'Jumat';
+      case 6: return 'Sabtu';
+      case 7: return 'Minggu';
+      default: return '';
+    }
   }
 
   void _refreshList() {
@@ -66,6 +93,7 @@ class _JadwalListScreenState extends State<JadwalListScreen> {
 
   Future<void> _deleteJadwal(int id) async {
     await _dbHelper.deleteJadwal(id);
+    _loadPreferences();
     _refreshList();
   }
 
@@ -134,6 +162,8 @@ class _JadwalListScreenState extends State<JadwalListScreen> {
               final showDayHeader =
                   index == 0 || list[index - 1].hari != jadwal.hari;
 
+              final isToday = _highlightTodaySchedule && jadwal.hari == _getTodayDayName();
+
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -189,9 +219,12 @@ class _JadwalListScreenState extends State<JadwalListScreen> {
                       ),
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Theme.of(context).cardColor,
+                          color: isToday ? AppColors.sageBg : Theme.of(context).cardColor,
                           borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: Theme.of(context).dividerColor),
+                          border: Border.all(
+                              color: isToday
+                                  ? AppColors.sage.withOpacity(0.5)
+                                  : Theme.of(context).dividerColor),
                         ),
                         child: Row(children: [
                           Container(
@@ -232,6 +265,20 @@ class _JadwalListScreenState extends State<JadwalListScreen> {
                                       style: TextStyle(fontSize: 14,
                                           fontWeight: FontWeight.w600,
                                           color: Theme.of(context).textTheme.bodyLarge?.color)),
+                                    if (isToday) ...[
+                                      SizedBox(width: 8),
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                        decoration: BoxDecoration(
+                                          color: AppColors.sage,
+                                          borderRadius: BorderRadius.circular(4),
+                                        ),
+                                        child: Text(
+                                          'Hari ini',
+                                          style: TextStyle(fontSize: 10, color: Colors.white, fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    ],
                                     SizedBox(width: 16),
                                     Icon(Icons.room_outlined,
                                         size: 15, color: AppColors.textMuted),
@@ -265,7 +312,10 @@ class _JadwalListScreenState extends State<JadwalListScreen> {
         onPressed: () async {
           final result = await Navigator.push(context,
             MaterialPageRoute(builder: (_) => const JadwalFormScreen()));
-          if (result == true) _refreshList();
+          if (result == true) {
+            _loadPreferences();
+            _refreshList();
+          }
         },
       ),
     );
