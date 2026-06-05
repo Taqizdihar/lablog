@@ -1,0 +1,580 @@
+{
+  "root": "E:\\College\\Telkom University\\Associate Degree of Information Systems\\Semesters\\4th Semester\\Advanced Mobile Device Programming\\Assessments\\tubes_ppbl",
+  "total_files_with_comments": 35,
+  "files": [
+    {
+      "path": "E:\\College\\Telkom University\\Associate Degree of Information Systems\\Semesters\\4th Semester\\Advanced Mobile Device Programming\\Assessments\\tubes_ppbl\\pubspec.yaml",
+      "count": 67,
+      "samples": [
+        [
+          "single",
+          "//developer.android.com/studio/publish/versioning"
+        ],
+        [
+          "single",
+          "//developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html"
+        ],
+        [
+          "single",
+          "//dart.dev/tools/pub/pubspec"
+        ],
+        [
+          "single",
+          "//flutter.dev/to/resolution-aware-images"
+        ],
+        [
+          "single",
+          "//flutter.dev/to/asset-from-package"
+        ]
+      ]
+    },
+    {
+      "path": "E:\\College\\Telkom University\\Associate Degree of Information Systems\\Semesters\\4th Semester\\Advanced Mobile Device Programming\\Assessments\\tubes_ppbl\\windows\\runner\\win32_window.h",
+      "count": 32,
+      "samples": [
+        [
+          "single",
+          "// A class abstraction for a high DPI-aware Win32 Window. Intended to be"
+        ],
+        [
+          "single",
+          "// inherited from by classes that wish to specialize with custom"
+        ],
+        [
+          "single",
+          "// rendering and input handling"
+        ],
+        [
+          "single",
+          "// Creates a win32 window with |title| that is positioned and sized using"
+        ],
+        [
+          "single",
+          "// |origin| and |size|. New windows are created on the default monitor. Window"
+        ]
+      ]
+    },
+    {
+      "path": "E:\\College\\Telkom University\\Associate Degree of Information Systems\\Semesters\\4th Semester\\Advanced Mobile Device Programming\\Assessments\\tubes_ppbl\\analysis_options.yaml",
+      "count": 27,
+      "samples": [
+        [
+          "single",
+          "//dart.dev/tools#ides-and-editors). The analyzer can also be"
+        ],
+        [
+          "single",
+          "//dart.dev/lints."
+        ],
+        [
+          "single",
+          "// ignore: name_of_lint` and"
+        ],
+        [
+          "single",
+          "// ignore_for_file: name_of_lint` syntax on the line or in the file"
+        ],
+        [
+          "single",
+          "//dart.dev/guides/language/analysis-options"
+        ]
+      ]
+    },
+    {
+      "path": "E:\\College\\Telkom University\\Associate Degree of Information Systems\\Semesters\\4th Semester\\Advanced Mobile Device Programming\\Assessments\\tubes_ppbl\\windows\\runner\\utils.h",
+      "count": 7,
+      "samples": [
+        [
+          "single",
+          "// Creates a console for the process, and redirects stdout and stderr to"
+        ],
+        [
+          "single",
+          "// it for both the runner and the Flutter library."
+        ],
+        [
+          "single",
+          "// Takes a null-terminated wchar_t* encoded in UTF-16 and returns a std::string"
+        ],
+        [
+          "single",
+          "// encoded in UTF-8. Returns an empty std::string on failure."
+        ],
+        [
+          "single",
+          "// Gets the command line arguments passed in as a std::vector<std::string>,"
+        ]
+      ]
+    },
+    {
+      "path": "E:\\College\\Telkom University\\Associate Degree of Information Systems\\Semesters\\4th Semester\\Advanced Mobile Device Programming\\Assessments\\tubes_ppbl\\android\\app\\build.gradle.kts",
+      "count": 6,
+      "samples": [
+        [
+          "single",
+          "// The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins."
+        ],
+        [
+          "single",
+          "// TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html)."
+        ],
+        [
+          "single",
+          "// You can update the following values to match your application needs."
+        ],
+        [
+          "single",
+          "// For more information, see: https://flutter.dev/to/review-gradle-config."
+        ],
+        [
+          "single",
+          "// TODO: Add your own signing config for the release build."
+        ]
+      ]
+    },
+    {
+      "path": "E:\\College\\Telkom University\\Associate Degree of Information Systems\\Semesters\\4th Semester\\Advanced Mobile Device Programming\\Assessments\\tubes_ppbl\\linux\\flutter\\generated_plugin_registrant.h",
+      "count": 6,
+      "samples": [
+        [
+          "single",
+          "//"
+        ],
+        [
+          "single",
+          "//  Generated file. Do not edit."
+        ],
+        [
+          "single",
+          "//"
+        ],
+        [
+          "single",
+          "// clang-format off"
+        ],
+        [
+          "single",
+          "// Registers Flutter plugins."
+        ]
+      ]
+    },
+    {
+      "path": "E:\\College\\Telkom University\\Associate Degree of Information Systems\\Semesters\\4th Semester\\Advanced Mobile Device Programming\\Assessments\\tubes_ppbl\\windows\\flutter\\generated_plugin_registrant.h",
+      "count": 6,
+      "samples": [
+        [
+          "single",
+          "//"
+        ],
+        [
+          "single",
+          "//  Generated file. Do not edit."
+        ],
+        [
+          "single",
+          "//"
+        ],
+        [
+          "single",
+          "// clang-format off"
+        ],
+        [
+          "single",
+          "// Registers Flutter plugins."
+        ]
+      ]
+    },
+    {
+      "path": "E:\\College\\Telkom University\\Associate Degree of Information Systems\\Semesters\\4th Semester\\Advanced Mobile Device Programming\\Assessments\\tubes_ppbl\\windows\\runner\\flutter_window.h",
+      "count": 6,
+      "samples": [
+        [
+          "single",
+          "// A window that does nothing but host a Flutter view."
+        ],
+        [
+          "single",
+          "// Creates a new FlutterWindow hosting a Flutter view running |project|."
+        ],
+        [
+          "single",
+          "// Win32Window:"
+        ],
+        [
+          "single",
+          "// The project to run."
+        ],
+        [
+          "single",
+          "// The Flutter instance hosted by this window."
+        ]
+      ]
+    },
+    {
+      "path": "E:\\College\\Telkom University\\Associate Degree of Information Systems\\Semesters\\4th Semester\\Advanced Mobile Device Programming\\Assessments\\tubes_ppbl\\windows\\runner\\resource.h",
+      "count": 6,
+      "samples": [
+        [
+          "single",
+          "//{{NO_DEPENDENCIES}}"
+        ],
+        [
+          "single",
+          "// Microsoft Visual C++ generated include file."
+        ],
+        [
+          "single",
+          "// Used by Runner.rc"
+        ],
+        [
+          "single",
+          "//"
+        ],
+        [
+          "single",
+          "// Next default values for new objects"
+        ]
+      ]
+    },
+    {
+      "path": "E:\\College\\Telkom University\\Associate Degree of Information Systems\\Semesters\\4th Semester\\Advanced Mobile Device Programming\\Assessments\\tubes_ppbl\\ios\\Runner\\GeneratedPluginRegistrant.h",
+      "count": 5,
+      "samples": [
+        [
+          "multiline_c",
+          "/* GeneratedPluginRegistrant_h */"
+        ],
+        [
+          "single",
+          "//"
+        ],
+        [
+          "single",
+          "//  Generated file. Do not edit."
+        ],
+        [
+          "single",
+          "//"
+        ],
+        [
+          "single",
+          "// clang-format off"
+        ]
+      ]
+    },
+    {
+      "path": "E:\\College\\Telkom University\\Associate Degree of Information Systems\\Semesters\\4th Semester\\Advanced Mobile Device Programming\\Assessments\\tubes_ppbl\\ios\\Runner\\GeneratedPluginRegistrant.m",
+      "count": 4,
+      "samples": [
+        [
+          "single",
+          "//"
+        ],
+        [
+          "single",
+          "//  Generated file. Do not edit."
+        ],
+        [
+          "single",
+          "//"
+        ],
+        [
+          "single",
+          "// clang-format off"
+        ]
+      ]
+    },
+    {
+      "path": "E:\\College\\Telkom University\\Associate Degree of Information Systems\\Semesters\\4th Semester\\Advanced Mobile Device Programming\\Assessments\\tubes_ppbl\\android\\app\\src\\main\\AndroidManifest.xml",
+      "count": 3,
+      "samples": [
+        [
+          "single",
+          "//schemas.android.com/apk/res/android\">"
+        ],
+        [
+          "single",
+          "//developer.android.com/training/package-visibility and"
+        ],
+        [
+          "single",
+          "//developer.android.com/reference/android/content/Intent#ACTION_PROCESS_TEXT."
+        ]
+      ]
+    },
+    {
+      "path": "E:\\College\\Telkom University\\Associate Degree of Information Systems\\Semesters\\4th Semester\\Advanced Mobile Device Programming\\Assessments\\tubes_ppbl\\macos\\Flutter\\GeneratedPluginRegistrant.swift",
+      "count": 3,
+      "samples": [
+        [
+          "single",
+          "//"
+        ],
+        [
+          "single",
+          "//  Generated file. Do not edit."
+        ],
+        [
+          "single",
+          "//"
+        ]
+      ]
+    },
+    {
+      "path": "E:\\College\\Telkom University\\Associate Degree of Information Systems\\Semesters\\4th Semester\\Advanced Mobile Device Programming\\Assessments\\tubes_ppbl\\test\\widget_test.dart",
+      "count": 3,
+      "samples": [
+        [
+          "single",
+          "// Basic Flutter widget test for LabLog app."
+        ],
+        [
+          "single",
+          "// Build our app and trigger a frame."
+        ],
+        [
+          "single",
+          "// Verify that the app title is displayed."
+        ]
+      ]
+    },
+    {
+      "path": "E:\\College\\Telkom University\\Associate Degree of Information Systems\\Semesters\\4th Semester\\Advanced Mobile Device Programming\\Assessments\\tubes_ppbl\\devtools_options.yaml",
+      "count": 2,
+      "samples": [
+        [
+          "single",
+          "//docs.flutter.dev/tools/devtools/extensions#configure-extension-enablement-states"
+        ],
+        [
+          "hash",
+          "#configure-extension-enablement-states"
+        ]
+      ]
+    },
+    {
+      "path": "E:\\College\\Telkom University\\Associate Degree of Information Systems\\Semesters\\4th Semester\\Advanced Mobile Device Programming\\Assessments\\tubes_ppbl\\ios\\RunnerTests\\RunnerTests.swift",
+      "count": 2,
+      "samples": [
+        [
+          "single",
+          "// If you add code to the Runner application, consider adding tests here."
+        ],
+        [
+          "single",
+          "// See https://developer.apple.com/documentation/xctest for more information about using XCTest."
+        ]
+      ]
+    },
+    {
+      "path": "E:\\College\\Telkom University\\Associate Degree of Information Systems\\Semesters\\4th Semester\\Advanced Mobile Device Programming\\Assessments\\tubes_ppbl\\lib\\screens\\home_screen.dart",
+      "count": 2,
+      "samples": [
+        [
+          "single",
+          "// Filter MK by semester for stats"
+        ],
+        [
+          "single",
+          "// Collect filtered MK IDs for jadwal filtering"
+        ]
+      ]
+    },
+    {
+      "path": "E:\\College\\Telkom University\\Associate Degree of Information Systems\\Semesters\\4th Semester\\Advanced Mobile Device Programming\\Assessments\\tubes_ppbl\\lib\\screens\\jadwal_list_screen.dart",
+      "count": 2,
+      "samples": [
+        [
+          "single",
+          "/// Called by MainNavigation when this tab becomes active."
+        ],
+        [
+          "single",
+          "// Filter jadwal based on semester_aktif"
+        ]
+      ]
+    },
+    {
+      "path": "E:\\College\\Telkom University\\Associate Degree of Information Systems\\Semesters\\4th Semester\\Advanced Mobile Device Programming\\Assessments\\tubes_ppbl\\linux\\runner\\my_application.h",
+      "count": 2,
+      "samples": [
+        [
+          "multiline_c",
+          "/**"
+        ],
+        [
+          "single",
+          "// FLUTTER_MY_APPLICATION_H_"
+        ]
+      ]
+    },
+    {
+      "path": "E:\\College\\Telkom University\\Associate Degree of Information Systems\\Semesters\\4th Semester\\Advanced Mobile Device Programming\\Assessments\\tubes_ppbl\\macos\\RunnerTests\\RunnerTests.swift",
+      "count": 2,
+      "samples": [
+        [
+          "single",
+          "// If you add code to the Runner application, consider adding tests here."
+        ],
+        [
+          "single",
+          "// See https://developer.apple.com/documentation/xctest for more information about using XCTest."
+        ]
+      ]
+    },
+    {
+      "path": "E:\\College\\Telkom University\\Associate Degree of Information Systems\\Semesters\\4th Semester\\Advanced Mobile Device Programming\\Assessments\\tubes_ppbl\\web\\index.html",
+      "count": 2,
+      "samples": [
+        [
+          "single",
+          "//developer.mozilla.org/en-US/docs/Web/HTML/Element/base"
+        ],
+        [
+          "single",
+          "//docs.flutter.dev/platform-integration/web/initialization"
+        ]
+      ]
+    },
+    {
+      "path": "E:\\College\\Telkom University\\Associate Degree of Information Systems\\Semesters\\4th Semester\\Advanced Mobile Device Programming\\Assessments\\tubes_ppbl\\android\\app\\src\\debug\\AndroidManifest.xml",
+      "count": 1,
+      "samples": [
+        [
+          "single",
+          "//schemas.android.com/apk/res/android\">"
+        ]
+      ]
+    },
+    {
+      "path": "E:\\College\\Telkom University\\Associate Degree of Information Systems\\Semesters\\4th Semester\\Advanced Mobile Device Programming\\Assessments\\tubes_ppbl\\android\\app\\src\\main\\java\\io\\flutter\\plugins\\GeneratedPluginRegistrant.java",
+      "count": 1,
+      "samples": [
+        [
+          "multiline_c",
+          "/**"
+        ]
+      ]
+    },
+    {
+      "path": "E:\\College\\Telkom University\\Associate Degree of Information Systems\\Semesters\\4th Semester\\Advanced Mobile Device Programming\\Assessments\\tubes_ppbl\\android\\app\\src\\main\\res\\drawable\\launch_background.xml",
+      "count": 1,
+      "samples": [
+        [
+          "single",
+          "//schemas.android.com/apk/res/android\">"
+        ]
+      ]
+    },
+    {
+      "path": "E:\\College\\Telkom University\\Associate Degree of Information Systems\\Semesters\\4th Semester\\Advanced Mobile Device Programming\\Assessments\\tubes_ppbl\\android\\app\\src\\main\\res\\drawable-v21\\launch_background.xml",
+      "count": 1,
+      "samples": [
+        [
+          "single",
+          "//schemas.android.com/apk/res/android\">"
+        ]
+      ]
+    },
+    {
+      "path": "E:\\College\\Telkom University\\Associate Degree of Information Systems\\Semesters\\4th Semester\\Advanced Mobile Device Programming\\Assessments\\tubes_ppbl\\android\\app\\src\\profile\\AndroidManifest.xml",
+      "count": 1,
+      "samples": [
+        [
+          "single",
+          "//schemas.android.com/apk/res/android\">"
+        ]
+      ]
+    },
+    {
+      "path": "E:\\College\\Telkom University\\Associate Degree of Information Systems\\Semesters\\4th Semester\\Advanced Mobile Device Programming\\Assessments\\tubes_ppbl\\android\\gradle\\wrapper\\gradle-wrapper.properties",
+      "count": 1,
+      "samples": [
+        [
+          "single",
+          "//services.gradle.org/distributions/gradle-8.14-all.zip"
+        ]
+      ]
+    },
+    {
+      "path": "E:\\College\\Telkom University\\Associate Degree of Information Systems\\Semesters\\4th Semester\\Advanced Mobile Device Programming\\Assessments\\tubes_ppbl\\ios\\Flutter\\AppFrameworkInfo.plist",
+      "count": 1,
+      "samples": [
+        [
+          "single",
+          "//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">"
+        ]
+      ]
+    },
+    {
+      "path": "E:\\College\\Telkom University\\Associate Degree of Information Systems\\Semesters\\4th Semester\\Advanced Mobile Device Programming\\Assessments\\tubes_ppbl\\ios\\Runner\\Info.plist",
+      "count": 1,
+      "samples": [
+        [
+          "single",
+          "//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">"
+        ]
+      ]
+    },
+    {
+      "path": "E:\\College\\Telkom University\\Associate Degree of Information Systems\\Semesters\\4th Semester\\Advanced Mobile Device Programming\\Assessments\\tubes_ppbl\\ios\\Runner.xcodeproj\\project.xcworkspace\\xcshareddata\\IDEWorkspaceChecks.plist",
+      "count": 1,
+      "samples": [
+        [
+          "single",
+          "//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">"
+        ]
+      ]
+    },
+    {
+      "path": "E:\\College\\Telkom University\\Associate Degree of Information Systems\\Semesters\\4th Semester\\Advanced Mobile Device Programming\\Assessments\\tubes_ppbl\\ios\\Runner.xcworkspace\\xcshareddata\\IDEWorkspaceChecks.plist",
+      "count": 1,
+      "samples": [
+        [
+          "single",
+          "//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">"
+        ]
+      ]
+    },
+    {
+      "path": "E:\\College\\Telkom University\\Associate Degree of Information Systems\\Semesters\\4th Semester\\Advanced Mobile Device Programming\\Assessments\\tubes_ppbl\\lib\\screens\\main_navigation.dart",
+      "count": 1,
+      "samples": [
+        [
+          "single",
+          "// Reload preferences when switching to Home or Jadwal tabs"
+        ]
+      ]
+    },
+    {
+      "path": "E:\\College\\Telkom University\\Associate Degree of Information Systems\\Semesters\\4th Semester\\Advanced Mobile Device Programming\\Assessments\\tubes_ppbl\\macos\\Runner\\Info.plist",
+      "count": 1,
+      "samples": [
+        [
+          "single",
+          "//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">"
+        ]
+      ]
+    },
+    {
+      "path": "E:\\College\\Telkom University\\Associate Degree of Information Systems\\Semesters\\4th Semester\\Advanced Mobile Device Programming\\Assessments\\tubes_ppbl\\macos\\Runner.xcodeproj\\project.xcworkspace\\xcshareddata\\IDEWorkspaceChecks.plist",
+      "count": 1,
+      "samples": [
+        [
+          "single",
+          "//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">"
+        ]
+      ]
+    },
+    {
+      "path": "E:\\College\\Telkom University\\Associate Degree of Information Systems\\Semesters\\4th Semester\\Advanced Mobile Device Programming\\Assessments\\tubes_ppbl\\macos\\Runner.xcworkspace\\xcshareddata\\IDEWorkspaceChecks.plist",
+      "count": 1,
+      "samples": [
+        [
+          "single",
+          "//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">"
+        ]
+      ]
+    }
+  ]
+}
