@@ -114,8 +114,8 @@ class _ReferensiListScreenState extends State<ReferensiListScreen> {
                         icon: Icons.edit_outlined,
                         label: 'Edit',
                         borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(12),
-                            bottomLeft: Radius.circular(12)),
+                            topLeft: Radius.circular(16),
+                            bottomLeft: Radius.circular(16)),
                       ),
                       SlidableAction(
                         onPressed: (_) => _deleteItem(ref.id!),
@@ -124,31 +124,38 @@ class _ReferensiListScreenState extends State<ReferensiListScreen> {
                         icon: Icons.delete_outline,
                         label: 'Hapus',
                         borderRadius: const BorderRadius.only(
-                            topRight: Radius.circular(12),
-                            bottomRight: Radius.circular(12)),
+                            topRight: Radius.circular(16),
+                            bottomRight: Radius.circular(16)),
                       ),
                     ],
                   ),
                   child: Container(
                     decoration: BoxDecoration(
                       color: Theme.of(context).cardColor,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Theme.of(context).dividerColor),
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: Theme.of(context).dividerColor.withOpacity(0.5)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.04),
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
                     ),
                     padding: const EdgeInsets.all(16),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          padding: const EdgeInsets.all(10),
+                          width: 44, height: 44,
                           decoration: BoxDecoration(
-                            color: AppColors.mkYellow,
-                            borderRadius: BorderRadius.circular(10),
+                            color: Theme.of(context).brightness == Brightness.dark ? AppColors.mkYellow.withOpacity(0.15) : AppColors.mkYellow.withOpacity(0.4),
+                            borderRadius: BorderRadius.circular(12),
                           ),
                           child: Icon(
                               Icons.auto_stories_outlined,
                               size: 22,
-                              color: Color(0xFFF59E0B)),
+                              color: Theme.of(context).brightness == Brightness.dark ? Color(0xFFFCD34D) : Color(0xFFD97706)),
                         ),
                         SizedBox(width: 14),
                         Expanded(
@@ -180,14 +187,14 @@ class _ReferensiListScreenState extends State<ReferensiListScreen> {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 8, vertical: 2),
                                   decoration: BoxDecoration(
-                                    color: AppColors.mkYellow,
-                                    borderRadius: BorderRadius.circular(8),
+                                    color: Theme.of(context).brightness == Brightness.dark ? AppColors.mkYellow.withOpacity(0.2) : AppColors.mkYellow,
+                                    borderRadius: BorderRadius.circular(16),
                                   ),
                                   child: Text(ref.tahunTerbit,
                                       style: TextStyle(
                                           fontSize: 11,
                                           fontWeight: FontWeight.w600,
-                                          color: Color(0xFF713F12))),
+                                          color: Theme.of(context).brightness == Brightness.dark ? Color(0xFFFCD34D) : Color(0xFF713F12))),
                                 ),
                                 if (ref.tautanSumber.isNotEmpty) ...[
                                   SizedBox(width: 8),

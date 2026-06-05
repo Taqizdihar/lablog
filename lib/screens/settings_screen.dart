@@ -83,7 +83,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
   InputDecoration _inputDecoration(String label, IconData icon) {
     return InputDecoration(
       labelText: label,
-      labelStyle: const TextStyle(color: AppColors.slate700),
+      labelStyle: TextStyle(
+          color: Theme.of(context).brightness == Brightness.dark
+              ? Colors.white70
+              : AppColors.slate700),
       hintStyle: const TextStyle(color: AppColors.textPlaceholder),
       prefixIcon: Icon(icon, color: AppColors.textMuted),
       border: OutlineInputBorder(
@@ -174,7 +177,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         items: _semesterOptions.map((semester) {
                           return DropdownMenuItem<String>(
                             value: semester,
-                            child: Text(semester, style: const TextStyle(color: AppColors.slate900)),
+                            child: Text(semester),
                           );
                         }).toList(),
                         onChanged: (value) {
@@ -202,8 +205,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 child: Column(
                   children: [
                     SwitchListTile(
-                      title: Text('Dark Mode',
-                          style: const TextStyle(color: AppColors.slate900)),
+                      title: Text('Dark Mode'),
                       subtitle: Text(
                         'Aktifkan tema gelap untuk tampilan lebih nyaman',
                         style: TextStyle(
@@ -224,8 +226,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
                     SizedBox(height: 8),
                     SwitchListTile(
-                      title: Text('Tata Letak Grid',
-                          style: const TextStyle(color: AppColors.slate900)),
+                      title: Text('Tata Letak Grid'),
                       subtitle: Text(
                         'Tampilkan mata kuliah dalam bentuk grid',
                         style: TextStyle(
@@ -245,8 +246,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
                     SizedBox(height: 8),
                     SwitchListTile(
-                      title: Text('Sorot Jadwal Hari Ini',
-                          style: const TextStyle(color: AppColors.slate900)),
+                      title: Text('Sorot Jadwal Hari Ini'),
                       subtitle: Text(
                         'Sorot jadwal praktikum hari ini',
                         style: TextStyle(

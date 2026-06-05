@@ -11,10 +11,10 @@ class JadwalListScreen extends StatefulWidget {
   const JadwalListScreen({super.key});
 
   @override
-  State<JadwalListScreen> createState() => _JadwalListScreenState();
+  JadwalListScreenState createState() => JadwalListScreenState();
 }
 
-class _JadwalListScreenState extends State<JadwalListScreen> {
+class JadwalListScreenState extends State<JadwalListScreen> {
   final DatabaseHelper _dbHelper = DatabaseHelper();
   late Future<List<JadwalPraktikum>> _jadwalFuture;
   Map<int, MataKuliah> _mkCache = {};
@@ -41,6 +41,7 @@ class _JadwalListScreenState extends State<JadwalListScreen> {
   };
 
   bool _highlightTodaySchedule = true;
+  String _semesterAktif = 'Semua Semester';
 
   @override
   void initState() {
@@ -54,8 +55,15 @@ class _JadwalListScreenState extends State<JadwalListScreen> {
     if (mounted) {
       setState(() {
         _highlightTodaySchedule = prefs.getBool('highlight_today_schedule') ?? true;
+        _semesterAktif = prefs.getString('semester_aktif') ?? 'Semua Semester';
       });
     }
+  }
+
+  /// Called by MainNavigation when this tab becomes active.
+  void reloadPreferences() {
+    _loadPreferences();
+    _refreshList();
   }
 
   String _getTodayDayName() {
@@ -123,7 +131,17 @@ class _JadwalListScreenState extends State<JadwalListScreen> {
 
           final list = snapshot.data ?? [];
 
-          if (list.isEmpty) {
+          // Filter jadwal based on semester_aktif
+          final filteredList = _semesterAktif == 'Semua Semester'
+              ? list
+              : list.where((j) {
+                  final mk = _mkCache[j.mkId];
+                  return mk != null && mk.semester == _semesterAktif;
+                }).toList();
+
+          if (filteredList.isEmpty) {
+            final bool isFiltered = _semesterAktif != 'Semua Semester';
+            final bool hasAnyJadwal = list.isNotEmpty;
             return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -132,35 +150,44 @@ class _JadwalListScreenState extends State<JadwalListScreen> {
                     padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
                       color: AppColors.sageBg, shape: BoxShape.circle),
-                    child: Icon(Icons.calendar_today_outlined,
-                        size: 48, color: AppColors.sage),
+                    child: Icon(
+                      isFiltered && hasAnyJadwal ? Icons.filter_list_off : Icons.calendar_today_outlined,
+                      size: 48, color: AppColors.sage),
                   ),
                   SizedBox(height: 20),
-                  Text('Belum ada jadwal',
-                      style: TextStyle(fontSize: 18,
-                          color: AppColors.textMuted,
-                          fontWeight: FontWeight.w600)),
+                  Text(
+                    isFiltered && hasAnyJadwal
+                        ? 'Tidak ada jadwal di $_semesterAktif'
+                        : 'Belum ada jadwal',
+                    style: TextStyle(fontSize: 18,
+                        color: AppColors.textMuted,
+                        fontWeight: FontWeight.w600),
+                    textAlign: TextAlign.center,
+                  ),
                   SizedBox(height: 8),
-                  Text('Tekan tombol + untuk menambahkan',
-                      style: TextStyle(fontSize: 14,
-                          color: AppColors.textPlaceholder)),
+                  Text(
+                    isFiltered && hasAnyJadwal
+                        ? 'Ubah filter semester di Pengaturan'
+                        : 'Tekan tombol + untuk menambahkan',
+                    style: TextStyle(fontSize: 14,
+                        color: AppColors.textPlaceholder)),
                 ],
               ),
             );
           }
 
           return ListView.builder(
-            itemCount: list.length,
+            itemCount: filteredList.length,
             padding: const EdgeInsets.all(16),
             itemBuilder: (context, index) {
-              final jadwal = list[index];
+              final jadwal = filteredList[index];
               final mk = _mkCache[jadwal.mkId];
               final warnaKey = mk?.warnaLabel ?? 'mkBlue';
               final cardColor = _warnaMap[warnaKey] ?? AppColors.mkBlue;
               final textColor = _warnaTextMap[warnaKey] ?? Color(0xFF1E40AF);
 
               final showDayHeader =
-                  index == 0 || list[index - 1].hari != jadwal.hari;
+                  index == 0 || filteredList[index - 1].hari != jadwal.hari;
 
               final isToday = _highlightTodaySchedule && jadwal.hari == _getTodayDayName();
 
@@ -202,8 +229,8 @@ class _JadwalListScreenState extends State<JadwalListScreen> {
                             icon: Icons.edit_outlined,
                             label: 'Edit',
                             borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(12),
-                              bottomLeft: Radius.circular(12)),
+                              topLeft: Radius.circular(16),
+                              bottomLeft: Radius.circular(16)),
                           ),
                           SlidableAction(
                             onPressed: (_) => _deleteJadwal(jadwal.id!),
@@ -212,35 +239,52 @@ class _JadwalListScreenState extends State<JadwalListScreen> {
                             icon: Icons.delete_outline,
                             label: 'Hapus',
                             borderRadius: const BorderRadius.only(
-                              topRight: Radius.circular(12),
-                              bottomRight: Radius.circular(12)),
+                              topRight: Radius.circular(16),
+                              bottomRight: Radius.circular(16)),
                           ),
                         ],
                       ),
                       child: Container(
+                        padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          color: isToday ? AppColors.sageBg : Theme.of(context).cardColor,
-                          borderRadius: BorderRadius.circular(12),
+                          color: isToday 
+                              ? (Theme.of(context).brightness == Brightness.dark 
+                                  ? AppColors.sage.withOpacity(0.1) 
+                                  : AppColors.sageBg) 
+                              : Theme.of(context).cardColor,
+                          borderRadius: BorderRadius.circular(16),
                           border: Border.all(
                               color: isToday
                                   ? AppColors.sage.withOpacity(0.5)
-                                  : Theme.of(context).dividerColor),
+                                  : Theme.of(context).dividerColor.withOpacity(0.5)),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.04),
+                              blurRadius: 10,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
                         ),
                         child: Row(children: [
                           Container(
-                            width: 5, height: 76,
+                            width: 44, height: 44,
                             decoration: BoxDecoration(
-                              color: cardColor,
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(12),
-                                bottomLeft: Radius.circular(12)),
+                              color: isToday
+                                  ? (Theme.of(context).brightness == Brightness.dark ? AppColors.sage.withOpacity(0.2) : AppColors.sage)
+                                  : (Theme.of(context).brightness == Brightness.dark ? cardColor.withOpacity(0.15) : cardColor.withOpacity(0.3)),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Icon(
+                              isToday ? Icons.event_available : Icons.event,
+                              color: isToday
+                                  ? Colors.white
+                                  : (Theme.of(context).brightness == Brightness.dark ? cardColor : textColor),
+                              size: 22,
                             ),
                           ),
+                          SizedBox(width: 14),
                           Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 14, vertical: 12),
-                              child: Column(
+                            child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Container(
@@ -248,12 +292,12 @@ class _JadwalListScreenState extends State<JadwalListScreen> {
                                         horizontal: 8, vertical: 3),
                                     decoration: BoxDecoration(
                                       color: cardColor,
-                                      borderRadius: BorderRadius.circular(8)),
+                                      borderRadius: BorderRadius.circular(12)),
                                     child: Text(
                                       mk?.namaMk ?? 'MK Tidak Ditemukan',
                                       style: TextStyle(fontSize: 11,
                                           fontWeight: FontWeight.w600,
-                                          color: textColor)),
+                                          color: Theme.of(context).brightness == Brightness.dark ? cardColor : textColor)),
                                   ),
                                   SizedBox(height: 8),
                                   Row(children: [
@@ -271,7 +315,7 @@ class _JadwalListScreenState extends State<JadwalListScreen> {
                                         padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                                         decoration: BoxDecoration(
                                           color: AppColors.sage,
-                                          borderRadius: BorderRadius.circular(4),
+                                          borderRadius: BorderRadius.circular(12),
                                         ),
                                         child: Text(
                                           'Hari ini',
@@ -293,7 +337,6 @@ class _JadwalListScreenState extends State<JadwalListScreen> {
                                 ],
                               ),
                             ),
-                          ),
                         ]),
                       ),
                     ),

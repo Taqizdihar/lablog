@@ -131,8 +131,8 @@ class _PeminjamanListScreenState extends State<PeminjamanListScreen> {
                         icon: Icons.edit_outlined,
                         label: 'Edit',
                         borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(12),
-                            bottomLeft: Radius.circular(12)),
+                            topLeft: Radius.circular(16),
+                            bottomLeft: Radius.circular(16)),
                       ),
                       SlidableAction(
                         onPressed: (_) => _deleteItem(item.id!),
@@ -141,30 +141,37 @@ class _PeminjamanListScreenState extends State<PeminjamanListScreen> {
                         icon: Icons.delete_outline,
                         label: 'Hapus',
                         borderRadius: const BorderRadius.only(
-                            topRight: Radius.circular(12),
-                            bottomRight: Radius.circular(12)),
+                            topRight: Radius.circular(16),
+                            bottomRight: Radius.circular(16)),
                       ),
                     ],
                   ),
                   child: Container(
                     decoration: BoxDecoration(
                       color: Theme.of(context).cardColor,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Theme.of(context).dividerColor),
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: Theme.of(context).dividerColor.withOpacity(0.5)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.04),
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
                     ),
                     padding: const EdgeInsets.all(16),
                     child: Row(
                       children: [
 
                         Container(
-                          padding: const EdgeInsets.all(10),
+                          width: 44, height: 44,
                           decoration: BoxDecoration(
-                            color: _statusBg(item.status),
-                            borderRadius: BorderRadius.circular(10),
+                            color: Theme.of(context).brightness == Brightness.dark ? _statusBg(item.status).withOpacity(0.15) : _statusBg(item.status).withOpacity(0.5),
+                            borderRadius: BorderRadius.circular(12),
                           ),
                           child: Icon(_statusIcon(item.status),
-                              size: 24,
-                              color: _statusText(item.status)),
+                              size: 22,
+                              color: Theme.of(context).brightness == Brightness.dark ? (item.status == 'Dikembalikan' ? Colors.greenAccent : Colors.orangeAccent) : _statusText(item.status)),
                         ),
                         SizedBox(width: 14),
 
@@ -204,14 +211,14 @@ class _PeminjamanListScreenState extends State<PeminjamanListScreen> {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 10, vertical: 5),
                           decoration: BoxDecoration(
-                            color: _statusBg(item.status),
-                            borderRadius: BorderRadius.circular(12),
+                            color: Theme.of(context).brightness == Brightness.dark ? _statusBg(item.status).withOpacity(0.2) : _statusBg(item.status),
+                            borderRadius: BorderRadius.circular(16),
                           ),
                           child: Text(item.status,
                               style: TextStyle(
                                   fontSize: 11,
                                   fontWeight: FontWeight.w600,
-                                  color: _statusText(item.status))),
+                                  color: Theme.of(context).brightness == Brightness.dark ? (item.status == 'Dikembalikan' ? Colors.greenAccent : Colors.orangeAccent) : _statusText(item.status))),
                         ),
                       ],
                     ),

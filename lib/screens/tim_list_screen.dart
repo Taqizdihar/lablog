@@ -39,7 +39,7 @@ class _TimListScreenState extends State<TimListScreen> {
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: Text('Tim Kelompok',
+        title: Text('Anggota Kelompok',
             style: TextStyle(
                 color: Colors.white, fontWeight: FontWeight.bold)),
         backgroundColor: AppColors.slate900,
@@ -137,8 +137,15 @@ class _TimListScreenState extends State<TimListScreen> {
                   child: Container(
                     decoration: BoxDecoration(
                       color: Theme.of(context).cardColor,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Theme.of(context).dividerColor),
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: Theme.of(context).dividerColor.withOpacity(0.5)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.04),
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
                     ),
                     padding: const EdgeInsets.all(16),
                     child: Row(
@@ -149,8 +156,8 @@ class _TimListScreenState extends State<TimListScreen> {
                           height: 44,
                           decoration: BoxDecoration(
                             color: isKetua
-                                ? AppColors.mkPurple
-                                : AppColors.baruBg,
+                                ? (Theme.of(context).brightness == Brightness.dark ? AppColors.mkPurple.withOpacity(0.15) : AppColors.mkPurple.withOpacity(0.3))
+                                : (Theme.of(context).brightness == Brightness.dark ? AppColors.baruBg.withOpacity(0.15) : AppColors.baruBg.withOpacity(0.3)),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Icon(
@@ -215,17 +222,17 @@ class _TimListScreenState extends State<TimListScreen> {
                               horizontal: 10, vertical: 5),
                           decoration: BoxDecoration(
                             color: isKetua
-                                ? AppColors.mkPurple
-                                : AppColors.baruBg,
-                            borderRadius: BorderRadius.circular(12),
+                                ? (Theme.of(context).brightness == Brightness.dark ? AppColors.mkPurple.withOpacity(0.15) : AppColors.mkPurple.withOpacity(0.5))
+                                : (Theme.of(context).brightness == Brightness.dark ? AppColors.baruBg.withOpacity(0.15) : AppColors.baruBg.withOpacity(0.5)),
+                            borderRadius: BorderRadius.circular(16),
                           ),
                           child: Text(tim.peran,
                               style: TextStyle(
                                   fontSize: 11,
                                   fontWeight: FontWeight.w600,
                                   color: isKetua
-                                      ? Color(0xFF581C87)
-                                      : Color(0xFF1E40AF))),
+                                      ? (Theme.of(context).brightness == Brightness.dark ? Color(0xFFC4B5FD) : Color(0xFF581C87))
+                                      : (Theme.of(context).brightness == Brightness.dark ? Color(0xFF93C5FD) : Color(0xFF1E40AF)))),
                         ),
                       ],
                     ),

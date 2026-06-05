@@ -143,8 +143,8 @@ class _EksperimenListScreenState extends State<EksperimenListScreen> {
                         icon: Icons.edit_outlined,
                         label: 'Edit',
                         borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(12),
-                            bottomLeft: Radius.circular(12)),
+                            topLeft: Radius.circular(16),
+                            bottomLeft: Radius.circular(16)),
                       ),
                       SlidableAction(
                         onPressed: (_) => _deleteItem(eks.id!),
@@ -153,8 +153,8 @@ class _EksperimenListScreenState extends State<EksperimenListScreen> {
                         icon: Icons.delete_outline,
                         label: 'Hapus',
                         borderRadius: const BorderRadius.only(
-                            topRight: Radius.circular(12),
-                            bottomRight: Radius.circular(12)),
+                            topRight: Radius.circular(16),
+                            bottomRight: Radius.circular(16)),
                       ),
                     ],
                   ),
@@ -168,64 +168,85 @@ class _EksperimenListScreenState extends State<EksperimenListScreen> {
                                   mkId: widget.mkId)));
                       if (r == true) _refreshList();
                     },
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(16),
                     child: Container(
                       decoration: BoxDecoration(
                         color: Theme.of(context).cardColor,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Theme.of(context).dividerColor),
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: Theme.of(context).dividerColor.withOpacity(0.5)),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.04),
+                            blurRadius: 10,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
                       ),
                       padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment:
-                            CrossAxisAlignment.start,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(children: [
-                            Expanded(
-                              child: Text(eks.judul,
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.bold,
-                                      color: Theme.of(context).textTheme.bodyLarge?.color)),
+                          Container(
+                            width: 44, height: 44,
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).brightness == Brightness.dark ? AppColors.mkBlue.withOpacity(0.15) : AppColors.mkBlue.withOpacity(0.3),
+                              borderRadius: BorderRadius.circular(12),
                             ),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 5),
-                              decoration: BoxDecoration(
-                                color:
-                                    _statusBg(eks.statusJurnal),
-                                borderRadius:
-                                    BorderRadius.circular(12),
-                              ),
-                              child: Text(eks.statusJurnal,
-                                  style: TextStyle(
-                                      fontSize: 11,
-                                      fontWeight: FontWeight.w600,
-                                      color: _statusTextColor(
-                                          eks.statusJurnal))),
+                            child: Icon(Icons.science_outlined, size: 22, color: Theme.of(context).brightness == Brightness.dark ? Color(0xFF93C5FD) : Color(0xFF1E40AF)),
+                          ),
+                          SizedBox(width: 14),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(children: [
+                                  Expanded(
+                                    child: Text(eks.judul,
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold,
+                                            color: Theme.of(context).textTheme.bodyLarge?.color)),
+                                  ),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 5),
+                                    decoration: BoxDecoration(
+                                      color: Theme.of(context).brightness == Brightness.dark ? _statusBg(eks.statusJurnal).withOpacity(0.2) : _statusBg(eks.statusJurnal),
+                                      borderRadius:
+                                          BorderRadius.circular(16),
+                                    ),
+                                    child: Text(eks.statusJurnal,
+                                        style: TextStyle(
+                                            fontSize: 11,
+                                            fontWeight: FontWeight.w600,
+                                            color: Theme.of(context).brightness == Brightness.dark ? (eks.statusJurnal == 'Selesai' ? Colors.greenAccent : (eks.statusJurnal == 'Revisi' ? Colors.redAccent : Colors.orangeAccent)) : _statusTextColor(
+                                                eks.statusJurnal))),
+                                  ),
+                                ]),
+                                SizedBox(height: 8),
+                                Row(children: [
+                                  Icon(
+                                      Icons.calendar_today_outlined,
+                                      size: 13,
+                                      color: AppColors.textMuted),
+                                  SizedBox(width: 4),
+                                  Text(eks.tanggal,
+                                      style: TextStyle(
+                                          fontSize: 13,
+                                          color: Theme.of(context).textTheme.bodyMedium?.color)),
+                                ]),
+                                if (eks.tujuan.isNotEmpty) ...[
+                                  SizedBox(height: 6),
+                                  Text(eks.tujuan,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          fontSize: 13,
+                                          color: AppColors.textMuted)),
+                                ],
+                              ],
                             ),
-                          ]),
-                          SizedBox(height: 8),
-                          Row(children: [
-                            Icon(
-                                Icons.calendar_today_outlined,
-                                size: 13,
-                                color: AppColors.textMuted),
-                            SizedBox(width: 4),
-                            Text(eks.tanggal,
-                                style: TextStyle(
-                                    fontSize: 13,
-                                    color: Theme.of(context).textTheme.bodyMedium?.color)),
-                          ]),
-                          if (eks.tujuan.isNotEmpty) ...[
-                            SizedBox(height: 6),
-                            Text(eks.tujuan,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                    fontSize: 13,
-                                    color: AppColors.textMuted)),
-                          ],
+                          ),
                         ],
                       ),
                     ),

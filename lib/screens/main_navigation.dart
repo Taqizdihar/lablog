@@ -15,12 +15,21 @@ class MainNavigation extends StatefulWidget {
 class _MainNavigationState extends State<MainNavigation> {
   int _currentIndex = 0;
 
-  final List<Widget> _screens = [
-    const HomeScreen(),
-    const JadwalListScreen(),
-    const PeminjamanListScreen(),
-    const SettingsScreen(),
-  ];
+  final GlobalKey<HomeScreenState> _homeKey = GlobalKey<HomeScreenState>();
+  final GlobalKey<JadwalListScreenState> _jadwalKey = GlobalKey<JadwalListScreenState>();
+
+  late final List<Widget> _screens;
+
+  @override
+  void initState() {
+    super.initState();
+    _screens = [
+      HomeScreen(key: _homeKey),
+      JadwalListScreen(key: _jadwalKey),
+      const PeminjamanListScreen(),
+      const SettingsScreen(),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +50,15 @@ class _MainNavigationState extends State<MainNavigation> {
         ),
         child: BottomNavigationBar(
           currentIndex: _currentIndex,
-          onTap: (index) => setState(() => _currentIndex = index),
+          onTap: (index) {
+            setState(() => _currentIndex = index);
+            // Reload preferences when switching to Home or Jadwal tabs
+            if (index == 0) {
+              _homeKey.currentState?.reloadPreferences();
+            } else if (index == 1) {
+              _jadwalKey.currentState?.reloadPreferences();
+            }
+          },
           type: BottomNavigationBarType.fixed,
           backgroundColor: AppColors.bgCard,
           selectedItemColor: AppColors.sage,
